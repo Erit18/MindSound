@@ -1,3 +1,11 @@
+<?php
+session_start();
+// Elimina esta redirección
+// if (!isset($_SESSION['usuario_id'])) {
+//     header("Location: intranet.php");
+//     exit();
+// }
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -42,7 +50,11 @@
         <i class="fas fa-search" aria-hidden="true"></i>      
         </a>
       </div>
-      <a href="intranet.php" class="login-btn">Iniciar sesión</a>
+      <?php if(isset($_SESSION['usuario_id'])): ?>
+        <a href="Modelo/PHP/cerrarsesion.php" class="login-btn">Cerrar sesión</a>
+      <?php else: ?>
+        <a href="intranet.php" class="login-btn">Iniciar sesión</a>
+      <?php endif; ?>
     </div>
   </div>
 </header>
@@ -253,6 +265,3 @@ for(let i=0; i<marqueeElementsDisplayed; i++) {
 
 </body>
 </html>
-
-
-

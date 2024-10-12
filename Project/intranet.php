@@ -46,8 +46,14 @@
             <i class="fas fa-search" aria-hidden="true"></i>      
             </a>
         </div>
-        <a href="login.php" class="login-btn">Iniciar sesión</a>
-        </div>
+        <?php
+        session_start();
+        if(isset($_SESSION['usuario_id'])): ?>
+            <a href="Modelo/PHP/cerrarsesion.php" class="login-btn">Cerrar sesión</a>
+        <?php else: ?>
+            <a href="intranet.php" class="login-btn">Iniciar sesión</a>
+        <?php endif; ?>
+    </div>
     </div>
 </header>
 <!-- ____________________________________________ HEADER _______________________________________________________ -->
@@ -58,7 +64,7 @@
         <div class="contenedor" id="contenedor">
             <div class="form-contenedor crear-cuenta">
                 <form action="Modelo/PHP/registrar.php" method="POST">
-                    <h1>Create una Cuenta</h1>
+                    <h1>Crea una Cuenta</h1>
                     <div class="social-iconos">
                         <a href="#" class="iconos">
                             <i class="fa-brands fa-google-plus-g"></i>
@@ -74,28 +80,24 @@
                         </a>
                     </div>
                     <span>O usa tu correo y contraseña</span>
-                    <input type="name" name="nombres" id="nombres" placeholder="Nombres y Apellidos">
-                    <input type="direccion" name="direccion" id="direccion" placeholder="Direccion">
-                    <select id="distritos" name="distritos">
-                        <option value="">Distrito</option>
-                        <?php
-                        
-                        $distritos = array("Ancón", "Ate", "Barranco", "Breña", "Carabayllo", "Chaclacayo", "Chorrillos", "Cieneguilla", "Comas", "El Agustino", "Independencia", "Jesús María", "La Molina", "La Victoria", "Lince", "Los Olivos", "Lurigancho", "Lurín", "Magdalena del Mar", "Miraflores", "Pachacámac", "Pucusana", "Pueblo Libre", "Puente Piedra", "Punta Hermosa", "Punta Negra", "Rímac", "San Bartolo", "San Borja", "San Isidro", "San Juan de Lurigancho", "San Juan de Miraflores", "San Luis", "San Martín de Porres", "San Miguel", "Santa Anita", "Santa María del Mar", "Santa Rosa", "Santiago de Surco", "Surquillo", "Villa El Salvador", "Villa María del Triunfo");
-
-                        foreach ($distritos as $distrito) {
-                            echo "<option value='$distrito'>$distrito</option>";
-                        }
-                        ?>
+                    <input type="text" name="nombre" id="nombre" placeholder="Nombre" required>
+                    <input type="text" name="apellido" id="apellido" placeholder="Apellido" required>
+                    <input type="email" name="correo" id="correo" placeholder="Correo electrónico" required>
+                    <input type="password" name="password" id="password" placeholder="Contraseña" required>
+                    <input type="password" name="password2" id="password2" placeholder="Repetir Contraseña" required>
+                    <input type="date" name="fechaNacimiento" id="fechaNacimiento" required>
+                    <select name="genero" id="genero" required>
+                        <option value="">Selecciona tu género</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                        <option value="Otro">Otro</option>
                     </select>
-                    <input type="email" name="correo" id="correo" placeholder="Correo">
-                    <input type="password" name="password" id="password" placeholder="Contraseña">
-                    <input type="password" name="password2" id="password2" placeholder="Repetir Contraseña">
                     <button type="submit" name="registro">Registrarse</button>
                 </form>
             </div>
             <div class="form-contenedor iniciar-sesion">
                 <form action="Modelo/PHP/iniciosesion.php" method="POST">
-                    <h1>Inicia Sesion</h1>
+                    <h1>Inicia Sesión</h1>
                     <div class="social-iconos">
                         <a href="#" class="iconos">
                             <i class="fa-brands fa-google-plus-g"></i>
@@ -111,10 +113,10 @@
                         </a>
                     </div>
                     <span>Usa tu correo y contraseña</span>
-                    <input type="email" name="correo" placeholder="Correo">
-                    <input type="password" name="password" placeholder="Contraseña">
-                    <a href="#">Olvidaste tu contraseña?</a>
-                    <button>Iniciar Sesion</button>
+                    <input type="email" name="correo" placeholder="Correo electrónico" required>
+                    <input type="password" name="password" placeholder="Contraseña" required>
+                    <a href="#">¿Olvidaste tu contraseña?</a>
+                    <button type="submit">Iniciar Sesión</button>
                 </form>
             </div>
             <div class="cambiar-contenedor">

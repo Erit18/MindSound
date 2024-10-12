@@ -1,8 +1,8 @@
-CREATE database bdmindsound;
+CREATE DATABASE bdmindsound;
 
-use bdmindsound
+USE bdmindsound;
 
--- Tabla Usuarios (modificada)
+-- Tabla Usuarios
 CREATE TABLE Usuarios (
     IDUsuario INT PRIMARY KEY AUTO_INCREMENT,
     Nombre VARCHAR(50) NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE Usuarios (
     EstadoSuscripcion ENUM('Activa', 'Inactiva', 'Pendiente') DEFAULT 'Inactiva'
 );
 
--- Tabla Libros (modificada)
+-- Tabla Libros
 CREATE TABLE Libros (
     IDLibro INT PRIMARY KEY AUTO_INCREMENT,
     Titulo VARCHAR(100) NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE HistorialEscuchas (
     FOREIGN KEY (IDLibro) REFERENCES Libros(IDLibro)
 );
 
--- Tabla Roles (modificada para ser una tabla de relación)
+-- Tabla Roles
 CREATE TABLE Roles (
     IDRol INT PRIMARY KEY AUTO_INCREMENT,
     IDUsuario INT,
@@ -50,25 +50,20 @@ CREATE TABLE Roles (
     UNIQUE KEY (IDUsuario, Descripcion)
 );
 
--- Tabla GeneroLiterario
-CREATE TABLE GeneroLiterario (
-    IDGeLite INT PRIMARY KEY AUTO_INCREMENT,
-    IDLibro INT,
-    NombreGeneroL VARCHAR(50) NOT NULL,
-    descripcion VARCHAR(50) NOT NULL,
-    FOREIGN KEY (IDLibro) REFERENCES Libros(IDLibro)
+-- Tabla Generos
+CREATE TABLE Generos (
+    IDGenero INT PRIMARY KEY AUTO_INCREMENT,
+    NombreGenero VARCHAR(50) NOT NULL,
+    Descripcion TEXT
 );
 
--- Tabla ListaDeReproducciones (corregido el nombre)
-CREATE TABLE ListaDeReproducciones (
-    IDListaProducciones INT PRIMARY KEY AUTO_INCREMENT,
-    IDUsuario INT,
-    historial_reproducciones VARCHAR(100) NOT NULL,
+-- Tabla LibroGenero
+CREATE TABLE LibroGenero (
     IDLibro INT,
-    TiempoEscuchado DECIMAL(5,2) NOT NULL,
-    FechaUltimaEscucha DATE,
-    FOREIGN KEY (IDUsuario) REFERENCES Usuarios(IDUsuario),
-    FOREIGN KEY (IDLibro) REFERENCES Libros(IDLibro)
+    IDGenero INT,
+    PRIMARY KEY (IDLibro, IDGenero),
+    FOREIGN KEY (IDLibro) REFERENCES Libros(IDLibro),
+    FOREIGN KEY (IDGenero) REFERENCES Generos(IDGenero)
 );
 
 -- Tabla Suscripciones
@@ -109,13 +104,13 @@ CREATE TABLE ProgresoLibros (
     IDUsuario INT,
     IDLibro INT,
     TiempoEscuchado DECIMAL(5,2) NOT NULL,
-    FechaUltimaEscucha DATE,
     UltimaPosicion TIME,
+    FechaUltimaEscucha DATE,
     FOREIGN KEY (IDUsuario) REFERENCES Usuarios(IDUsuario),
     FOREIGN KEY (IDLibro) REFERENCES Libros(IDLibro)
 );
 
--- Procedimientos almacenados (adaptados a las nuevas tablas)
+-- Procedimientos almacenados
 
 DELIMITER //
 
@@ -160,7 +155,8 @@ CREATE PROCEDURE SP_ACTUALIZAR_USUARIO(
     IN p_Apellido VARCHAR(50),
     IN p_CorreoElectronico VARCHAR(100),
     IN p_FechaNacimiento DATE,
-    IN p_Genero ENUM('Masculino', 'Femenino', 'Otro')
+    IN p_Genero ENUM('Masculino', 'Femenino', 'Otro'),
+    IN p_Rol ENUM('Usuario', 'Administrador')
 )
 BEGIN
     UPDATE Usuarios
@@ -168,7 +164,8 @@ BEGIN
         Apellido = p_Apellido,
         CorreoElectronico = p_CorreoElectronico,
         FechaNacimiento = p_FechaNacimiento,
-        Genero = p_Genero
+        Genero = p_Genero,
+        Rol = p_Rol
     WHERE IDUsuario = p_IDUsuario;
 END //
 
@@ -179,41 +176,13 @@ BEGIN
     DELETE FROM Usuarios WHERE IDUsuario = p_IDUsuario;
 END //
 
--- Procedimiento para verificar credenciales y obtener rol
 CREATE PROCEDURE SP_VERIFICAR_CREDENCIALES(
-    IN p_Usuario VARCHAR(50),
-    IN p_Contraseña VARCHAR(255)
+    IN p_CorreoElectronico VARCHAR(100)
 )
 BEGIN
-    SELECT IDUsuario, Nombre, Apellido, Rol, EstadoSuscripcion
+    SELECT IDUsuario, Nombre, Apellido, CorreoElectronico, Contraseña, Rol, EstadoSuscripcion
     FROM Usuarios
-    WHERE Usuario = p_Usuario AND Contraseña = p_Contraseña;
+    WHERE CorreoElectronico = p_CorreoElectronico;
 END //
 
 DELIMITER ;
-
--- Aquí puedes agregar más procedimientos almacenados para las nuevas tablas según sea necesario
-
--- Eliminar tabla ListaDeReproducciones
-DROP TABLE IF EXISTS ListaDeReproducciones;
-
--- Modificar tabla ProgresoLibros
-ALTER TABLE ProgresoLibros
-ADD COLUMN UltimaPosicion TIME AFTER TiempoEscuchado;
-
--- Crear tabla Géneros
-CREATE TABLE Generos (
-    IDGenero INT PRIMARY KEY AUTO_INCREMENT,
-    NombreGenero VARCHAR(50) NOT NULL,
-    Descripcion TEXT
-);
-
--- Modificar tabla GeneroLiterario para vincular con Generos
-DROP TABLE IF EXISTS GeneroLiterario;
-CREATE TABLE LibroGenero (
-    IDLibro INT,
-    IDGenero INT,
-    PRIMARY KEY (IDLibro, IDGenero),
-    FOREIGN KEY (IDLibro) REFERENCES Libros(IDLibro),
-    FOREIGN KEY (IDGenero) REFERENCES Generos(IDGenero)
-);
