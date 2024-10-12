@@ -27,7 +27,7 @@ $(".add-to-cart").click(function () {
 
 function openwindow(){
 
-    window.open("../audio.html");
+    window.open("../audio.php");
 
 }
 

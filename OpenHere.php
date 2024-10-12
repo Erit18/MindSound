@@ -85,7 +85,7 @@ body {
 // Establecer un tiempo de espera de 3 segundos para simular el tiempo de carga
 setTimeout(function() {
   // Redirigir a la página de inicio
-  window.location.href = "Project/home.html";
+  window.location.href = "Project/Home.php";
 }, 3000);
 
     </script>

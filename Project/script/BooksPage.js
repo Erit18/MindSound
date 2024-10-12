@@ -186,6 +186,6 @@ for (var i = 0; i < books.length; i++) {
   container.appendChild(card);
 }
 function openwindow(){
-  window.open("../audio.html");
+  window.open("../audio.php");
 }
 

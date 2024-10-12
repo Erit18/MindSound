@@ -92,6 +92,6 @@ var books = [
     container.appendChild(card);
   }
   function openwindow(){
-    window.open("../audio.html");
+    window.open("../audio.php");
   }
   

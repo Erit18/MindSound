@@ -21,15 +21,15 @@
 <header id="header">
   <div id="nav">
     <div id="logo">
-      <a href="Inicio.html"><img src="img/logo/logo.png" alt="imagen de prueba" class="responsive"></a>
+      <a href="Home.php"><img src="img/logo/logo.png" alt="imagen de prueba" class="responsive"></a>
     </div>
     <div class="topnav" id="myTopnav">
-      <a href="Inicio.html">Inicio</a>
-      <a href="PaginaLibros.html">Libros</a>
-      <a href="megusta.html">Me gusta</a>
-      <a href="sobrenosotros.html">Sobre Nosotros</a>
-      <a href="contacto.html">Contacto</a>
-      <a href="carrito.html"><i class="fa-solid fa-cart-shopping"></i></a>
+      <a href="Home.php">Inicio</a>
+      <a href="BooksPage.php">Libros</a>
+      <a href="likes.php">Me gusta</a>
+      <a href="aboutus.php">Sobre Nosotros</a>
+      <a href="contact.php">Contacto</a>
+      <a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
     <div id="whitemode"> 
       <h6>Modo Claro</h6>

@@ -11,26 +11,26 @@
   <link rel="stylesheet" href="style/Style.css">
   <link rel="stylesheet" href="style/BooksPage.css">
   <script src="https://kit.fontawesome.com/9a05771681.js" crossorigin="anonymous"></script>
-  <title>Me gusta</title>
+  <title>Libros</title>
 </head>
   
+  
 <body>
-
-    
-<!-- ____________________________________________ HEADER _______________________________________________________ -->
+   
+<!-- ____________________________________________ ENCABEZADO _______________________________________________________ -->
   
 <header id="header">
   <div id="nav">
     <div id="logo">
-      <a href="Home.html"><img src="img/logo/logo.png" alt="test image" class="responsive"></a>
+      <a href="Home.php"><img src="img/logo/logo.png" alt="test image" class="responsive"></a>
     </div>
     <div class="topnav" id="myTopnav">
-      <a href="Home.html">Inicio</a>
-      <a href="BooksPage.html">Libros</a>
-      <a href="likes.html">Me gusta</a>
-      <a href="aboutus.html">Sobre nosotros</a>
-      <a href="contact.html">Contacto</a>
-      <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+      <a href="Home.php">Inicio</a>
+      <a href="BooksPage.php">Libros</a>
+      <a href="likes.php">Me gusta</a>
+      <a href="aboutus.php">Sobre nosotros</a>
+      <a href="contact.php">Contacto</a>
+      <a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
     <div id="whitemode"> 
       <h6>Modo claro</h6>
@@ -46,17 +46,19 @@
 </div>
 </header>
 
-<!-- ____________________________________________ HEADER _______________________________________________________ -->
+<!-- ____________________________________________ ENCABEZADO _______________________________________________________ -->
 
-<!-- ____________________________________________ LIKED BOOKS _______________________________________________________ -->
 
-<h1>Libros que me gustan</h1>
-<div id="container"></div>
-<div id="messageContainer"> </div>
- 
-<!-- ____________________________________________ LIKED BOOKS _______________________________________________________ --> 
+  
+<!-- ____________________________________________ SECCIÓN DE LIBROS _______________________________________________________ -->
 
-<!-- ____________________________________________ FOOTER _______________________________________________________ -->
+    <h2>Libros</h2>
+    <div id="container"></div>
+
+<!-- ____________________________________________ SECCIÓN DE LIBROS _______________________________________________________ -->    
+  
+
+<!-- ____________________________________________ PIE DE PÁGINA _______________________________________________________ -->
     
 <footer>
   <div class="footer-content">
@@ -74,9 +76,13 @@
   </div>
 </footer>
 
-<!-- ____________________________________________ FOOTER _______________________________________________________ -->
+<!-- ____________________________________________ PIE DE PÁGINA _______________________________________________________ -->
 
-<script src="script/like.js"></script>
+
+
+
+<script src="https://hammerjs.github.io/dist/hammer.js"></script>
+<script src="script/BooksPage.js"></script>
 <script>
   const modeToggle = document.getElementById('mode-toggle');
   const body = document.body;
@@ -85,5 +91,8 @@
   });
 </script>
 
+    
+
 </body>
 </html>
+

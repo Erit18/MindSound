@@ -20,15 +20,15 @@
 <header id="header">
   <div id="nav">
     <div id="logo">
-      <a href="Home.html"><img src="img/logo/logo.png" alt="test image" class="responsive"></a>
+      <a href="Home.php"><img src="img/logo/logo.png" alt="test image" class="responsive"></a>
     </div>
     <div class="topnav" id="myTopnav">
-      <a href="Home.html">Inicio</a>
-      <a href="BooksPage.html">Libros</a>
-      <a href="likes.html">Me gusta</a>
-      <a href="aboutus.html">Sobre nosotros</a>
-      <a href="contact.html">Contacto</a>
-      <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+      <a href="Home.php">Inicio</a>
+      <a href="BooksPage.php">Libros</a>
+      <a href="likes.php">Me gusta</a>
+      <a href="aboutus.php">Sobre nosotros</a>
+      <a href="contact.php">Contacto</a>
+      <a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
     <div id="whitemode"> 
       <h6>Modo claro</h6>
@@ -97,7 +97,7 @@
   <div class="contact-form">
     <span class="circle one"></span>
     <span class="circle two"></span>
-    <form action="index.html" autocomplete="off">
+    <form action="index.php" autocomplete="off">
       <h3 class="title">Contáctanos</h3>
       <div class="input-container">
         <input type="text" name="name" class="input" />

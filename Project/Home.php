@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="UTF-8">
@@ -20,28 +20,31 @@
 <header id="header">
   <div id="nav">
     <div id="logo">
-      <a href="Home.html"><img src="img/logo/logo.png" alt="test image" class="responsive"></a>
+      <a href="Home.php"><img src="img/logo/logo.png" alt="test image" class="responsive"></a>
     </div>
     <div class="topnav" id="myTopnav">
-      <a href="Home.html">Inicio</a>
-      <a href="BooksPage.html">Libros</a>
-      <a href="likes.html">Me gusta</a>
-      <a href="aboutus.html">Sobre nosotros</a>
-      <a href="contact.html">Contacto</a>
-      <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+      <a href="Home.php">Inicio</a>
+      <a href="BooksPage.php">Libros</a>
+      <a href="likes.php">Me gusta</a>
+      <a href="aboutus.php">Sobre nosotros</a>
+      <a href="contact.php">Contacto</a>
+      <a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
     <div id="whitemode"> 
       <h6>Modo Claro</h6>
       <label class="switch">
       <input type="checkbox" id="mode-toggle" Modo Claro> <span class="slider round"></span></label>
     </div>
-    <div class="search-container">
-      <input type="text" name="search" id="searchInput" placeholder="Buscar..." class="search-input">
-      <a href="#" class="search-btn">
-      <i class="fas fa-search" aria-hidden="true"></i>      
-      </a>
+    <div class="search-login-container">
+      <div class="search-container">
+        <input type="text" name="search" id="searchInput" placeholder="Buscar..." class="search-input">
+        <a href="#" class="search-btn">
+        <i class="fas fa-search" aria-hidden="true"></i>      
+        </a>
+      </div>
+      <a href="intranet.php" class="login-btn">Iniciar sesión</a>
     </div>
-</div>
+  </div>
 </header>
   
 <!-- ____________________________________________ HEADER _______________________________________________________ -->
@@ -250,5 +253,6 @@ for(let i=0; i<marqueeElementsDisplayed; i++) {
 
 </body>
 </html>
+
 
 
