@@ -7,6 +7,11 @@ include '../../Controlador/BD/Conexion.php';
 $correo = $_POST['correo'];
 $contrasena = $_POST['password'];
 
+if (empty($correo) || empty($contrasena)) {
+    // Mostrar error: "Por favor, ingrese tanto el correo como la contraseña"
+    exit();
+}
+
 $conexion = new Conexion();
 $con = $conexion->getcon();
 

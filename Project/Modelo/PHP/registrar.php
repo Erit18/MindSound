@@ -7,15 +7,16 @@ $conexion = new Conexion();
 $con = $conexion->getcon();
 
 // Captura los datos del formulario
-$nombre = $_POST['nombres'];
-$direccion = $_POST['direccion'];
-$distrito = $_POST['distritos'];
+$nombre = $_POST['nombre'];
+$apellido = $_POST['apellido'];
 $correo = $_POST['correo'];
 $contrasena = $_POST['password'];
 $contrasena2 = $_POST['password2'];
+$fechaNacimiento = $_POST['fechaNacimiento'];
+$genero = $_POST['genero'];
 
 // Verifica que todos los campos estén llenos
-if (empty($nombre) || empty($direccion) || empty($distrito) || empty($correo) || empty($contrasena) || empty($contrasena2)) {
+if (empty($nombre) || empty($apellido) || empty($correo) || empty($contrasena) || empty($contrasena2) || empty($fechaNacimiento) || empty($genero)) {
     echo "<body>";
     echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
     echo "<script>
@@ -36,7 +37,7 @@ if (empty($nombre) || empty($direccion) || empty($distrito) || empty($correo) ||
 }
 
 // Verifica que las contraseñas coincidan
-if ($contrasena != $contrasena2) {
+if ($contrasena !== $contrasena2) {
     echo "<body>";
     echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
     echo "<script>
@@ -57,7 +58,7 @@ if ($contrasena != $contrasena2) {
 }
 
 // Verifica si el correo ya está en uso
-$stmt = $con->prepare("SELECT * FROM usuarios WHERE correo = :correo");
+$stmt = $con->prepare("SELECT * FROM Usuarios WHERE CorreoElectronico = :correo");
 $stmt->bindParam(':correo', $correo);
 $stmt->execute();
 if ($stmt->rowCount() > 0) {
@@ -80,38 +81,18 @@ if ($stmt->rowCount() > 0) {
     exit();
 }
 
-// Verifica si el nombre ya está en uso
-$stmt = $con->prepare("SELECT * FROM usuarios WHERE nombres = :nombre");
-$stmt->bindParam(':nombre', $nombre);
-$stmt->execute();
-if ($stmt->rowCount() > 0) {
-    echo "<body>";
-    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
-    echo "<script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Este Usuario ya esta en uso, pruebe con uno diferente!',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'Aceptar',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location = '../../intranet.php';
-            }
-        });
-        </script>
-        </body>";
-    exit();
-}
+// Hashea la contraseña
+$contrasenaHash = password_hash($contrasena, PASSWORD_DEFAULT);
 
-// Inserta el nuevo usuario
-$query = "INSERT INTO usuarios (nombres, direccion, distrito, correo, contrasena) VALUES (:nombre, :direccion, :distrito, :correo, :contrasena)";
+// Inserta el nuevo usuario con la contraseña hasheada
+$query = "INSERT INTO Usuarios (Nombre, Apellido, CorreoElectronico, Contraseña, FechaNacimiento, Genero) VALUES (:nombre, :apellido, :correo, :contrasena, :fechaNacimiento, :genero)";
 $stmt = $con->prepare($query);
 $stmt->bindParam(':nombre', $nombre);
-$stmt->bindParam(':direccion', $direccion);
-$stmt->bindParam(':distrito', $distrito);
+$stmt->bindParam(':apellido', $apellido);
 $stmt->bindParam(':correo', $correo);
-$stmt->bindParam(':contrasena', $contrasena);
+$stmt->bindParam(':contrasena', $contrasenaHash);
+$stmt->bindParam(':fechaNacimiento', $fechaNacimiento);
+$stmt->bindParam(':genero', $genero);
 
 if ($stmt->execute()) {
     echo "<body>";

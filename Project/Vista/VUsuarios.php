@@ -178,35 +178,45 @@ $(document).ready(function() {
     });
 
     $("#btnGuardarUsuario").click(function() {
-        const formData = $("#formUsuario").serialize();
-        $.ajax({
-            url: '../Controlador/actualizarUsuario.php',
-            method: 'POST',
-            data: formData,
-            dataType: 'json',
-            success: function(response) {
-                console.log('Respuesta del servidor:', response);
-                if (response.success) {
-                    alert(response.message);
-                    $("#modalUsuario").modal('hide');
-                    location.reload();
-                } else {
-                    console.error('Error en la respuesta:', response);
-                    alert('Error: ' + response.message);
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error("AJAX error:", textStatus, errorThrown);
-                console.log("Respuesta del servidor:", jqXHR.responseText);
-                alert('Error al procesar la solicitud: ' + textStatus + '\n' + errorThrown + '\n' + jqXHR.responseText);
-            }
-        });
+        // Aquí iría la lógica para guardar o actualizar el usuario
+        // Por ahora, solo cerraremos el modal
+        alert("Guardar/Actualizar usuario (funcionalidad no implementada)");
+        $("#modalUsuario").modal('hide');
     });
 
     $("#btnConfirmarEliminar").click(function() {
-        // Aquí iría la lógica para eliminar el usuario
-        alert("Eliminar usuario con ID: " + usuarioIdAEliminar + " (funcionalidad no implementada)");
-        $("#modalConfirmarEliminar").modal('hide');
+        $.ajax({
+            url: '/MindSound/Project/Controlador/CUsuarios.php', // Ruta absoluta para XAMPP
+            type: 'POST',
+            data: {
+                accion: 'eliminar',
+                idUsuario: usuarioIdAEliminar
+            },
+            success: function(response) {
+                console.log("Respuesta del servidor:", response);
+                try {
+                    const jsonResponse = JSON.parse(response);
+                    if (jsonResponse.status === 'success') {
+                        alert("Usuario eliminado con éxito");
+                        location.reload();
+                    } else {
+                        alert("Error al eliminar el usuario: " + jsonResponse.message);
+                    }
+                } catch (e) {
+                    console.error("Error al parsear la respuesta:", e);
+                    alert("Error inesperado al procesar la respuesta del servidor");
+                }
+                $("#modalConfirmarEliminar").modal('hide');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error en la solicitud AJAX:");
+                console.log("Estado:", textStatus);
+                console.log("Error:", errorThrown);
+                console.log("Respuesta del servidor:", jqXHR.responseText);
+                alert("Error en la solicitud: " + textStatus);
+                $("#modalConfirmarEliminar").modal('hide');
+            }
+        });
     });
 });
 </script>
