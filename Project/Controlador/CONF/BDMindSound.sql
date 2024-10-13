@@ -173,6 +173,14 @@ CREATE PROCEDURE SP_ELIMINAR_USUARIO(
     IN p_IDUsuario INT
 )
 BEGIN
+    -- Primero, eliminar registros relacionados
+    DELETE FROM HistorialEscuchas WHERE IDUsuario = p_IDUsuario;
+    DELETE FROM Roles WHERE IDUsuario = p_IDUsuario;
+    DELETE FROM Suscripciones WHERE IDUsuario = p_IDUsuario;
+    DELETE FROM Pagos WHERE IDUsuario = p_IDUsuario;
+    DELETE FROM ProgresoLibros WHERE IDUsuario = p_IDUsuario;
+    
+    -- Finalmente, eliminar el usuario
     DELETE FROM Usuarios WHERE IDUsuario = p_IDUsuario;
 END //
 
@@ -183,6 +191,20 @@ BEGIN
     SELECT IDUsuario, Nombre, Apellido, CorreoElectronico, Contraseña, Rol, EstadoSuscripcion
     FROM Usuarios
     WHERE CorreoElectronico = p_CorreoElectronico;
+END //
+
+CREATE PROCEDURE SP_AGREGAR_USUARIO(
+    IN p_Nombre VARCHAR(50),
+    IN p_Apellido VARCHAR(50),
+    IN p_CorreoElectronico VARCHAR(100),
+    IN p_Contraseña VARCHAR(255),
+    IN p_FechaNacimiento DATE,
+    IN p_Genero ENUM('Masculino', 'Femenino', 'Otro'),
+    IN p_Rol ENUM('Usuario', 'Administrador')
+)
+BEGIN
+    INSERT INTO Usuarios (Nombre, Apellido, CorreoElectronico, Contraseña, FechaNacimiento, Genero, Rol)
+    VALUES (p_Nombre, p_Apellido, p_CorreoElectronico, p_Contraseña, p_FechaNacimiento, p_Genero, p_Rol);
 END //
 
 DELIMITER ;

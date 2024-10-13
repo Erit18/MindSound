@@ -14,6 +14,8 @@ try {
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
+
+$baseUrl = '/Project'; // Ajusta esto para que coincida con la ruta base de tu proyecto
 ?>
 
 <h2>Gestión de Usuarios</h2>
@@ -113,9 +115,13 @@ try {
                         <label for="rol">Rol:</label>
                         <select class="form-control" id="rol" name="rol" required>
                             <option value="">Seleccione...</option>
-                            <option value="Admin">Administrador</option>
+                            <option value="Administrador">Administrador</option>
                             <option value="Usuario">Usuario</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <input type="password" class="form-control" id="password" name="password">
                     </div>
                 </form>
             </div>
@@ -149,6 +155,8 @@ try {
 </div>
 
 <script>
+var baseUrl = '<?php echo $baseUrl; ?>';
+
 $(document).ready(function() {
     let usuarioIdAEliminar;
 
@@ -178,42 +186,74 @@ $(document).ready(function() {
     });
 
     $("#btnGuardarUsuario").click(function() {
-        // Aquí iría la lógica para guardar o actualizar el usuario
-        // Por ahora, solo cerraremos el modal
-        alert("Guardar/Actualizar usuario (funcionalidad no implementada)");
-        $("#modalUsuario").modal('hide');
+        const idUsuario = $("#idUsuario").val();
+        const nombre = $("#nombre").val();
+        const apellido = $("#apellido").val();
+        const email = $("#email").val();
+        const fechaNacimiento = $("#fechaNacimiento").val();
+        const genero = $("#genero").val();
+        const rol = $("#rol").val();
+        const password = $("#password").val();
+
+        const accion = idUsuario ? 'editar' : 'agregar';
+
+        $.ajax({
+            url: baseUrl + '/Controlador/CUsuarios.php',
+            type: 'POST',
+            data: {
+                accion: accion,
+                idUsuario: idUsuario,
+                nombre: nombre,
+                apellido: apellido,
+                email: email,
+                fechaNacimiento: fechaNacimiento,
+                genero: genero,
+                rol: rol,
+                password: password
+            },
+            dataType: 'json',
+            success: function(response) {
+                console.log("Respuesta del servidor:", response);
+                if (response.status === 'success') {
+                    alert(accion === 'editar' ? "Usuario actualizado con éxito" : "Usuario agregado con éxito");
+                    location.reload();
+                } else {
+                    alert("Error al " + (accion === 'editar' ? "actualizar" : "agregar") + " el usuario: " + response.message);
+                }
+                $("#modalUsuario").modal('hide');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error en la solicitud AJAX:", textStatus, errorThrown);
+                console.log("Respuesta del servidor:", jqXHR.responseText);
+                alert("Error en la solicitud. Por favor, revisa la consola para más detalles.");
+                $("#modalUsuario").modal('hide');
+            }
+        });
     });
 
     $("#btnConfirmarEliminar").click(function() {
         $.ajax({
-            url: '/MindSound/Project/Controlador/CUsuarios.php', // Ruta absoluta para XAMPP
+            url: baseUrl + '/Controlador/CUsuarios.php',
             type: 'POST',
             data: {
                 accion: 'eliminar',
                 idUsuario: usuarioIdAEliminar
             },
+            dataType: 'json',
             success: function(response) {
                 console.log("Respuesta del servidor:", response);
-                try {
-                    const jsonResponse = JSON.parse(response);
-                    if (jsonResponse.status === 'success') {
-                        alert("Usuario eliminado con éxito");
-                        location.reload();
-                    } else {
-                        alert("Error al eliminar el usuario: " + jsonResponse.message);
-                    }
-                } catch (e) {
-                    console.error("Error al parsear la respuesta:", e);
-                    alert("Error inesperado al procesar la respuesta del servidor");
+                if (response.status === 'success') {
+                    alert("Usuario eliminado con éxito");
+                    location.reload();
+                } else {
+                    alert("Error al eliminar el usuario: " + response.message);
                 }
                 $("#modalConfirmarEliminar").modal('hide');
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.log("Error en la solicitud AJAX:");
-                console.log("Estado:", textStatus);
-                console.log("Error:", errorThrown);
+                console.log("Error en la solicitud AJAX:", textStatus, errorThrown);
                 console.log("Respuesta del servidor:", jqXHR.responseText);
-                alert("Error en la solicitud: " + textStatus);
+                alert("Error en la solicitud. Por favor, revisa la consola para más detalles.");
                 $("#modalConfirmarEliminar").modal('hide');
             }
         });
