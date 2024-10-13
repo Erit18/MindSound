@@ -204,23 +204,26 @@ main {
     align-items: center;
     height: 100%;
 }
+.titulo {
+    color: #333333;
 
+}
 .contenedor {
-    background-color:transparent; /* Fondo negro oscuro */
-    border-radius: 70px; /* Aumentado de 60px */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* Sombra más pronunciada */
+    background-color:transparent; 
+    border-radius: 70px; 
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); 
     position: relative;
     overflow: hidden;
-    color: #ff4d4d; /* Añadido: texto blanco para todo el contenedor */
+    color: #81241F; 
 }
 
 .contenedor a {
-    color: #ff4d4d; /* Rojo claro */
+    color: #81241F; 
     text-decoration: none;
 }
 
 .contenedor button, .button {
-    background-color: #cc0000; /* Rojo oscuro */
+    background-color: #5E6A54; 
     color: white;
     border: 1px solid transparent;
     border-radius: 8px;
@@ -232,12 +235,13 @@ main {
 }
 
 .contenedor button.ocultar {
-    background-color: transparent;
-    border-color: #ff4d4d; /* Rojo claro */
+    background-color: #CAB890;
+    color: #333333;
+    border-color: #37310D;
 }
 
 .contenedor form {
-    background-color: #CAB890; /* Fondo negro oscuro */
+    background-color: #CAB890; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -248,12 +252,18 @@ main {
 
 .contenedor input,
 .contenedor select {
-    background-color: #333333; /* Gris oscuro */
+    background-color: #70683A; 
     color: white;
     border: none;
     border-radius: 8px;
     width: 100%;
     outline: none;
+}
+
+.contenedor input::placeholder,
+.contenedor select::placeholder {
+    color: #cccccc;
+    opacity: 1; 
 }
 
 .form-contenedor {
