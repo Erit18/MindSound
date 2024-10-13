@@ -73,7 +73,7 @@
         <div class="contenedor" id="contenedor">
             <div class="form-contenedor crear-cuenta">
                 <form action="Modelo/PHP/registrar.php" method="POST">
-                    <h1>Crea una Cuenta</h1>
+                    <h1 class="titulo" id="titulo">Registrate</h1>
                     <div class="social-iconos">
                         <a href="#" class="iconos">
                             <i class="fa-brands fa-google-plus-g"></i>
@@ -106,7 +106,7 @@
             </div>
             <div class="form-contenedor iniciar-sesion">
                 <form action="Modelo/PHP/iniciosesion.php" method="POST">
-                    <h1>Inicia Sesión</h1>
+                    <h1 class="titulo" id="titulo">Inicia Sesión</h1>
                     <div class="social-iconos">
                         <a href="#" class="iconos">
                             <i class="fa-brands fa-google-plus-g"></i>
@@ -132,12 +132,12 @@
                 <div class="cambiar">
                     <div class="cambiar-panel cambiar-izquierda">
                         <h1>Bienvenido!</h1>
-                        <p>Ingresa todos tus datos correspondientes</p>
+                        <p>Unete y disfruta de tus libros favoritos</p>
                         <button class="ocultar" id="login">Iniciar Sesion</button>
                     </div>
                     <div class="cambiar-panel cambiar-derecha">
-                        <h1>Buen Dia!</h1>
-                        <p>Registra todos tus datos!</p>
+                        <h1>Buen Día!</h1>
+                        <p>Registra todos tus datos y se parte de nosotros</p>
                         <button class="ocultar" id="register">Registrarse</button>
                     </div>
                 </div>
@@ -150,9 +150,8 @@
 <!-- ____________________________________________ FOOTER _______________________________________________________ -->
 <footer>
     <div class="footer-content">
-    <h3>Compañía</h3>
-    <p>Proyecto JS
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam, praesentium quas sint accusantium dolorem, aliquam tempora voluptates at deserunt consectetur excepturi ratione adipisci. Accusantium animi totam labore perferendis incidunt corporis!
+    <h3>MindSound </h3>
+    <p>MindSound es una plataforma de audiolibros diseñada para facilitar el acceso a literatura y contenido educativo para personas ciegas y con discapacidades visuales.
     </p>
     <ul class="socials">
         <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
