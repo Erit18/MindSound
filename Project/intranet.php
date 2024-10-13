@@ -21,31 +21,40 @@
 
 <body>
 <!-- ____________________________________________ HEADER _______________________________________________________ -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Dancing+Script:wght@700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lato&amp;display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="img/logo/logo.ico">
+  <link rel="stylesheet" href="style/Style.css">
+  <script src="https://kit.fontawesome.com/9a05771681.js" crossorigin="anonymous"></script>
+  <title> LIBROS</title>
+</head>
+  
+<body>
+
+<!--  HEADER-->
 <header id="header">
-    <div id="nav">
-    <div id="logo">
-        <a href="Home.php"><img src="img/logo/logo.png" alt="test image" class="responsive"></a>
-    </div>
+  <div id="nav">
+    
     <div class="topnav" id="myTopnav">
-        <a href="Home.php">Inicio</a>
-        <a href="BooksPage.php">Libros</a>
-        <a href="likes.php">Me gusta</a>
-        <a href="aboutus.php">Sobre nosotros</a>
-        <a href="contact.php">Contacto</a>
-        <a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a>
+      <a href="Home.php">Inicio</a>
+      <a href="BooksPage.php">Libros</a>
+      <a href="likes.php">Me gusta</a>
+      <a href="aboutus.php">Sobre Nosotros</a>
+      <a href="contact.php">Contacto</a>
+      <a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
-    <div id="whitemode"> 
-        <h6>Modo Claro</h6>
-        <label class="switch">
-        <input type="checkbox" id="mode-toggle" Modo Claro> <span class="slider round"></span></label>
+
+    <div class="search-container">
+      <input type="text" name="search" id="searchInput" placeholder="Buscar..." class="search-input">
+      <a href="#" class="search-btn">
+      <i class="fas fa-search" aria-hidden="true"></i>      
+      </a>
     </div>
-    <div class="search-login-container">
-        <div class="search-container">
-            <input type="text" name="search" id="searchInput" placeholder="Buscar..." class="search-input">
-            <a href="#" class="search-btn">
-            <i class="fas fa-search" aria-hidden="true"></i>      
-            </a>
-        </div>
+    <div>
         <?php
         session_start();
         if(isset($_SESSION['usuario_id'])): ?>
