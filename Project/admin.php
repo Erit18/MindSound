@@ -301,12 +301,12 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'Administrad
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>CRUD - Usuarios</h1>
+                            <h1>CRUD - Libros</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-                                <li class="breadcrumb-item active">CRUD - Usuarios</li>
+                                <li class="breadcrumb-item active">CRUD - Libros</li>
                             </ol>
                         </div>
                     </div>
@@ -319,7 +319,7 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'Administrad
                 <!-- Default box -->
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title"></h3>
+                        <h3 class="card-title">Gestión de Libros</h3>
 
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -331,7 +331,7 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'Administrad
                         </div>
                     </div>
                     <div class="card-body" id="TbBody">
-                        Start creating your amazing application!
+                        <!-- El contenido de la gestión de libros se cargará aquí -->
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">

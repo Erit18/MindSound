@@ -207,4 +207,69 @@ BEGIN
     VALUES (p_Nombre, p_Apellido, p_CorreoElectronico, p_Contraseña, p_FechaNacimiento, p_Genero, p_Rol);
 END //
 
+-- Obtener todos los libros
+CREATE PROCEDURE SP_OBTENER_LIBROS()
+BEGIN
+    SELECT * FROM Libros;
+END //
+
+-- Obtener un libro por ID
+CREATE PROCEDURE SP_OBTENER_LIBRO_POR_ID(IN p_IDLibro INT)
+BEGIN
+    SELECT * FROM Libros WHERE IDLibro = p_IDLibro;
+END //
+
+-- Agregar un nuevo libro
+CREATE PROCEDURE SP_AGREGAR_LIBRO(
+    IN p_Titulo VARCHAR(100),
+    IN p_Autor VARCHAR(100),
+    IN p_Narrador VARCHAR(100),
+    IN p_Duracion TIME,
+    IN p_FechaPublicacion VARCHAR(10),
+    IN p_Descripcion TEXT,
+    IN p_RutaAudio VARCHAR(255),
+    IN p_RutaPortada VARCHAR(255),
+    IN p_Precio DECIMAL(10, 2),
+    IN p_EsGratuito BOOLEAN
+)
+BEGIN
+    INSERT INTO Libros (Titulo, Autor, Narrador, Duracion, FechaPublicacion, Descripcion, RutaAudio, RutaPortada, Precio, EsGratuito)
+    VALUES (p_Titulo, p_Autor, p_Narrador, p_Duracion, STR_TO_DATE(p_FechaPublicacion, '%Y-%m-%d'), p_Descripcion, p_RutaAudio, p_RutaPortada, p_Precio, p_EsGratuito);
+END //
+
+-- Actualizar un libro existente
+CREATE PROCEDURE SP_ACTUALIZAR_LIBRO(
+    IN p_IDLibro INT,
+    IN p_Titulo VARCHAR(100),
+    IN p_Autor VARCHAR(100),
+    IN p_Narrador VARCHAR(100),
+    IN p_Duracion TIME,
+    IN p_FechaPublicacion DATE,
+    IN p_Descripcion TEXT,
+    IN p_RutaAudio VARCHAR(255),
+    IN p_RutaPortada VARCHAR(255),
+    IN p_Precio DECIMAL(10, 2),
+    IN p_EsGratuito BOOLEAN
+)
+BEGIN
+    UPDATE Libros
+    SET Titulo = p_Titulo,
+        Autor = p_Autor,
+        Narrador = p_Narrador,
+        Duracion = p_Duracion,
+        FechaPublicacion = p_FechaPublicacion,
+        Descripcion = p_Descripcion,
+        RutaAudio = p_RutaAudio,
+        RutaPortada = p_RutaPortada,
+        Precio = p_Precio,
+        EsGratuito = p_EsGratuito
+    WHERE IDLibro = p_IDLibro;
+END //
+
+-- Eliminar un libro
+CREATE PROCEDURE SP_ELIMINAR_LIBRO(IN p_IDLibro INT)
+BEGIN
+    DELETE FROM Libros WHERE IDLibro = p_IDLibro;
+END //
+
 DELIMITER ;
