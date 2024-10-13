@@ -19,9 +19,7 @@
   
 <header id="header">
   <div id="nav">
-    <div id="logo">
-      <a href="Home.php"><img src="img/logo/logo.png" alt="test image" class="responsive"></a>
-    </div>
+    
     <div class="topnav" id="myTopnav">
       <a href="Home.php">Inicio</a>
       <a href="BooksPage.php">Libros</a>
@@ -30,11 +28,7 @@
       <a href="contact.php">Contacto</a>
       <a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
-    <div id="whitemode"> 
-      <h6>Modo Claro</h6>
-      <label class="switch">
-      <input type="checkbox" id="mode-toggle" Modo Claro> <span class="slider round"></span></label>
-    </div>
+
     <div class="search-container">
       <input type="text" name="search" id="searchInput" placeholder="Buscar..." class="search-input">
       <a href="#" class="search-btn">
@@ -50,58 +44,19 @@
 
     <div id="aboutus">
     <div id="image" >
-        <img src="img/logo/logo.png">
+        <img src="img/logo/Logo2.png">
     </div>
     <div id="paragrph">
         <h2>Sobre Nosotros</h2>
         <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quaerat assumenda, quia alias omnis temporibus non necessitatibus eius nihil maiores aut ipsum eos minus ipsa quis sit. Aliquam ducimus libero doloremque?
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dicta optio ad cupiditate fuga at voluptate voluptatum natus aliquid minus iste, ea dignissimos atque quasi non? Consequatur nisi laboriosam qui ullam!
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis incidunt qui officiis exercitationem ipsum praesentium. Ab, inventore fugit ipsum, temporibus consectetur, maiores voluptatum veritatis voluptate atque reprehenderit doloribus aliquid quaerat?
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt necessitatibus, quasi repellendus alias sint temporibus, molestiae rem mollitia doloremque aliquid eius! Reiciendis, dicta cumque? Nesciunt atque repellendus tempora enim ipsam.
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex unde hic at nemo a libero ullam error dolore incidunt quae itaque, obcaecati quas illum, dolorem voluptatem. Quo temporibus qui ab.
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quas, facere voluptate voluptates, similique repudiandae veniam dolorum vitae fugiat labore mollitia ratione rerum quo ipsam, doloribus sed eum dolorem laborum rem?
+            
         </p>
     </div>
   </div>
- 
-<!-- ____________________________________________ ABOUTUS _______________________________________________________ -->
-
-<!-- ____________________________________________ FOOTER _______________________________________________________ -->
-    
-<footer>
-  <div class="footer-content">
-    <h3>Empresa</h3>
-    <p>Proyecto JS
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam, praesentium quas sint accusantium dolorem, aliquam tempora voluptates at deserunt consectetur excepturi ratione adipisci. Accusantium animi totam labore perferendis incidunt corporis!
-    </p>
-    <ul class="socials">
-      <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class="fa fa-youtube" aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a></li>
-    </ul>
-  </div>
-</footer>
-
-<!-- ____________________________________________ FOOTER _______________________________________________________ -->
-
-
-
-
-<script src="https://hammerjs.github.io/dist/hammer.js"></script>
+ <!-- -- -->
 <script src="script/contact.js"></script>
-<script>
-  const modeToggle = document.getElementById('mode-toggle');
-  const body = document.body;
-  modeToggle.addEventListener('click', () => {
-  body.classList.toggle('modo-claro');
-  });
-</script>
-
-
-    
-
+<!-- -- -->
 </body>
 </html>
 
