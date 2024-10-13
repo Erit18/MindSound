@@ -318,7 +318,7 @@ main {
 }
 
 .cambiar {
-    background-color: #cc0000; /* Rojo oscuro */
+    background:url('../../img/logo/Libros.png') no-repeat center center; /* Rojo oscuro */
     color: white;
     position: relative;
     left: -100%;
