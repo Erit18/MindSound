@@ -225,7 +225,7 @@ CREATE PROCEDURE SP_AGREGAR_LIBRO(
     IN p_Autor VARCHAR(100),
     IN p_Narrador VARCHAR(100),
     IN p_Duracion TIME,
-    IN p_FechaPublicacion VARCHAR(10),
+    IN p_FechaPublicacion DATE,
     IN p_Descripcion TEXT,
     IN p_RutaAudio VARCHAR(255),
     IN p_RutaPortada VARCHAR(255),
@@ -234,7 +234,7 @@ CREATE PROCEDURE SP_AGREGAR_LIBRO(
 )
 BEGIN
     INSERT INTO Libros (Titulo, Autor, Narrador, Duracion, FechaPublicacion, Descripcion, RutaAudio, RutaPortada, Precio, EsGratuito)
-    VALUES (p_Titulo, p_Autor, p_Narrador, p_Duracion, STR_TO_DATE(p_FechaPublicacion, '%Y-%m-%d'), p_Descripcion, p_RutaAudio, p_RutaPortada, p_Precio, p_EsGratuito);
+    VALUES (p_Titulo, p_Autor, p_Narrador, p_Duracion, p_FechaPublicacion, p_Descripcion, p_RutaAudio, p_RutaPortada, p_Precio, p_EsGratuito);
 END //
 
 -- Actualizar un libro existente
@@ -270,6 +270,47 @@ END //
 CREATE PROCEDURE SP_ELIMINAR_LIBRO(IN p_IDLibro INT)
 BEGIN
     DELETE FROM Libros WHERE IDLibro = p_IDLibro;
+END //
+
+-- Obtener todos los géneros
+CREATE PROCEDURE SP_OBTENER_GENEROS()
+BEGIN
+    SELECT * FROM Generos;
+END //
+
+-- Obtener un género por ID
+CREATE PROCEDURE SP_OBTENER_GENERO_POR_ID(IN p_id INT)
+BEGIN
+    SELECT * FROM Generos WHERE IDGenero = p_id;
+END //
+
+-- Insertar un nuevo género
+CREATE PROCEDURE SP_INSERTAR_GENERO(
+    IN p_nombre VARCHAR(50), 
+    IN p_descripcion TEXT
+)
+BEGIN
+    INSERT INTO Generos (NombreGenero, Descripcion)
+    VALUES (p_nombre, p_descripcion);
+END //
+
+-- Actualizar un género existente
+CREATE PROCEDURE SP_ACTUALIZAR_GENERO(
+    IN p_id INT,
+    IN p_nombre VARCHAR(50),
+    IN p_descripcion TEXT
+)
+BEGIN
+    UPDATE Generos
+    SET NombreGenero = p_nombre,
+        Descripcion = p_descripcion
+    WHERE IDGenero = p_id;
+END //
+
+-- Eliminar un género
+CREATE PROCEDURE SP_ELIMINAR_GENERO(IN p_id INT)
+BEGIN
+    DELETE FROM Generos WHERE IDGenero = p_id;
 END //
 
 DELIMITER ;

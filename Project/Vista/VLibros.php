@@ -4,66 +4,91 @@ require_once '../Controlador/CLibros.php';
 // Obtener libros
 $controladorLibros = new CLibros();
 $libros = $controladorLibros->obtenerLibros();
+
+$baseUrl = '/Project'; // Ajusta esto para que coincida con la ruta base de tu proyecto
 ?>
+
 
 <h2>Gestión de Libros</h2>
 
-<button class="btn btn-primary mb-3" data-toggle="modal" data-target="#modalAgregarLibro">Agregar Nuevo Libro</button>
+<div class="card-body">
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-primary" id="btnMostrarFormulario">Agregar Nuevo Libro</button>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12" id="tablaLibros">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Narrador</th>
+                        <th>Duración</th>
+                        <th>Descripción</th>
+                        <th>Ruta Audio</th>
+                        <th>Portada</th>
+                        <th>Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($libros as $libro): ?>
+                    <tr>
+                        <td><?php echo $libro['IDLibro']; ?></td>
+                        <td><?php echo $libro['Titulo']; ?></td>
+                        <td><?php echo $libro['Autor']; ?></td>
+                        <td><?php echo $libro['Narrador']; ?></td>
+                        <td><?php echo $libro['Duracion']; ?></td>
+                        <td><?php echo substr($libro['Descripcion'], 0, 50) . '...'; ?></td>
+                        <td><?php echo basename($libro['RutaAudio']); ?></td>
+                        <td>
+                            <?php if ($libro['RutaPortada']): ?>
+                                <img src="<?php echo $libro['RutaPortada']; ?>" alt="Portada" style="width: 50px; height: auto;">
+                            <?php else: ?>
+                                Sin portada
+                            <?php endif; ?>
+                        </td>
+                        <td><?php echo $libro['Precio']; ?></td>
+                        <td>
+                            <button class="btn btn-sm btn-primary btnEditar" 
+                                data-id="<?php echo $libro['IDLibro']; ?>"
+                                data-titulo="<?php echo $libro['Titulo']; ?>"
+                                data-autor="<?php echo $libro['Autor']; ?>"
+                                data-narrador="<?php echo $libro['Narrador']; ?>"
+                                data-duracion="<?php echo $libro['Duracion']; ?>"
+                                data-fechapublicacion="<?php echo $libro['FechaPublicacion']; ?>"
+                                data-descripcion="<?php echo $libro['Descripcion']; ?>"
+                                data-precio="<?php echo $libro['Precio']; ?>"
+                                data-esgratuito="<?php echo $libro['EsGratuito']; ?>">
+                                Editar
+                            </button>
+                            <button class="btn btn-sm btn-danger btnEliminar" data-id="<?php echo $libro['IDLibro']; ?>">Eliminar</button>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Título</th>
-            <th>Autor</th>
-            <th>Narrador</th>
-            <th>Duración</th>
-            <th>Descripción</th>
-            <th>Ruta Audio</th>
-            <th>Ruta Portada</th>
-            <th>Precio</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($libros as $libro): ?>
-        <tr>
-            <td><?php echo $libro['IDLibro']; ?></td>
-            <td><?php echo $libro['Titulo']; ?></td>
-            <td><?php echo $libro['Autor']; ?></td>
-            <td><?php echo $libro['Narrador']; ?></td>
-            <td><?php echo $libro['Duracion']; ?></td>
-            <td><?php echo substr($libro['Descripcion'], 0, 50) . '...'; ?></td>
-            <td><?php echo basename($libro['RutaAudio']); ?></td>
-            <td>
-                <?php if ($libro['RutaPortada']): ?>
-                    <img src="<?php echo $libro['RutaPortada']; ?>" alt="Portada" style="width: 50px; height: auto;">
-                <?php else: ?>
-                    Sin portada
-                <?php endif; ?>
-            </td>
-            <td><?php echo $libro['Precio']; ?></td>
-            <td>
-                <button class="btn btn-sm btn-primary" onclick="editarLibro(<?php echo $libro['IDLibro']; ?>)">Editar</button>
-                <button class="btn btn-sm btn-danger" onclick="eliminarLibro(<?php echo $libro['IDLibro']; ?>)">Eliminar</button>
-            </td>
-        </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
-
-<!-- Modal para Agregar Nuevo Libro -->
-<div class="modal fade" id="modalAgregarLibro" tabindex="-1" role="dialog" aria-labelledby="modalAgregarLibroLabel" aria-hidden="true">
+<!-- Modal para agregar/editar libro -->
+<div class="modal fade" id="modalLibro" tabindex="-1" role="dialog" aria-labelledby="modalLibroLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalAgregarLibroLabel">Agregar Nuevo Libro</h5>
+                <h5 class="modal-title" id="modalLibroLabel">Agregar/Editar Libro</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form id="formLibro" enctype="multipart/form-data">
+                    <input type="hidden" id="idLibro" name="idLibro">
                     <div class="form-group">
                         <label for="titulo">Título:</label>
                         <input type="text" class="form-control" id="titulo" name="titulo" required>
@@ -108,209 +133,149 @@ $libros = $controladorLibros->obtenerLibros();
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="agregarLibro()">Agregar Libro</button>
+                <button type="button" class="btn btn-primary" id="btnGuardarLibro">Guardar Libro</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal para Editar Libro -->
-<div class="modal fade" id="modalEditarLibro" tabindex="-1" role="dialog" aria-labelledby="modalEditarLibroLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+<!-- Modal de confirmación para eliminar -->
+<div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" role="dialog" aria-labelledby="modalConfirmarEliminarLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalEditarLibroLabel">Editar Libro</h5>
+                <h5 class="modal-title" id="modalConfirmarEliminarLabel">Confirmar Eliminación</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="formEditarLibro" enctype="multipart/form-data">
-                    <input type="hidden" id="editIdLibro" name="idLibro">
-                    <div class="form-group">
-                        <label for="editTitulo">Título:</label>
-                        <input type="text" class="form-control" id="editTitulo" name="titulo" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="editAutor">Autor:</label>
-                        <input type="text" class="form-control" id="editAutor" name="autor" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="editNarrador">Narrador:</label>
-                        <input type="text" class="form-control" id="editNarrador" name="narrador">
-                    </div>
-                    <div class="form-group">
-                        <label for="editDuracion">Duración:</label>
-                        <input type="time" class="form-control" id="editDuracion" name="duracion">
-                    </div>
-                    <div class="form-group">
-                        <label for="editFechaPublicacion">Fecha de Publicación:</label>
-                        <input type="date" class="form-control" id="editFechaPublicacion" name="fechaPublicacion" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="editDescripcion">Descripción:</label>
-                        <textarea class="form-control" id="editDescripcion" name="descripcion" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="editRutaAudio">Archivo de Audio:</label>
-                        <input type="file" class="form-control-file" id="editRutaAudio" name="rutaAudio" accept="audio/*">
-                    </div>
-                    <div class="form-group">
-                        <label for="editRutaPortada">Imagen de Portada:</label>
-                        <input type="file" class="form-control-file" id="editRutaPortada" name="rutaPortada" accept="image/*">
-                    </div>
-                    <div class="form-group">
-                        <label for="editPrecio">Precio:</label>
-                        <input type="number" step="0.01" class="form-control" id="editPrecio" name="precio" required>
-                    </div>
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="editEsGratuito" name="esGratuito">
-                        <label class="form-check-label" for="editEsGratuito">Es gratuito</label>
-                    </div>
-                </form>
+                ¿Está seguro de que desea eliminar este libro?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="actualizarLibro()">Guardar Cambios</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para mensajes -->
+<div class="modal fade" id="modalMensaje" tabindex="-1" role="dialog" aria-labelledby="modalMensajeLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalMensajeLabel">Mensaje</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalMensajeContenido">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-function agregarLibro() {
-    var formData = new FormData(document.getElementById('formLibro'));
-    formData.append('accion', 'agregar');
+var baseUrl = '<?php echo $baseUrl; ?>';
 
-    $.ajax({
-        url: 'Controlador/CLibros.php',
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        dataType: 'json',
-        success: function(response) {
-            if (response.status === 'success') {
-                alert(response.message);
-                $('#modalAgregarLibro').modal('hide');
-                location.reload();
-            } else {
-                alert('Error: ' + response.message);
-            }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.error('Error en la solicitud:', textStatus, errorThrown);
-            alert('Error en la solicitud: ' + textStatus);
-        }
+$(document).ready(function() {
+    let libroIdAEliminar;
+
+    function mostrarMensaje(mensaje) {
+        $("#modalMensajeContenido").text(mensaje);
+        $("#modalMensaje").modal('show');
+    }
+
+    $("#btnMostrarFormulario").click(function() {
+        $("#idLibro").val('');
+        $("#formLibro")[0].reset();
+        $("#modalLibroLabel").text("Agregar Nuevo Libro");
+        $("#modalLibro").modal('show');
     });
-}
 
-function editarLibro(idLibro) {
-    $.ajax({
-        url: 'Controlador/CLibros.php',
-        type: 'POST',
-        data: {
-            accion: 'obtener',
-            idLibro: idLibro
-        },
-        dataType: 'json',
-        success: function(response) {
-            if (response.status === 'success') {
-                var libro = response.data;
-                $('#editIdLibro').val(libro.IDLibro);
-                $('#editTitulo').val(libro.Titulo);
-                $('#editAutor').val(libro.Autor);
-                $('#editNarrador').val(libro.Narrador);
-                $('#editDuracion').val(libro.Duracion);
-                $('#editFechaPublicacion').val(libro.FechaPublicacion);
-                $('#editDescripcion').val(libro.Descripcion);
-                $('#editPrecio').val(libro.Precio);
-                $('#editEsGratuito').prop('checked', libro.EsGratuito == 1);
-                $('#modalEditarLibro').modal('show');
-            } else {
-                alert('Error al obtener datos del libro: ' + response.message);
-            }
-        },
-        error: function() {
-            alert('Error en la solicitud');
-        }
+    $(".btnEditar").click(function() {
+        const libroId = $(this).data('id');
+        $("#idLibro").val(libroId);
+        $("#titulo").val($(this).data('titulo'));
+        $("#autor").val($(this).data('autor'));
+        $("#narrador").val($(this).data('narrador'));
+        $("#duracion").val($(this).data('duracion'));
+        $("#fechaPublicacion").val($(this).data('fechapublicacion'));
+        $("#descripcion").val($(this).data('descripcion'));
+        $("#precio").val($(this).data('precio'));
+        $("#esGratuito").prop('checked', $(this).data('esgratuito') == 1);
+        $("#modalLibroLabel").text("Editar Libro");
+        $("#modalLibro").modal('show');
     });
-}
 
-function actualizarLibro() {
-    var formData = new FormData(document.getElementById('formEditarLibro'));
-    formData.append('accion', 'actualizar');
-
-    $.ajax({
-        url: 'Controlador/CLibros.php',
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        dataType: 'json',
-        success: function(response) {
-            if (response.status === 'success') {
-                alert(response.message);
-                $('#modalEditarLibro').modal('hide');
-                location.reload();
-            } else {
-                alert('Error: ' + response.message);
-            }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.error('Error en la solicitud:', textStatus, errorThrown);
-            alert('Error en la solicitud: ' + textStatus);
-        }
+    $(".btnEliminar").click(function() {
+        libroIdAEliminar = $(this).data('id');
+        $("#modalConfirmarEliminar").modal('show');
     });
-}
 
-function eliminarLibro(idLibro) {
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: "No podrás revertir esta acción",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: 'Controlador/CLibros.php',
-                type: 'POST',
-                data: {
-                    accion: 'eliminar',
-                    idLibro: idLibro
-                },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.status === 'success') {
-                        Swal.fire(
-                            '¡Eliminado!',
-                            response.message,
-                            'success'
-                        ).then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire(
-                            'Error',
-                            response.message,
-                            'error'
-                        );
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('Error en la solicitud:', textStatus, errorThrown);
-                    Swal.fire(
-                        'Error',
-                        'Hubo un problema al procesar la solicitud',
-                        'error'
-                    );
+    $("#btnGuardarLibro").click(function() {
+        var formData = new FormData($("#formLibro")[0]);
+        const idLibro = $("#idLibro").val();
+        formData.append('accion', idLibro ? 'actualizar' : 'agregar');
+
+        $.ajax({
+            url: baseUrl + '/Controlador/CLibros.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(response) {
+                $("#modalLibro").modal('hide');
+                if (response.status === 'success') {
+                    mostrarMensaje(idLibro ? "Libro actualizado con éxito" : "Libro agregado con éxito");
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    mostrarMensaje("Error al " + (idLibro ? "actualizar" : "agregar") + " el libro: " + response.message);
                 }
-            });
-        }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $("#modalLibro").modal('hide');
+                console.log("Error en la solicitud AJAX:", textStatus, errorThrown);
+                console.log("Respuesta del servidor:", jqXHR.responseText);
+                mostrarMensaje("Error en la solicitud. Por favor, revisa la consola para más detalles.");
+            }
+        });
     });
-}
+
+    $("#btnConfirmarEliminar").click(function() {
+        $.ajax({
+            url: baseUrl + '/Controlador/CLibros.php',
+            type: 'POST',
+            data: {
+                accion: 'eliminar',
+                idLibro: libroIdAEliminar
+            },
+            dataType: 'json',
+            success: function(response) {
+                $("#modalConfirmarEliminar").modal('hide');
+                if (response.status === 'success') {
+                    mostrarMensaje("Libro eliminado con éxito");
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    mostrarMensaje("Error al eliminar el libro: " + response.message);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $("#modalConfirmarEliminar").modal('hide');
+                console.log("Error en la solicitud AJAX:", textStatus, errorThrown);
+                console.log("Respuesta del servidor:", jqXHR.responseText);
+                mostrarMensaje("Error en la solicitud. Por favor, revisa la consola para más detalles.");
+            }
+        });
+    });
+});
 </script>
