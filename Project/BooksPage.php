@@ -3,6 +3,9 @@ require_once 'Controlador/CLibros.php';
 
 $controladorLibros = new CLibros();
 $libros = $controladorLibros->obtenerLibros();
+
+// Añade esta línea para definir $baseUrl
+$baseUrl = '/Project'; // Ajusta esto según la estructura de tu proyecto
 ?>
 
 <!DOCTYPE html>
@@ -57,14 +60,21 @@ $libros = $controladorLibros->obtenerLibros();
 <h2>Libros</h2>
 <div id="container" class="books-container">
     <?php foreach ($libros as $libro): ?>
-    <div class="book-card">
-        <img src="<?php echo $libro['RutaPortada']; ?>" alt="<?php echo $libro['Titulo']; ?>" class="book-cover">
-        <div class="book-info">
-            <h3 class="book-title"><?php echo $libro['Titulo']; ?></h3>
-            <p class="book-author"><?php echo $libro['Autor']; ?></p>
-            <a href="detalleLibro.php?id=<?php echo $libro['IDLibro']; ?>" class="book-details-link">Ver detalles</a>
+    <article class="card">
+        <img class="card__background" 
+             src="<?php echo file_exists($libro['RutaPortada']) ? $baseUrl . '/' . $libro['RutaPortada'] : $baseUrl . '/img/default-cover.jpg'; ?>" 
+             alt="<?php echo htmlspecialchars($libro['Titulo']); ?>" 
+             width="1920" height="2193">
+        <div class="card__content | flow">
+            <div class="card__content--container | flow">
+                <h3 class="card__title"><?php echo $libro['Titulo']; ?></h3>
+                <p class="card__description">
+                    <?php echo substr($libro['Descripcion'], 0, 100) . '...'; ?>
+                </p>
+            </div>
+            <a href="detalleLibro.php?id=<?php echo $libro['IDLibro']; ?>"><button class="card__button">Leer más</button></a>
         </div>
-    </div>
+    </article>
     <?php endforeach; ?>
 </div>
 
