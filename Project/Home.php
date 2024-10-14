@@ -5,6 +5,13 @@ session_start();
 //     header("Location: intranet.php");
 //     exit();
 // }
+
+require_once 'Controlador/CLibros.php';
+
+$controladorLibros = new CLibros();
+$libros = $controladorLibros->obtenerLibros();
+
+$baseUrl = '/Project'; // Ajusta esto según la estructura de tu proyecto
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -186,8 +193,26 @@ session_start();
 
 <h1>Libros</h1>
 
-<div id="container"></div>  
-  <a class="seemorelink" href="BooksPage.html"><button class="seemore" ><span >Ver más </span></button></a>
+<div id="container">
+    <?php foreach ($libros as $libro): ?>
+    <article class="card">
+        <img class="card__background" 
+             src="<?php echo file_exists($libro['RutaPortada']) ? $baseUrl . '/' . $libro['RutaPortada'] : $baseUrl . '/img/default-cover.jpg'; ?>" 
+             alt="<?php echo htmlspecialchars($libro['Titulo']); ?>" 
+             width="1920" height="2193">
+        <div class="card__content | flow">
+            <div class="card__content--container | flow">
+                <h3 class="card__title"><?php echo $libro['Titulo']; ?></h3>
+                <p class="card__description">
+                    <?php echo substr($libro['Descripcion'], 0, 100) . '...'; ?>
+                </p>
+            </div>
+            <a href="detalleLibro.php?id=<?php echo $libro['IDLibro']; ?>"><button class="card__button">Leer más</button></a>
+        </div>
+    </article>
+    <?php endforeach; ?>
+</div>
+  <a class="seemorelink" href="BooksPage.php"><button class="seemore" ><span >Ver más </span></button></a>
 
 
 <!-- ____________________________________________ BOOKS SECTION _______________________________________________________ -->

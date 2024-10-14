@@ -5,7 +5,11 @@ require_once '../Controlador/CLibros.php';
 $controladorLibros = new CLibros();
 $libros = $controladorLibros->obtenerLibros();
 
-$baseUrl = '/Project'; // Ajusta esto para que coincida con la ruta base de tu proyecto
+// Ajusta esto según la estructura de tu proyecto
+$baseUrl = '/Project';
+
+// Si estás usando un servidor virtual, podrías necesitar esto en su lugar:
+// $baseUrl = ''
 ?>
 
 
@@ -46,8 +50,12 @@ $baseUrl = '/Project'; // Ajusta esto para que coincida con la ruta base de tu p
                         <td><?php echo substr($libro['Descripcion'], 0, 50) . '...'; ?></td>
                         <td><?php echo basename($libro['RutaAudio']); ?></td>
                         <td>
-                            <?php if ($libro['RutaPortada']): ?>
-                                <img src="<?php echo $libro['RutaPortada']; ?>" alt="Portada" style="width: 50px; height: auto;">
+                            <?php if (!empty($libro['RutaPortada'])): ?>
+                                <?php
+                                $rutaCompleta = $baseUrl . '/' . $libro['RutaPortada'];
+                                $rutaRelativa = str_replace($_SERVER['DOCUMENT_ROOT'], '', $rutaCompleta);
+                                ?>
+                                <img src="<?php echo $rutaRelativa; ?>" alt="Portada" style="width: 50px; height: auto;">
                             <?php else: ?>
                                 Sin portada
                             <?php endif; ?>
@@ -279,3 +287,4 @@ $(document).ready(function() {
     });
 });
 </script>
+

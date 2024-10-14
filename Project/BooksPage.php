@@ -1,3 +1,10 @@
+<?php
+require_once 'Controlador/CLibros.php';
+
+$controladorLibros = new CLibros();
+$libros = $controladorLibros->obtenerLibros();
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -47,8 +54,19 @@
   
 <!-- ____________________________________________ SECCIÓN DE LIBROS _______________________________________________________ -->
 
-    <h2>Libros</h2>
-    <div id="container"></div>
+<h2>Libros</h2>
+<div id="container" class="books-container">
+    <?php foreach ($libros as $libro): ?>
+    <div class="book-card">
+        <img src="<?php echo $libro['RutaPortada']; ?>" alt="<?php echo $libro['Titulo']; ?>" class="book-cover">
+        <div class="book-info">
+            <h3 class="book-title"><?php echo $libro['Titulo']; ?></h3>
+            <p class="book-author"><?php echo $libro['Autor']; ?></p>
+            <a href="detalleLibro.php?id=<?php echo $libro['IDLibro']; ?>" class="book-details-link">Ver detalles</a>
+        </div>
+    </div>
+    <?php endforeach; ?>
+</div>
 
 <!-- ____________________________________________ SECCIÓN DE LIBROS _______________________________________________________ -->    
   
@@ -90,4 +108,3 @@
 
 </body>
 </html>
-

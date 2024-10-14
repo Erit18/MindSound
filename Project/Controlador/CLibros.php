@@ -1,4 +1,16 @@
 <?php
+ini_set('display_errors', 0);
+error_reporting(E_ALL);
+
+function captureErrors($errno, $errstr, $errfile, $errline) {
+    global $errors;
+    $errors[] = "Error [$errno] $errstr en $errfile:$errline";
+}
+
+set_error_handler("captureErrors");
+
+$errors = [];
+
 require_once __DIR__ . '/BD/Conexion.php';
 
 class CLibros {
@@ -45,8 +57,11 @@ class CLibros {
         $esGratuito = isset($_POST['esGratuito']) ? 1 : 0;
 
         // Manejar la carga de archivos
-        $rutaAudio = $this->subirArchivo('rutaAudio', 'audio');
-        $rutaPortada = $this->subirArchivo('rutaPortada', 'imagenes');
+        $rutaAudio = $this->subirArchivo('rutaAudio', 'audio/');
+        $rutaPortada = $this->subirArchivo('rutaPortada', 'img/Books/');
+
+        error_log("Ruta de audio guardada: " . $rutaAudio);
+        error_log("Ruta de portada guardada: " . $rutaPortada);
 
         // Validar datos
         if (!$titulo || !$autor || !$fechaPublicacion) {
@@ -91,7 +106,7 @@ class CLibros {
         $esGratuito = isset($_POST['esGratuito']) ? 1 : 0;
 
         // Manejar la carga de archivos
-        $rutaAudio = $this->subirArchivo('rutaAudio', 'audio') ?: $_POST['rutaAudioActual'] ?? '';
+        $rutaAudio = $this->subirArchivo('rutaAudio', 'imagenes') ?: $_POST['rutaAudioActual'] ?? '';
         $rutaPortada = $this->subirArchivo('rutaPortada', 'imagenes') ?: $_POST['rutaPortadaActual'] ?? '';
 
         if (!$idLibro || !$titulo || !$autor || !$fechaPublicacion) {
@@ -141,23 +156,25 @@ class CLibros {
         }
     }
 
-    private function subirArchivo($inputName, $folder) {
-        if (isset($_FILES[$inputName]) && $_FILES[$inputName]['error'] == 0) {
-            $targetDir = "uploads/$folder/";
-            if (!file_exists($targetDir)) {
-                mkdir($targetDir, 0777, true);
+    private function subirArchivo($inputName, $targetDir) {
+        if (isset($_FILES[$inputName]) && $_FILES[$inputName]['error'] === UPLOAD_ERR_OK) {
+            $tempName = $_FILES[$inputName]['tmp_name'];
+            $fileName = basename($_FILES[$inputName]['name']);
+            
+            // Asegúrate de que el directorio exista
+            $fullTargetDir = $_SERVER['DOCUMENT_ROOT'] . '/Project/' . $targetDir;
+            if (!file_exists($fullTargetDir)) {
+                mkdir($fullTargetDir, 0777, true);
             }
-            $fileName = basename($_FILES[$inputName]["name"]);
-            $targetFilePath = $targetDir . $fileName;
-            $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-
-            // Puedes agregar más validaciones aquí (tipo de archivo, tamaño, etc.)
-
-            if (move_uploaded_file($_FILES[$inputName]["tmp_name"], $targetFilePath)) {
-                return $targetFilePath;
+            
+            $targetPath = $fullTargetDir . $fileName;
+            
+            if (move_uploaded_file($tempName, $targetPath)) {
+                // Devuelve la ruta relativa al proyecto
+                return $targetDir . $fileName;
             }
         }
-        return '';
+        return false;
     }
 }
 
