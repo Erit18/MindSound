@@ -110,8 +110,12 @@ $baseUrl = '/Project';
                         <input type="text" class="form-control" id="narrador" name="narrador">
                     </div>
                     <div class="form-group">
-                        <label for="duracion">Duración:</label>
-                        <input type="time" class="form-control" id="duracion" name="duracion">
+                        <label for="rutaAudio">Audio del libro (MP3)</label>
+                        <input type="file" class="form-control-file" id="rutaAudio" name="rutaAudio" accept=".mp3" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="duracion">Duración</label>
+                        <input type="text" class="form-control" id="duracion" name="duracion" readonly>
                     </div>
                     <div class="form-group">
                         <label for="fechaPublicacion">Fecha de Publicación:</label>
@@ -120,10 +124,6 @@ $baseUrl = '/Project';
                     <div class="form-group">
                         <label for="descripcion">Descripción:</label>
                         <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="rutaAudio">Archivo de Audio:</label>
-                        <input type="file" class="form-control-file" id="rutaAudio" name="rutaAudio" accept="audio/*">
                     </div>
                     <div class="form-group">
                         <label for="rutaPortada">Imagen de Portada:</label>
@@ -286,5 +286,59 @@ $(document).ready(function() {
         });
     });
 });
+
+document.getElementById('rutaAudio').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (file && file.type === "audio/mpeg") {
+        var audio = new Audio();
+        audio.onloadedmetadata = function() {
+            var duration = audio.duration;
+            var minutes = Math.floor(duration / 60);
+            var seconds = Math.floor(duration % 60);
+            document.getElementById('duracion').value = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+        };
+        audio.src = URL.createObjectURL(file);
+    } else {
+        alert('Por favor, seleccione un archivo MP3 válido.');
+        this.value = ''; // Limpiar el input
+        document.getElementById('duracion').value = '';
+    }
+});
+
+// Modificar el evento de envío del formulario
+document.getElementById('formLibro').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    
+    $.ajax({
+        url: 'Controlador/CLibros.php?action=agregar',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            // Manejar la respuesta
+            console.log(response);
+            Swal.fire({
+                icon: 'success',
+                title: 'Éxito',
+                text: 'Libro agregado correctamente',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.reload();
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo agregar el libro. Por favor, intente de nuevo.',
+            });
+        }
+    });
+});
 </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>

@@ -22,7 +22,7 @@ CREATE TABLE Libros (
     Titulo VARCHAR(100) NOT NULL,
     Autor VARCHAR(100) NOT NULL,
     Narrador VARCHAR(100),
-    Duracion TIME,
+    Duracion VARCHAR(8),  -- Cambiado de TIME a VARCHAR(8)
     FechaPublicacion DATE,
     Descripcion TEXT,
     RutaAudio VARCHAR(255),
@@ -224,7 +224,7 @@ CREATE PROCEDURE SP_AGREGAR_LIBRO(
     IN p_Titulo VARCHAR(100),
     IN p_Autor VARCHAR(100),
     IN p_Narrador VARCHAR(100),
-    IN p_Duracion TIME,
+    IN p_Duracion VARCHAR(8),
     IN p_FechaPublicacion DATE,
     IN p_Descripcion TEXT,
     IN p_RutaAudio VARCHAR(255),
@@ -243,7 +243,7 @@ CREATE PROCEDURE SP_ACTUALIZAR_LIBRO(
     IN p_Titulo VARCHAR(100),
     IN p_Autor VARCHAR(100),
     IN p_Narrador VARCHAR(100),
-    IN p_Duracion TIME,
+    IN p_Duracion VARCHAR(8),  -- Cambiado de TIME a VARCHAR(8)
     IN p_FechaPublicacion DATE,
     IN p_Descripcion TEXT,
     IN p_RutaAudio VARCHAR(255),
