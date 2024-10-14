@@ -23,8 +23,8 @@ body{
 #nav{
   width: 250px;
   background-color: transparent;
-  margin: 0;
-  padding: 20px 15px;
+  /* margin: 0; */
+  /* padding: 20px 15px; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,19 +42,19 @@ body{
 .topnav {
   text-align: center;
   background-color: #8F9569;
-  margin: auto;
+  margin:20%;
   width: 80%;
   padding: 20px 15px;
   border-radius: 12px;
   box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 .topnav a {color: #37310D;
   font-size: 22px;
   font-weight: 500;
   list-style: none;
-  margin: 10px 0; 
+  margin: 10px 0px; 
   padding: 6px 0;
   text-decoration: none;
   cursor: pointer;
@@ -62,9 +62,10 @@ body{
   }
 
 
-.topnav a:after {
+/* .topnav a:after {
   content: '';
   position: absolute;
+  margin-bottom: 100px;
   width: 100%;
   height: 5px;
   bottom: -5px;
@@ -73,16 +74,16 @@ body{
   background: #730F16 ;
   transform-origin: bottom right;
   transition: transform 0.3s ease-out;
-}
+} */
 
-.topnav a:hover:after {
+/* .topnav a:hover:after {
   transform: scaleX(1);
   transform-origin: bottom left;
 }
 
 .topnav .icon {
   display: none;
-}
+} */
 
 
 /* ____________________________________________________________________________ */
@@ -90,17 +91,19 @@ body{
 
 .search-container{
   height: 30px;
-  border-radius: 90px;
+  border-radius: 80px;
+  margin: 50px;
   width: 50%;
   display: flex;
-  margin: auto;
+  margin: 8px; /*cambio*/
   border-radius: 12px;
   box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-  padding: 20px 15px;
+  padding: 10px 15px;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   transition: 0.8s;
+  
   
 }
 
@@ -955,21 +958,30 @@ margin-bottom: 20px;
   background-color: #730F16; /* Color principal de tu sitio */
   color: white;
   padding: 8px 15px;
+  margin: 90px;
   border-radius: 5px;
   text-decoration: none;
   font-size: 14px;
   white-space: nowrap;
   transition: background-color 0.3s ease;
+  display: flex;
+  /* position: relative;
+  top: 10px; */
 }
 
+
 .login-btn:hover {
-  background-color: #8B1319; /* Un tono ligeramente más claro para el efecto hover */
+  background-color: #8B1319;
+  /* margin-top: 50px; Un tono ligeramente más claro para el efecto hover */
 }
+
+
 
 /* Asegúrate de que el contenedor principal tenga suficiente espacio */
 #nav {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
   padding: 10px 20px;
+  /* margin: -20px; de aqui borre algo*/
 }
