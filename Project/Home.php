@@ -42,7 +42,7 @@ session_start();
       <i class="fas fa-search" aria-hidden="true"></i>      
       </a>
     </div>
-    <div>
+    <div class="Container" id="containere">
       <?php if(isset($_SESSION['usuario_id'])): ?>
         <a href="Modelo/PHP/cerrarsesion.php" class="login-btn">Cerrar sesión</a>
       <?php else: ?>
