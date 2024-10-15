@@ -101,7 +101,7 @@ if ($stmt->execute()) {
         Swal.fire({
             icon: 'success',
             title: 'Registro Exitoso!',
-            text: 'Bienvenido a MindSound. Tu cuenta ha sido creada con éxito.',
+            text: 'Bienvenido a MindSound. Tu cuenta ha sido creada con éxito como Administrador.',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'Aceptar',
         }).then((result) => {

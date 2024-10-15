@@ -1,0 +1,18 @@
+DELIMITER //
+
+DROP PROCEDURE IF EXISTS SP_INSERTAR_USUARIO //
+
+CREATE PROCEDURE SP_INSERTAR_USUARIO(
+    IN p_Nombre VARCHAR(50),
+    IN p_Apellido VARCHAR(50),
+    IN p_CorreoElectronico VARCHAR(100),
+    IN p_Contraseña VARCHAR(255),
+    IN p_FechaNacimiento DATE,
+    IN p_Genero ENUM('Masculino', 'Femenino', 'Otro')
+)
+BEGIN
+    INSERT INTO Usuarios (Nombre, Apellido, CorreoElectronico, Contraseña, FechaNacimiento, Genero, Rol, EstadoSuscripcion)
+    VALUES (p_Nombre, p_Apellido, p_CorreoElectronico, p_Contraseña, p_FechaNacimiento, p_Genero, 'Administrador', 'Activa');
+END //
+
+DELIMITER ;
