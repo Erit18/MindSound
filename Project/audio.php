@@ -20,9 +20,9 @@
   
 <header id="header">
   <div id="nav">
-    <div id="logo">
+    <!-- <div id="logo">
       <a href="Home.php"><img src="img/logo/logo.png" alt="imagen de prueba" class="responsive"></a>
-    </div>
+    </div> -->
     <div class="topnav" id="myTopnav">
       <a href="Home.php">Inicio</a>
       <a href="BooksPage.php">Libros</a>
@@ -31,11 +31,7 @@
       <a href="contact.php">Contacto</a>
       <a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
-    <div id="whitemode"> 
-      <h6>Modo Claro</h6>
-      <label class="switch">
-      <input type="checkbox" id="mode-toggle" Modo Claro> <span class="slider round"></span></label>
-    </div>
+    
     <div class="search-container">
       <input type="text" name="search" id="searchInput" placeholder="Buscar..." class="search-input">
       <a href="#" class="search-btn">
