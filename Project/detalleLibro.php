@@ -6,66 +6,204 @@ $controladorLibros = new CLibros();
 $libro = $controladorLibros->obtenerLibroPorId($idLibro);
 
 if (!$libro) {
-    // Manejar el caso de libro no encontrado
     header("Location: BooksPage.php");
     exit();
 }
 
-// Definir la URL base del proyecto
-$baseUrl = '/Project'; // Ajusta esto según la estructura de tu proyecto
+$baseUrl = '/Project';
+
+// Función para verificar el estado de suscripción (asegúrate de que esta función esté definida o importada)
+function tieneSubscripcionActiva($userId) {
+    // Implementación de la función
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!-- ... (tus metadatos y enlaces CSS) ... -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($libro['Titulo']); ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="style/Style.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #22312A;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            padding-left: 250px; /* Espacio para la barra lateral */
+        }
+        .main_card {
+            background: linear-gradient(to right, #d85d65, #730F16);
+            border-radius: 30px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            display: flex;
+            margin: 100px auto;
+            max-width: 760px;
+            overflow: hidden;
+        }
+        .card_left {
+            padding: 30px;
+            width: 60%;
+        }
+        .card_right {
+            width: 40%;
+        }
+        .card_right img {
+            height: 100%;
+            object-fit: cover;
+            width: 100%;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .card_cat {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .card_cat p {
+            background: #d85d65;
+            border-radius: 15px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 5px 10px;
+        }
+        .disc {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .action-button {
+            background-color: #d85d65;
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 10px 20px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+            flex: 1;
+            text-align: center;
+        }
+        .action-button:last-child {
+            margin-right: 0;
+        }
+        .action-button:hover {
+            background-color: #c74c54;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding-left: 0;
+            }
+            .main_card {
+                flex-direction: column;
+                margin: 20px;
+            }
+            .card_left, .card_right {
+                width: 100%;
+            }
+            .card_right img {
+                height: 300px;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+            .action-button {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- ... (tu header) ... -->
 
-    <div id="contin">
-        <div class="wrapper">
-            <div class="main_card">
-                <div class="card_left">
-                    <div class="card_datails">
-                        <h1><?php echo htmlspecialchars($libro['Titulo']); ?></h1>
-                        <div class="card_cat">
-                            <p class="PG">Autor: <?php echo htmlspecialchars($libro['Autor']); ?></p>
-                            <p class="year">Narrador: <?php echo htmlspecialchars($libro['Narrador']); ?></p>
-                            <p class="genre">Duración: <?php echo $libro['Duracion']; ?></p>
-                            <p class="time">Precio: $<?php echo $libro['Precio']; ?></p>
-                        </div>
-                        <p class="disc"><?php echo nl2br(htmlspecialchars($libro['Descripcion'])); ?></p>
-                        <?php if ($libro['EsGratuito']): ?>
-                            <div class="audio-player">
-                                <audio controls>
-                                    <source src="<?php echo $baseUrl . '/' . $libro['RutaAudio']; ?>" type="audio/mpeg">
-                                    Tu navegador no soporta el elemento de audio.
-                                </audio>
-                            </div>
-                        <?php else: ?>
-                            <a href="#" class="social-btn">Agregar al carrito</a>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                <div class="card_right">
-                    <div class="img_container">
-                        <img src="<?php echo $baseUrl . '/' . $libro['RutaPortada']; ?>" alt="<?php echo htmlspecialchars($libro['Titulo']); ?>">
-                    </div>
-                    <?php if ($libro['EsGratuito']): ?>
-                        <div class="play_btn">
-                            <a href="#" onclick="document.querySelector('audio').play(); return false;">
-                                <i class="fas fa-play-circle"></i>
-                            </a>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
+<!-- Barra lateral -->
+<div id="nav">
+    <div class="topnav" id="myTopnav">
+        <a href="Home.php">Inicio</a>
+        <a href="BooksPage.php">Libros</a>
+        <a href="likes.php">Me gusta</a>
+        <a href="aboutus.php">Sobre Nosotros</a>
+        <a href="contact.php">Contacto</a>
+        <?php if(isset($_SESSION['usuario_id'])): ?>
+            <?php if($_SESSION['usuario_rol'] !== 'Administrador'): ?>
+                <?php if(tieneSubscripcionActiva($_SESSION['usuario_id'])): ?>
+                    <a href="gestionar_suscripcion.php">Gestionar Suscripción</a>
+                <?php else: ?>
+                    <a href="suscripciones.php">Suscribirse</a>
+                <?php endif; ?>
+            <?php endif; ?>
+        <?php else: ?>
+            <a href="intranet.php?redirect=suscripciones.php">Suscribirse</a>
+        <?php endif; ?>
+        <a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
 
-    <!-- ... (tu footer) ... -->
+    <div class="search-container">
+        <input type="text" name="search" id="searchInput" placeholder="Buscar..." class="search-input">
+        <a href="#" class="search-btn">
+            <i class="fas fa-search" aria-hidden="true"></i>      
+        </a>
+    </div>
+    <div class="Container" id="containere">
+        <?php if(isset($_SESSION['usuario_id'])): ?>
+            <a href="Modelo/PHP/cerrarsesion.php" class="login-btn">Cerrar sesión</a>
+        <?php else: ?>
+            <a href="intranet.php" class="login-btn">Iniciar sesión</a>
+        <?php endif; ?>
+    </div>
+</div>
+
+<!-- Contenido principal -->
+<div class="main_card">
+    <div class="card_left">
+        <h1><?php echo htmlspecialchars($libro['Titulo']); ?></h1>
+        <div class="card_cat">
+            <p>Autor: <?php echo htmlspecialchars($libro['Autor']); ?></p>
+            <p>Narrador: <?php echo htmlspecialchars($libro['Narrador']); ?></p>
+            <p>Duración: <?php echo $libro['Duracion']; ?></p>
+        </div>
+        <p class="disc"><?php echo nl2br(htmlspecialchars($libro['Descripcion'])); ?></p>
+        <div class="action-buttons">
+            <a href="audio.php?id=<?php echo $libro['IDLibro']; ?>" class="action-button">
+                <i class="fas fa-play"></i> Reproducir
+            </a>
+            <a href="<?php echo $baseUrl . '/' . $libro['RutaAudio']; ?>" download class="action-button">
+                <i class="fas fa-download"></i> Descargar
+            </a>
+            <button class="action-button like-button" data-book-id="<?php echo $libro['IDLibro']; ?>">
+                <i class="fas fa-heart"></i> Me gusta
+            </button>
+        </div>
+    </div>
+    <div class="card_right">
+        <img src="<?php echo $baseUrl . '/' . $libro['RutaPortada']; ?>" alt="<?php echo htmlspecialchars($libro['Titulo']); ?>">
+    </div>
+</div>
+
+<script src="script/HomeScript.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const likeButton = document.querySelector('.like-button');
+    likeButton.addEventListener('click', function() {
+        const bookId = this.getAttribute('data-book-id');
+        // Aquí puedes agregar la lógica para manejar el "me gusta"
+        // Por ejemplo, enviar una solicitud AJAX al servidor
+        console.log('Me gusta clickeado para el libro ID:', bookId);
+        // Cambiar el estilo del botón para indicar que se ha dado "me gusta"
+        this.classList.toggle('liked');
+    });
+});
+</script>
 </body>
 </html>

@@ -1,150 +1,95 @@
-var currentAudio=0;
-var audioPlay=document.querySelector('#audio');
-var authorName=document.querySelector('.authorName');
-var seekBar=document.querySelector('.bar');
-var audioName=document.querySelector('.audioName');
-var disk = document.querySelector('.disk');
-var currentTime = document.querySelector('.timeNow');
-var audioDuration=document.querySelector('.audioDuration');
-var playBtn=document.querySelector('.playBtn');
-var forwardBtn=document.querySelector('.forwardBtn');
-var backwardBtn=document.querySelector('.backwardBtn');
+document.addEventListener('DOMContentLoaded', function() {
+    const audioElement = document.getElementById('audio');
+    const playBtn = document.querySelector('.playBtn');
+    const backwardBtn = document.querySelector('.backwardBtn');
+    const forwardBtn = document.querySelector('.forwardBtn');
+    const progressBar = document.querySelector('.bar');
+    const timeNow = document.querySelector('.timeNow');
+    const audioDuration = document.querySelector('.audioDuration');
 
-playBtn.addEventListener('click',()=>{
+    let audioContext, source, analyser;
+    let isPlaying = false;
+    let startedAt = 0;
+    let pausedAt = 0;
+    let duration = 0;
 
-    if(playBtn.className.includes('pause')){
-        audioPlay.play();
-
-
-
-    }
-    else{
-
-        audioPlay.pause();
-
+    function initAudio() {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        source = audioContext.createMediaElementSource(audioElement);
+        analyser = audioContext.createAnalyser();
+        source.connect(analyser);
+        analyser.connect(audioContext.destination);
     }
 
-    playBtn.classList.toggle('pause');
-    disk.classList.toggle('play');
-}
-)
-
-
-
-  var setAudio =(i)=>{
-seekBar.value=0;
-var audio=audios[i];
-currentAudio=[i];
-audioPlay.src=audio.path;
-audioName.innerHTML=audio.name;
-authorName.innerHTML=audio.artist;
-disk.style.backgroundImage =`url('${audio.cover}')`;
-currentTime.innerHTML='00:00';
-seekBar.max = audioPlay.duration;
-
-setTimeout(()=> {
-
-seekBar.max = audioPlay.duration;
-audioDuration.innerHTML= formatTime(audioPlay.duration) ;
-
-
-},300)
-
-}
-var formatTime=(time)=>{
-
-var min=Math.floor(time/60);
-if(min<10)
-{
-min=`0${min}`;
-}
-
-var sec=Math.floor(time%60);
-if(sec < 10)
-{
-
-sec =`0${sec}`;
-
-}
-return `${min} : ${sec}`;
-
-}
-
-
-setInterval(()=>{
-
-seekBar.value=audioPlay.currentTime;
-currentTime.innerHTML= formatTime(audioPlay.currentTime);
-
-},500)
-
-
-
-seekBar.addEventListener('change',()=>
-{
-
-audioPlay.currentTime=seekBar.value;
-
-})
-
-
-
-var playAudio=()=>{
-audioPlay.play();
-playBtn.classList.remove('pause');
-disk.classList.add('play');
-
-
-}
-
-forwardBtn.addEventListener('click',()=>{
-
-if(currentAudio>=audios.length-1){
-currentAudio=0;
-
-
-
-}
-else{
-
-    currentAudio++;
-}
-
-setAudio(currentAudio);
-playAudio();
-
-})
-
-
-
-backwardBtn.addEventListener('click',()=>{
-
-    if(currentAudio<=0){
-    currentAudio=audios.length-1;
-    
-    
-    
+    function togglePlay() {
+        if (!audioContext) initAudio();
+        if (isPlaying) {
+            audioContext.suspend();
+            pausedAt = audioContext.currentTime - startedAt;
+            isPlaying = false;
+            playBtn.classList.add('pause');
+        } else {
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            startedAt = audioContext.currentTime - pausedAt;
+            audioElement.play();
+            isPlaying = true;
+            playBtn.classList.remove('pause');
+            requestAnimationFrame(updateAudioTime);
+        }
     }
-    else{
-    
-        currentAudio--;
+
+    function formatTime(time) {
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
-    
-    setAudio(currentAudio);
-    playAudio();
-    
-    })
 
-    var selectedBookId = sessionStorage.getItem('selectedBookId');
-    setAudio(selectedBookId);
+    function updateAudioTime() {
+        if (isPlaying) {
+            const currentTime = audioContext.currentTime - startedAt;
+            progressBar.value = (currentTime / duration) * 100;
+            timeNow.textContent = formatTime(currentTime);
+            requestAnimationFrame(updateAudioTime);
+        }
+    }
 
+    function seek(e) {
+        const seekTime = (e.target.value / 100) * duration;
+        pausedAt = seekTime;
+        if (isPlaying) {
+            audioElement.currentTime = seekTime;
+            startedAt = audioContext.currentTime - seekTime;
+        }
+        timeNow.textContent = formatTime(seekTime);
+    }
 
+    function skip(direction) {
+        const currentTime = isPlaying ? audioContext.currentTime - startedAt : pausedAt;
+        const newTime = Math.max(0, Math.min(duration, currentTime + direction * 10));
+        if (isPlaying) {
+            audioElement.currentTime = newTime;
+            startedAt = audioContext.currentTime - newTime;
+        } else {
+            pausedAt = newTime;
+        }
+        progressBar.value = (newTime / duration) * 100;
+        timeNow.textContent = formatTime(newTime);
+    }
 
+    playBtn.addEventListener('click', togglePlay);
+    backwardBtn.addEventListener('click', () => skip(-1));
+    forwardBtn.addEventListener('click', () => skip(1));
+    progressBar.addEventListener('input', seek);
 
+    audioElement.addEventListener('loadedmetadata', function() {
+        duration = audioElement.duration;
+        audioDuration.textContent = formatTime(duration);
+        progressBar.max = 100;
+    });
 
-
-
-
-
-
-
+    audioElement.addEventListener('error', function(e) {
+        console.error('Error loading audio:', e);
+    });
+});
