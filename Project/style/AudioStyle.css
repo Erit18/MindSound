@@ -7,8 +7,9 @@
 
 body{
     /* box-sizing: border-box; */
-    background: #1F2122;
+    background: #22312A;
     overflow-x: hidden;
+    padding-left: 250px;
   }
 
   #hbody{
@@ -36,57 +37,42 @@ body{
 
 
 #nav{
-  width: 90%;
+  width: 250px;
   background-color: transparent;
-  margin: auto;
-  display:flex;
-  flex-wrap: wrap;
-  text-align: center;
-  margin-bottom: 10px;
-  margin-top: 50px;
-  padding: 20px 15px;  
- }
-
- /* ____________________________________________________________________________ */
-
-#logo{
-  text-align: center;
-  margin-top: 30px;
-  margin-bottom: 10px;
-  background-color: transparent;
-  margin: auto;
-  width: 10%;
-  border-radius: 12px;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-}
-#logo img {
-  width: 60%;
-  height: auto;
-}
-
-/* ____________________________________________________________________________ */
+  /* margin: 0; */
+  padding: 20px 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh; 
+  position: fixed; 
+  top: 0;
+  left: 0;
+  box-shadow: 5px 0px 10px rgba(0,0,0,0.2); 
+  }
+/* -- */
 
 .topnav {
   text-align: center;
-  background-color: transparent;
-  margin: auto;
-  width: 40%;
+  background-color: #8F9569;
+  margin:20%;
+  width: 80%;
   padding: 20px 15px;
   border-radius: 12px;
   box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+  margin-top: 10px;
 }
 
-.topnav a {
-  position: relative;
-  color: white;
+.topnav a {color: #37310D;
   font-size: 22px;
   font-weight: 500;
   list-style: none;
-  margin: 0 6px;
+  margin: 10px 0px; 
   padding: 6px 0;
   text-decoration: none;
   cursor: pointer;
-}
+  display: block;
+  }
 
 .topnav a:after {
   content: '';
