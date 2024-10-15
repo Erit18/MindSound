@@ -12,6 +12,16 @@ $controladorLibros = new CLibros();
 $libros = $controladorLibros->obtenerLibros();
 
 $baseUrl = '/Project'; // Ajusta esto según la estructura de tu proyecto
+
+// Función para verificar el estado de suscripción
+function tieneSubscripcionActiva($userId) {
+    $conexion = new Conexion();
+    $conn = $conexion->getcon();
+    $stmt = $conn->prepare("SELECT EstadoSuscripcion FROM Usuarios WHERE IDUsuario = ?");
+    $stmt->execute([$userId]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['EstadoSuscripcion'] === 'Activa';
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -26,9 +36,34 @@ $baseUrl = '/Project'; // Ajusta esto según la estructura de tu proyecto
   <link rel="stylesheet" href="style/Style.css">
   <script src="https://kit.fontawesome.com/9a05771681.js" crossorigin="anonymous"></script>
   <title> LIBROS</title>
+  <style>
+        .mensaje-exito {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            margin: 20px auto;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            max-width: 80%;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .oculto {
+            opacity: 0;
+        }
+    </style>
 </head>
   
 <body>
+
+<?php include 'Vista/header.php'; ?>
+
+<?php
+if (isset($_GET['success']) && $_GET['success'] == 'true' && isset($_SESSION['mensaje_exito'])) {
+    echo '<div id="mensajeExito" class="mensaje-exito">' . htmlspecialchars($_SESSION['mensaje_exito']) . '</div>';
+    unset($_SESSION['mensaje_exito']); // Elimina el mensaje después de mostrarlo
+}
+?>
 
 <!--  HEADER-->
 <header id="header">
@@ -40,6 +75,17 @@ $baseUrl = '/Project'; // Ajusta esto según la estructura de tu proyecto
       <a href="likes.php">Me gusta</a>
       <a href="aboutus.php">Sobre Nosotros</a>
       <a href="contact.php">Contacto</a>
+      <?php if(isset($_SESSION['usuario_id'])): ?>
+        <?php if($_SESSION['usuario_rol'] !== 'Administrador'): ?>
+          <?php if(tieneSubscripcionActiva($_SESSION['usuario_id'])): ?>
+            <a href="gestionar_suscripcion.php">Gestionar Suscripción</a>
+          <?php else: ?>
+            <a href="suscripciones.php">Suscribirse</a>
+          <?php endif; ?>
+        <?php endif; ?>
+      <?php else: ?>
+        <a href="intranet.php?redirect=suscripciones.php">Suscribirse</a>
+      <?php endif; ?>
       <a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
 
@@ -279,6 +325,22 @@ root.style.setProperty("--marquee-elements", marqueeContent.children.length);
 for(let i=0; i<marqueeElementsDisplayed; i++) {
   marqueeContent.appendChild(marqueeContent.children[i].cloneNode(true));
 }
+</script>
+
+<?php include 'Vista/footer.php'; ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const mensajeExito = document.getElementById('mensajeExito');
+    if (mensajeExito) {
+        setTimeout(function() {
+            mensajeExito.style.opacity = '0';
+            setTimeout(function() {
+                mensajeExito.remove();
+            }, 500);
+        }, 3000);
+    }
+});
 </script>
 
 </body>
