@@ -115,24 +115,21 @@ if (isset($_GET['success']) && $_GET['success'] == 'true' && isset($_SESSION['me
     <li data-color="#473e3d">
       <div class="content" style="background-image:url(img/slider/01.png)">
         <blockquote >
-          <p>AHORA.. ESCUCHARÁS TUS LIBROS FAVORITOS FÁCILMENTE</p>
-          
+          <p>VIVE LA LECTURA DE UNA NUEVA FORMA</p>
         </blockquote>
       </div>
     </li>
     <li data-color="#634200">
       <div class="content" style="background-image:url(img/slider/02.png)">
         <blockquote>
-          <p>PUEDES ESCUCHAR LOS LIBROS QUE QUIERAS.. GRATIS</p>
-          
+          <p>MILES DE HISTORIAS, UNA SUSCRIPCIÓN</p>
         </blockquote>
       </div>
     </li>
     <li data-color="#022c4d">
       <div class="content" style="background-image:url(img/slider/03.png)">
         <blockquote>
-          <p>ADEMÁS.. PUEDES DESCARGAR ESTOS LIBROS</p>
-          
+          <p>LLEVA TU BIBLIOTECA CONTIGO A DONDE VAYAS</p>
         </blockquote>
       </div>
     </li>

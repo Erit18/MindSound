@@ -245,8 +245,8 @@ a {
 	background-position: 50% 100%;
 	background-size: auto 100%;
 	background-repeat: no-repeat;
-	mix-blend-mode: lighten;
-	opacity: 0;
+	mix-blend-mode: lighten; /* Volvemos al valor original */
+	opacity: 1; /* Volvemos al valor original */
 	transform: scale(1.2);
 	transition: opacity .4s .6s, transform .4s .6s;
 }
@@ -256,13 +256,22 @@ a {
 	left: 4%;
 	z-index: 2;
 	max-width: 45%;
+	/* Eliminamos el fondo semitransparente */
+	padding: 20px;
+	border-radius: 10px;
 }
 blockquote p {
 	font-size: 4rem;
 	margin-bottom: 2rem;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 
+								0 0 10px rgba(0, 0, 0, 0.5); /* Sombra mejorada */
+	color: #ffffff; /* Aseguramos que el texto sea blanco */
 }
 blockquote span {
 	font-size: 1.4rem;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8),
+							0 0 5px rgba(0, 0, 0, 0.5); /* Sombra mejorada */
+	color: #ffffff; /* Aseguramos que el texto sea blanco */
 }
 /* current slide
 ---------------------------------*/
