@@ -55,15 +55,16 @@ try {
 
     // Actualizar el estado de suscripción del usuario
     $stmt = $conn->prepare("UPDATE Usuarios SET EstadoSuscripcion = 'Activa' WHERE IDUsuario = ?");
-    $stmt->bindParam(1, $_SESSION['usuario_id'], PDO::PARAM_INT);
-    $stmt->execute();
-    $stmt->closeCursor(); // Cerrar el cursor después de la ejecución
+    $stmt->execute([$_SESSION['usuario_id']]);
 
     // Confirmar la transacción
     $conn->commit();
 
-    $_SESSION['mensaje'] = "¡Suscripción realizada con éxito!";
-    header("Location: Home.php");
+    // Establecer el mensaje de éxito
+    $_SESSION['mensaje_exito'] = "¡Suscripción realizada con éxito! Gracias por suscribirte al plan " . ucfirst($plan) . ".";
+    
+    // Redirigir a la página de inicio
+    header("Location: Home.php?success=true");
     exit();
 } catch (Exception $e) {
     // Revertir la transacción en caso de error

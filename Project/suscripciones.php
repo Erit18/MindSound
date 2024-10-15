@@ -4,7 +4,7 @@ require_once 'Controlador/BD/Conexion.php';
 
 // Verificar si el usuario está logueado
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: intranet.php");
+    header("Location: intranet.php?redirect=suscripciones.php");
     exit();
 }
 
