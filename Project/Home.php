@@ -262,21 +262,7 @@ if (isset($_GET['success']) && $_GET['success'] == 'true' && isset($_SESSION['me
 
 <!-- ____________________________________________ OUR PARTNERS _______________________________________________________ -->
 
-<h1>NUESTROS Socios</h1>
-<div class="marquee">
-  
-  <ul class="marquee-content">
-    
-    <li><i><img src="img/partner/01.png"  ></i></li>
-    <li><i><img src="img/partner/02.png"  ></i></li>
-    <li><i><img src="img/partner/03.jpg"></i></li>
-    <li><i><img src="img/partner/04.jpg"  ></i></li>
-    <li><i><img src="img/partner/05.png"  ></i></li>
-    <li><i><img src="img/partner/06.png"  ></i></li>
-    <li><i><img src="img/partner/07.png"  ></i></li>
 
-  </ul>
-</div>
 
 <!-- ____________________________________________ OUR PARTNERS _______________________________________________________ -->
 
@@ -285,9 +271,12 @@ if (isset($_GET['success']) && $_GET['success'] == 'true' && isset($_SESSION['me
 <footer>
   <div class="footer-content">
     <h3>Compañía</h3>
-    <p>Proyecto JS
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam, praesentium quas sint accusantium dolorem, aliquam tempora voluptates at deserunt consectetur excepturi ratione adipisci. Accusantium animi totam labore perferendis incidunt corporis!
-    </p>
+    <p>SoundMind es tu destino premium para audiolibros. Ofrecemos una amplia selección de títulos gratuitos, 
+    así como una colección exclusiva de audiolibros premium para nuestros suscriptores. Nuestra misión es hacer 
+    que la literatura sea accesible para todos, en cualquier momento y lugar. Con SoundMind, puedes sumergirte 
+    en historias fascinantes, aprender nuevos conceptos y disfrutar de la narración profesional, todo desde la 
+    comodidad de tu dispositivo. Únete a nuestra comunidad de amantes de la lectura auditiva y descubre un 
+    nuevo mundo de posibilidades literarias.</p>
     <ul class="socials">
       <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
       <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
