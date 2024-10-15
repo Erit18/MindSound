@@ -70,7 +70,7 @@ CREATE TABLE LibroGenero (
 CREATE TABLE Suscripciones (
     IDSuscripcion INT PRIMARY KEY AUTO_INCREMENT,
     IDUsuario INT,
-    TipoSuscripcion ENUM('Mensual', 'Anual') NOT NULL,
+    TipoSuscripcion ENUM('Básica', 'Normal', 'Premium') NOT NULL,
     FechaInicio DATE NOT NULL,
     FechaFin DATE NOT NULL,
     EstadoSuscripcion ENUM('Activa', 'Cancelada', 'Expirada') DEFAULT 'Activa',
@@ -311,6 +311,107 @@ END //
 CREATE PROCEDURE SP_ELIMINAR_GENERO(IN p_id INT)
 BEGIN
     DELETE FROM Generos WHERE IDGenero = p_id;
+END //
+
+-- Agregar procedimientos almacenados para Suscripciones
+DELIMITER //
+
+CREATE PROCEDURE SP_OBTENER_SUSCRIPCIONES()
+BEGIN
+    SELECT s.*, u.Nombre, u.Apellido
+    FROM Suscripciones s
+    JOIN Usuarios u ON s.IDUsuario = u.IDUsuario;
+END //
+
+CREATE PROCEDURE SP_OBTENER_SUSCRIPCION_POR_ID(IN p_IDSuscripcion INT)
+BEGIN
+    SELECT s.*, u.Nombre, u.Apellido
+    FROM Suscripciones s
+    JOIN Usuarios u ON s.IDUsuario = u.IDUsuario
+    WHERE s.IDSuscripcion = p_IDSuscripcion;
+END //
+
+CREATE PROCEDURE SP_AGREGAR_SUSCRIPCION(
+    IN p_IDUsuario INT,
+    IN p_TipoSuscripcion ENUM('Básica', 'Normal', 'Premium'),
+    IN p_FechaInicio DATE,
+    IN p_FechaFin DATE
+)
+BEGIN
+    INSERT INTO Suscripciones (IDUsuario, TipoSuscripcion, FechaInicio, FechaFin)
+    VALUES (p_IDUsuario, p_TipoSuscripcion, p_FechaInicio, p_FechaFin);
+END //
+
+CREATE PROCEDURE SP_ACTUALIZAR_SUSCRIPCION(
+    IN p_IDSuscripcion INT,
+    IN p_TipoSuscripcion ENUM('Básica', 'Normal', 'Premium'),
+    IN p_FechaInicio DATE,
+    IN p_FechaFin DATE,
+    IN p_EstadoSuscripcion ENUM('Activa', 'Cancelada', 'Expirada')
+)
+BEGIN
+    UPDATE Suscripciones
+    SET TipoSuscripcion = p_TipoSuscripcion,
+        FechaInicio = p_FechaInicio,
+        FechaFin = p_FechaFin,
+        EstadoSuscripcion = p_EstadoSuscripcion
+    WHERE IDSuscripcion = p_IDSuscripcion;
+END //
+
+CREATE PROCEDURE SP_ELIMINAR_SUSCRIPCION(IN p_IDSuscripcion INT)
+BEGIN
+    DELETE FROM Suscripciones WHERE IDSuscripcion = p_IDSuscripcion;
+END //
+
+-- Agregar procedimientos almacenados para Pagos
+DELIMITER //
+
+CREATE PROCEDURE SP_OBTENER_PAGOS()
+BEGIN
+    SELECT p.*, u.Nombre, u.Apellido, s.TipoSuscripcion
+    FROM Pagos p
+    JOIN Usuarios u ON p.IDUsuario = u.IDUsuario
+    JOIN Suscripciones s ON p.IDSuscripcion = s.IDSuscripcion;
+END //
+
+CREATE PROCEDURE SP_OBTENER_PAGO_POR_ID(IN p_IDPago INT)
+BEGIN
+    SELECT p.*, u.Nombre, u.Apellido, s.TipoSuscripcion
+    FROM Pagos p
+    JOIN Usuarios u ON p.IDUsuario = u.IDUsuario
+    JOIN Suscripciones s ON p.IDSuscripcion = s.IDSuscripcion
+    WHERE p.IDPago = p_IDPago;
+END //
+
+CREATE PROCEDURE SP_AGREGAR_PAGO(
+    IN p_IDUsuario INT,
+    IN p_IDSuscripcion INT,
+    IN p_Monto DECIMAL(10, 2),
+    IN p_MetodoPago VARCHAR(50),
+    IN p_EstadoPago ENUM('Completado', 'Pendiente', 'Fallido')
+)
+BEGIN
+    INSERT INTO Pagos (IDUsuario, IDSuscripcion, Monto, MetodoPago, EstadoPago)
+    VALUES (p_IDUsuario, p_IDSuscripcion, p_Monto, p_MetodoPago, p_EstadoPago);
+END //
+
+CREATE PROCEDURE SP_ACTUALIZAR_PAGO(
+    IN p_IDPago INT,
+    IN p_Monto DECIMAL(10, 2),
+    IN p_MetodoPago VARCHAR(50),
+    IN p_EstadoPago ENUM('Completado', 'Pendiente', 'Fallido')
+)
+BEGIN
+    UPDATE Pagos
+    SET Monto = p_Monto,
+        MetodoPago = p_MetodoPago,
+        EstadoPago = p_EstadoPago
+    WHERE IDPago = p_IDPago;
+END //
+
+CREATE PROCEDURE SP_ELIMINAR_PAGO(IN p_IDPago INT)
+BEGIN
+    DELETE FROM Pagos WHERE IDPago = p_IDPago;
 END //
 
 DELIMITER ;
