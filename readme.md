@@ -8,13 +8,13 @@ MindSound ofrece una amplia selección de audiolibros, incluyendo títulos gratu
 
 ## Características principales
 
-- Amplia biblioteca de audiolibros
+- Amplia biblioteca de audiolibros gestionada dinámicamente desde una base de datos
 - Interfaz accesible y fácil de usar
 - Opciones de suscripción flexibles
 - Reproductor de audio integrado
 - Funcionalidad de búsqueda y filtrado de libros
 - Sistema de "Me gusta" para marcar libros favoritos
-- Información detallada sobre cada libro
+- Información detallada sobre cada libro obtenida de la base de datos
 
 ## Tecnologías utilizadas
 
@@ -28,12 +28,11 @@ MindSound ofrece una amplia selección de audiolibros, incluyendo títulos gratu
 
 El proyecto está organizado en varias carpetas principales:
 
-- `html Books`: Contiene las páginas HTML individuales para cada libro
 - `img`: Almacena las imágenes utilizadas en el sitio, incluyendo portadas de libros
 - `style`: Contiene los archivos CSS para el estilo del sitio
 - `script`: Almacena los archivos JavaScript
-- `Controlador`: Contiene los controladores PHP
-- `Modelo`: Incluye los modelos de datos y lógica de negocio
+- `Controlador`: Contiene los controladores PHP para manejar la lógica de negocio
+- `Modelo`: Incluye los modelos de datos y la interacción con la base de datos
 - `Vista`: Contiene las vistas y componentes de la interfaz de usuario
 
 ## Instalación y configuración
@@ -72,4 +71,3 @@ Si tienes alguna pregunta o sugerencia, no dudes en contactarnos:
 - Email: [tu-email@ejemplo.com](mailto:tu-email@ejemplo.com)
 - Twitter: [@MindSound](https://twitter.com/MindSound)
 - Facebook: [MindSound](https://www.facebook.com/MindSound)
-
