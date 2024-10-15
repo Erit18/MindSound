@@ -338,8 +338,8 @@ CREATE PROCEDURE SP_AGREGAR_SUSCRIPCION(
     IN p_FechaFin DATE
 )
 BEGIN
-    INSERT INTO Suscripciones (IDUsuario, TipoSuscripcion, FechaInicio, FechaFin)
-    VALUES (p_IDUsuario, p_TipoSuscripcion, p_FechaInicio, p_FechaFin);
+    INSERT INTO Suscripciones (IDUsuario, TipoSuscripcion, FechaInicio, FechaFin, EstadoSuscripcion)
+    VALUES (p_IDUsuario, p_TipoSuscripcion, p_FechaInicio, p_FechaFin, 'Activa');
 END //
 
 CREATE PROCEDURE SP_ACTUALIZAR_SUSCRIPCION(
@@ -391,8 +391,8 @@ CREATE PROCEDURE SP_AGREGAR_PAGO(
     IN p_EstadoPago ENUM('Completado', 'Pendiente', 'Fallido')
 )
 BEGIN
-    INSERT INTO Pagos (IDUsuario, IDSuscripcion, Monto, MetodoPago, EstadoPago)
-    VALUES (p_IDUsuario, p_IDSuscripcion, p_Monto, p_MetodoPago, p_EstadoPago);
+    INSERT INTO Pagos (IDUsuario, IDSuscripcion, Monto, FechaPago, MetodoPago, EstadoPago)
+    VALUES (p_IDUsuario, p_IDSuscripcion, p_Monto, NOW(), p_MetodoPago, p_EstadoPago);
 END //
 
 CREATE PROCEDURE SP_ACTUALIZAR_PAGO(

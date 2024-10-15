@@ -40,6 +40,9 @@ $baseUrl = '/Project'; // Ajusta esto según la estructura de tu proyecto
       <a href="likes.php">Me gusta</a>
       <a href="aboutus.php">Sobre Nosotros</a>
       <a href="contact.php">Contacto</a>
+      <?php if(isset($_SESSION['usuario_id']) && $_SESSION['usuario_rol'] !== 'Administrador'): ?>
+        <a href="suscripciones.php">Suscribirse</a>
+      <?php endif; ?>
       <a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
 

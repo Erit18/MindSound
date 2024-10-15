@@ -985,3 +985,249 @@ margin-bottom: 20px;
   padding: 10px 20px;
   /* margin: -20px; de aqui borre algo*/
 }
+
+/* Estilos para la página de suscripciones */
+.subscription-plans {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin: 2rem 0;
+}
+
+.plan {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 1.5rem;
+    margin: 1rem;
+    width: 300px;
+    text-align: center;
+}
+
+.plan h2 {
+    color: #007bff;
+}
+
+.plan .price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 1rem 0;
+}
+
+.plan ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.plan li {
+    margin: 0.5rem 0;
+}
+
+.btn-subscribe {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 0.25rem;
+    margin-top: 1rem;
+}
+
+/* Estilos para el formulario de pago */
+#payment-form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+.btn-pagar {
+    display: block;
+    width: 100%;
+    background-color: #28a745;
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.subscription-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 0.25rem;
+    margin-left: 1rem;
+}
+
+/* Estilos específicos para la página de suscripciones */
+.suscripciones-page {
+    background-color: #22312A; /* Mantenemos el fondo oscuro */
+    color: #ffffff;
+}
+
+.suscripciones-page h1 {
+    color: #8F9569; /* Color similar al de tu barra de navegación */
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+}
+
+.suscripciones-page .subscription-plans {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.suscripciones-page .plan {
+    background-color: #37310D; /* Un tono oscuro que combina con tu paleta */
+    border: 1px solid #8F9569;
+    border-radius: 10px;
+    padding: 2rem;
+    width: 300px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.suscripciones-page .plan:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(143, 149, 105, 0.2);
+}
+
+.suscripciones-page .plan h2 {
+    color: #8F9569; /* Color similar al de tu barra de navegación */
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.suscripciones-page .plan .price {
+    color: #730F16; /* Color rojo de tu sitio */
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+.suscripciones-page .plan ul {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 1.5rem;
+}
+
+.suscripciones-page .plan li {
+    margin: 0.5rem 0;
+    color: #ffffff;
+}
+
+.suscripciones-page .btn-subscribe {
+    display: inline-block;
+    background-color: #730F16; /* Color rojo de tu sitio */
+    color: white;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.suscripciones-page .btn-subscribe:hover {
+    background-color: #8B1319; /* Un tono más claro del rojo al pasar el mouse */
+}
+
+/* Estilos específicos para la página de proceso de pago */
+.proceso-pago-page {
+    background-color: #22312A;
+    color: #ffffff;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.proceso-pago-page h1 {
+    color: #8F9569;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+}
+
+.proceso-pago-page #payment-form {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #37310D;
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid #8F9569;
+    box-sizing: border-box;
+}
+
+.proceso-pago-page .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.proceso-pago-page label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #8F9569;
+}
+
+.proceso-pago-page input[type="text"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #8F9569;
+    border-radius: 5px;
+    background-color: #22312A;
+    color: #ffffff;
+    box-sizing: border-box;
+}
+
+.proceso-pago-page input[type="text"]::placeholder {
+    color: #8F9569;
+    opacity: 0.7;
+}
+
+.proceso-pago-page .btn-pagar {
+    display: block;
+    width: 100%;
+    background-color: #730F16;
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.proceso-pago-page .btn-pagar:hover {
+    background-color: #8B1319;
+}
+
+/* Estilo para mostrar el monto a pagar */
+.proceso-pago-page .monto-a-pagar {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #730F16;
+    font-weight: bold;
+}
