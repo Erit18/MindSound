@@ -74,7 +74,6 @@ body {
     </style>
 </head>
 <body>
-  <img src="Project/img/logo/logo.png" class="logo" alt="Logotipo">
     <section class="sec-loading">
         <div class="one">
         </div>
