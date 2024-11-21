@@ -15,7 +15,7 @@ try {
     die("Error: " . $e->getMessage());
 }
 
-$baseUrl = '/Project'; // Ajusta esto para que coincida con la ruta base de tu proyecto
+$baseUrl = '/mindsound/Project';
 ?>
 
 <h2>Gestión de Usuarios</h2>
