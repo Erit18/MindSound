@@ -10,7 +10,7 @@ if (!$libro) {
     exit();
 }
 
-$baseUrl = '/Project';
+$baseUrl = '/mindsound/Project';
 
 // Función para verificar el estado de suscripción (asegúrate de que esta función esté definida o importada)
 function tieneSubscripcionActiva($userId) {

@@ -1,13 +1,6 @@
-# Avoid large file sizes :
-
-we added 3 audio books only :
-
-1- Gadid Nafsk
-
-2- Nazret Elfosdk
-
-3- The Three Questions
-
+Funcione con Xampp y PhpMyAdmin: $baseUrl = '/mindsound/Project';
+Funcione con Xampp y Workbench: $baseUrl = '/mindsound/Project';
+Funcione con Visual Studio Code(extension: PHP Server) y Workbench: $baseUrl = '/Project';
 
 
 # Open Project >>>> ( OpenHere.html )

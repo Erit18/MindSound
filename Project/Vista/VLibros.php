@@ -6,7 +6,7 @@ $controladorLibros = new CLibros();
 $libros = $controladorLibros->obtenerLibros();
 
 // Ajusta esto según la estructura de tu proyecto
-$baseUrl = '/Project';
+$baseUrl = '/mindsound/Project';
 
 // Si estás usando un servidor virtual, podrías necesitar esto en su lugar:
 // $baseUrl = ''

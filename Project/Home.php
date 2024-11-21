@@ -11,7 +11,7 @@ require_once 'Controlador/CLibros.php';
 $controladorLibros = new CLibros();
 $libros = $controladorLibros->obtenerLibros();
 
-$baseUrl = '/Project'; // Ajusta esto según la estructura de tu proyecto
+$baseUrl = '/mindsound/Project'; // Ajusta esto según la estructura de tu proyecto
 
 // Función para verificar el estado de suscripción
 function tieneSubscripcionActiva($userId) {

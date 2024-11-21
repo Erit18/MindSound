@@ -170,7 +170,6 @@ class CLibros {
             $targetPath = $fullTargetDir . $fileName;
             
             if (move_uploaded_file($tempName, $targetPath)) {
-                // Devuelve la ruta relativa al proyecto
                 return $targetDir . $fileName;
             }
         }
