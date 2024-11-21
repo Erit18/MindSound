@@ -84,13 +84,8 @@ if ($stmt->rowCount() > 0) {
 // Hashea la contraseña
 $contrasenaHash = password_hash($contrasena, PASSWORD_DEFAULT);
 
-// CAMBIO TEMPORAL: Asignar rol de administrador por defecto
-// Para revertir, simplemente comenta la siguiente línea
-$rol = 'Administrador';
-
-// Usa una consulta INSERT directa en lugar del procedimiento almacenado
-$query = "INSERT INTO Usuarios (Nombre, Apellido, CorreoElectronico, Contraseña, FechaNacimiento, Genero, Rol) 
-          VALUES (:nombre, :apellido, :correo, :contrasena, :fechaNacimiento, :genero, :rol)";
+// Usa el procedimiento almacenado SP_INSERTAR_USUARIO
+$query = "CALL SP_INSERTAR_USUARIO(:nombre, :apellido, :correo, :contrasena, :fechaNacimiento, :genero)";
 $stmt = $con->prepare($query);
 $stmt->bindParam(':nombre', $nombre);
 $stmt->bindParam(':apellido', $apellido);
@@ -98,7 +93,6 @@ $stmt->bindParam(':correo', $correo);
 $stmt->bindParam(':contrasena', $contrasenaHash);
 $stmt->bindParam(':fechaNacimiento', $fechaNacimiento);
 $stmt->bindParam(':genero', $genero);
-$stmt->bindParam(':rol', $rol);
 
 if ($stmt->execute()) {
     echo "<body>";
