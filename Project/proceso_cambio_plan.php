@@ -17,39 +17,83 @@ try {
     $conexion = new Conexion();
     $conn = $conexion->getcon();
     
-    // Iniciar transacción
-    $conn->beginTransaction();
+    // Definir precios de los planes
+    $precios = [
+        'basica' => 9.99,
+        'normal' => 14.99,
+        'premium' => 19.99
+    ];
     
     // Obtener la suscripción actual
-    $stmt = $conn->prepare("SELECT IDSuscripcion FROM Suscripciones WHERE IDUsuario = ? AND EstadoSuscripcion = 'Activa'");
+    $stmt = $conn->prepare("
+        SELECT s.*, p.Monto as MontoActual, p.IDMetodoPago
+        FROM Suscripciones s 
+        LEFT JOIN Pagos p ON s.IDSuscripcion = p.IDSuscripcion 
+        WHERE s.IDUsuario = ? AND s.EstadoSuscripcion = 'Activa'
+        ORDER BY p.FechaPago DESC LIMIT 1
+    ");
     $stmt->execute([$_SESSION['usuario_id']]);
     $suscripcionActual = $stmt->fetch(PDO::FETCH_ASSOC);
     
-    if ($suscripcionActual) {
-        // Actualizar la suscripción existente a 'Cancelada'
-        $stmt = $conn->prepare("UPDATE Suscripciones SET EstadoSuscripcion = 'Cancelada' WHERE IDSuscripcion = ?");
-        $stmt->execute([$suscripcionActual['IDSuscripcion']]);
+    // Calcular días restantes del período actual
+    $fechaFin = new DateTime($suscripcionActual['FechaFin']);
+    $hoy = new DateTime();
+    $diasRestantes = $fechaFin->diff($hoy)->days;
+    
+    $precioNuevo = $precios[$nuevoPlan];
+    $precioActual = $precios[strtolower($suscripcionActual['TipoSuscripcion'])];
+    
+    // Iniciar transacción
+    $conn->beginTransaction();
+    
+    if ($precioNuevo > $precioActual) {
+        // Calcular el monto proporcional a pagar
+        $diferenciaDiaria = ($precioNuevo - $precioActual) / 30;
+        $montoPagar = $diferenciaDiaria * $diasRestantes;
+        $montoPagar = round($montoPagar, 2);
         
-        // Crear nueva suscripción
-        $stmt = $conn->prepare("CALL SP_AGREGAR_SUSCRIPCION(?, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 MONTH))");
-        $stmt->execute([$_SESSION['usuario_id'], ucfirst($nuevoPlan)]);
-        
-        // Actualizar estado del usuario
-        $stmt = $conn->prepare("UPDATE Usuarios SET EstadoSuscripcion = 'Activa' WHERE IDUsuario = ?");
-        $stmt->execute([$_SESSION['usuario_id']]);
-        
-        $conn->commit();
-        
-        $_SESSION['mensaje_exito'] = "Tu plan ha sido actualizado exitosamente a " . ucfirst($nuevoPlan);
-        header("Location: gestionar_suscripcion.php");
-        exit();
+        // Registrar el pago adicional
+        $stmt = $conn->prepare("
+            INSERT INTO Pagos (IDUsuario, IDSuscripcion, IDMetodoPago, Monto, FechaPago, EstadoPago) 
+            VALUES (?, ?, ?, ?, CURDATE(), 'Completado')
+        ");
+        $stmt->execute([
+            $_SESSION['usuario_id'],
+            $suscripcionActual['IDSuscripcion'],
+            $suscripcionActual['IDMetodoPago'],
+            $montoPagar
+        ]);
+    }
+    
+    // Actualizar la suscripción actual
+    $stmt = $conn->prepare("
+        UPDATE Suscripciones 
+        SET TipoSuscripcion = ?, 
+            FechaModificacion = CURDATE(),
+            PrecioMensual = ?
+        WHERE IDSuscripcion = ?
+    ");
+    $stmt->execute([
+        ucfirst($nuevoPlan),
+        $precioNuevo,
+        $suscripcionActual['IDSuscripcion']
+    ]);
+    
+    $conn->commit();
+    
+    if ($precioNuevo > $precioActual) {
+        $_SESSION['mensaje_exito'] = "Plan actualizado a " . ucfirst($nuevoPlan) . ". Se ha cobrado un cargo adicional de $" . 
+            number_format($montoPagar, 2) . " por la diferencia del período actual.";
     } else {
-        throw new Exception("No se encontró una suscripción activa");
+        $_SESSION['mensaje_exito'] = "Tu plan ha sido actualizado a " . ucfirst($nuevoPlan) . 
+            ". El nuevo precio se aplicará en tu próxima facturación.";
     }
     
 } catch (Exception $e) {
     $conn->rollBack();
+    error_log("Error en cambio de plan: " . $e->getMessage());
     $_SESSION['error'] = "Error al cambiar el plan: " . $e->getMessage();
-    header("Location: gestionar_suscripcion.php");
-    exit();
 }
+
+header("Location: gestionar_suscripcion.php");
+exit();

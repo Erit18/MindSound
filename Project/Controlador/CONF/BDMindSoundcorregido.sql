@@ -64,7 +64,9 @@ CREATE TABLE Suscripciones (
     TipoSuscripcion ENUM('Básica', 'Normal', 'Premium') NOT NULL,
     FechaInicio DATE NOT NULL,
     FechaFin DATE NOT NULL,
-    EstadoSuscripcion ENUM('Activa', 'Cancelada', 'Expirada') DEFAULT 'Activa',
+    EstadoSuscripcion ENUM('Activa', 'Cancelada', 'Pendiente de cambio') DEFAULT 'Activa',
+    PrecioMensual DECIMAL(10, 2) DEFAULT 0.00,
+    FechaModificacion DATETIME NULL,
     FOREIGN KEY (IDUsuario) REFERENCES Usuarios(IDUsuario)
 );
 
@@ -84,6 +86,7 @@ CREATE TABLE Pagos (
     FechaPago DATETIME DEFAULT CURRENT_TIMESTAMP,
     IDMetodoPago INT,
     EstadoPago ENUM('Completado', 'Pendiente', 'Fallido') DEFAULT 'Pendiente',
+    Descripcion VARCHAR(255) NULL,
     FOREIGN KEY (IDUsuario) REFERENCES Usuarios(IDUsuario),
     FOREIGN KEY (IDSuscripcion) REFERENCES Suscripciones(IDSuscripcion),
     FOREIGN KEY (IDMetodoPago) REFERENCES MetodosPago(IDMetodoPago)

@@ -9,6 +9,10 @@ if (!isset($_SESSION['usuario_id']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $plan = $_POST['plan'] ?? '';
 $precio = $_POST['precio'] ?? 0;
+$numero_tarjeta = $_POST['numero_tarjeta'] ?? '';
+$fecha_vencimiento = $_POST['fecha_vencimiento'] ?? '';
+$cvv = $_POST['cvv'] ?? '';
+$nombre_tarjeta = $_POST['nombre_tarjeta'] ?? '';
 
 try {
     $conexion = new Conexion();
@@ -17,19 +21,33 @@ try {
     // Iniciar transacción
     $conn->beginTransaction();
     
-    // Convertir el plan a formato correcto
-    $tipoSuscripcion = ucfirst($plan);
-    
-    // Insertar método de pago
+    // 1. Insertar método de pago
     $stmt = $conn->prepare("INSERT INTO MetodosPago (NombreMetodo) VALUES (?) ON DUPLICATE KEY UPDATE IDMetodoPago=LAST_INSERT_ID(IDMetodoPago)");
     $stmt->execute(['Tarjeta de crédito']);
     $idMetodoPago = $conn->lastInsertId();
     
-    // Insertar nueva suscripción
+    // 2. Crear nueva suscripción
     $stmt = $conn->prepare("CALL SP_AGREGAR_SUSCRIPCION(?, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 MONTH))");
-    $stmt->execute([$_SESSION['usuario_id'], $tipoSuscripcion]);
+    $stmt->execute([$_SESSION['usuario_id'], ucfirst($plan)]);
     
-    // Actualizar estado de usuario
+    // 3. Obtener el ID de la suscripción recién creada
+    $stmt = $conn->prepare("SELECT IDSuscripcion FROM Suscripciones WHERE IDUsuario = ? ORDER BY FechaInicio DESC LIMIT 1");
+    $stmt->execute([$_SESSION['usuario_id']]);
+    $suscripcion = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    // 4. Registrar el pago
+    $stmt = $conn->prepare("
+        INSERT INTO Pagos (IDUsuario, IDSuscripcion, IDMetodoPago, Monto, FechaPago, EstadoPago) 
+        VALUES (?, ?, ?, ?, CURDATE(), 'Completado')
+    ");
+    $stmt->execute([
+        $_SESSION['usuario_id'],
+        $suscripcion['IDSuscripcion'],
+        $idMetodoPago,
+        $precio
+    ]);
+    
+    // 5. Actualizar estado del usuario
     $stmt = $conn->prepare("UPDATE Usuarios SET EstadoSuscripcion = 'Activa' WHERE IDUsuario = ?");
     $stmt->execute([$_SESSION['usuario_id']]);
     
@@ -41,6 +59,7 @@ try {
     
 } catch (Exception $e) {
     $conn->rollBack();
+    error_log("Error en suscripción: " . $e->getMessage());
     $_SESSION['error'] = "Hubo un error al procesar tu pago. Por favor, intenta de nuevo.";
     header("Location: suscripciones.php");
     exit();
