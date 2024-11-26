@@ -36,6 +36,50 @@ if (empty($nombre) || empty($apellido) || empty($correo) || empty($contrasena) |
     exit();
 }
 
+// Verifica el formato del correo electrónico
+if (!filter_var($correo, FILTER_VALIDATE_EMAIL) || preg_match('/@.*\./', $correo) === 0) {
+    echo "<body>";
+    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+    echo "<script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Por favor, ingrese un correo electrónico válido!',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Aceptar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location = '../../intranet.php';
+            }
+        });
+        </script>
+        </body>";
+    exit();
+}
+
+// Verifica que la fecha de nacimiento no sea del año actual o futuro
+$fechaActual = new DateTime();
+$fechaNacimientoDate = new DateTime($fechaNacimiento);
+if ($fechaNacimientoDate->format('Y') >= $fechaActual->format('Y')) {
+    echo "<body>";
+    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+    echo "<script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'La fecha de nacimiento no puede ser del año actual o futuro!',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Aceptar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location = '../../intranet.php';
+            }
+        });
+        </script>
+        </body>";
+    exit();
+}
+
 // Verifica que las contraseñas coincidan
 if ($contrasena !== $contrasena2) {
     echo "<body>";
@@ -45,6 +89,27 @@ if ($contrasena !== $contrasena2) {
             icon: 'error',
             title: 'Oops...',
             text: 'Las contraseñas no coinciden, por favor verifique!',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Aceptar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location = '../../intranet.php';
+            }
+        });
+        </script>
+        </body>";
+    exit();
+}
+
+// Verifica que el nombre y apellido no contengan caracteres no permitidos
+if (!preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$/", $nombre) || !preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$/", $apellido)) {
+    echo "<body>";
+    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+    echo "<script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'El nombre y apellido solo pueden contener letras y espacios!',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'Aceptar',
         }).then((result) => {
@@ -68,7 +133,7 @@ if ($stmt->rowCount() > 0) {
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Este Correo ya esta en uso, pruebe con uno diferente!',
+            text: 'Este Correo ya está en uso, pruebe con uno diferente!',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'Aceptar',
         }).then((result) => {
