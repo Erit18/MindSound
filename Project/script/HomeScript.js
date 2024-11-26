@@ -125,7 +125,7 @@ var books = [
 
     var cardDescription = document.createElement("p");
     cardDescription.className = "card__description";
-    cardDescription.textContent = book.description;
+    cardDescription.textContent = book.description.length > 100 ? book.description.substring(0, 100) + '...' : book.description;
   
  
     cardContentContainer.appendChild(cardTitle);
@@ -134,7 +134,7 @@ var books = [
 
     var cardButton = document.createElement("button");
     cardButton.className = "card__button";
-    cardButton.textContent = "Read more";
+    cardButton.textContent = "Leer más";
   
      cardButton.addEventListener("click", function() {
          window.open(book.link, "_blank");
