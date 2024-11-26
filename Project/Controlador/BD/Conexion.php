@@ -4,7 +4,7 @@ class Conexion
     private $local = "localhost";
     private $usu = "root";
     private $pas = "erits321123";
-    private $bd = "bdmindsound";
+    private $bd = "bdmindsoundcorregido";
     private $port = "3306";
 
     public function getcon()

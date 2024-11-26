@@ -18,19 +18,27 @@ if (!in_array($nuevoPlan, ['basica', 'normal', 'premium']) || $precio <= 0) {
 try {
     $conexion = new Conexion();
     $conn = $conexion->getcon();
-
+    
     // Iniciar transacción
     $conn->beginTransaction();
-
-    // Actualizar la suscripción existente
-    $stmt = $conn->prepare("UPDATE Suscripciones SET TipoSuscripcion = ?, FechaFin = DATE_ADD(CURDATE(), INTERVAL 1 MONTH) WHERE IDUsuario = ? AND EstadoSuscripcion = 'Activa'");
-    $stmt->execute([ucfirst($nuevoPlan), $_SESSION['usuario_id']]);
-
-    // Insertar nuevo pago
-    $stmt = $conn->prepare("INSERT INTO Pagos (IDUsuario, IDSuscripcion, Monto, FechaPago, MetodoPago, EstadoPago) VALUES (?, (SELECT IDSuscripcion FROM Suscripciones WHERE IDUsuario = ? ORDER BY FechaInicio DESC LIMIT 1), ?, CURDATE(), 'Tarjeta de crédito', 'Completado')");
-    $stmt->execute([$_SESSION['usuario_id'], $_SESSION['usuario_id'], $precio]);
-
-    // Confirmar la transacción
+    
+    // Agregar suscripción usando SP_AGREGAR_SUSCRIPCION
+    $stmt = $conn->prepare("CALL SP_AGREGAR_SUSCRIPCION(?, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 MONTH))");
+    $stmt->execute([$_SESSION['usuario_id'], ucfirst($nuevoPlan)]);
+    
+    // Obtener el ID de la suscripción recién creada
+    $idSuscripcion = $conn->lastInsertId();
+    
+    // Agregar pago usando SP_AGREGAR_PAGO
+    $stmt = $conn->prepare("CALL SP_AGREGAR_PAGO(?, ?, ?, ?, ?)");
+    $stmt->execute([
+        $_SESSION['usuario_id'],
+        $idSuscripcion,
+        $precio,
+        1, // ID del método de pago por defecto
+        'Completado'
+    ]);
+    
     $conn->commit();
 
     $_SESSION['mensaje_exito'] = "Tu plan ha sido actualizado a " . ucfirst($nuevoPlan) . " exitosamente.";
@@ -40,7 +48,6 @@ try {
     header("Location: Home.php?success=true");
     exit();
 } catch (Exception $e) {
-    // Revertir la transacción en caso de error
     $conn->rollBack();
     error_log("Error en el cambio de plan: " . $e->getMessage());
     $_SESSION['error'] = "Hubo un error al procesar tu cambio de plan. Por favor, intenta de nuevo más tarde.";

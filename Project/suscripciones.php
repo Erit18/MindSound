@@ -106,24 +106,16 @@ $baseUrl = '/Project'; // Ajusta esto según la estructura de tu proyecto
         </div>
     </footer>
 
-    <script src="https://hammerjs.github.io/dist/hammer.js"></script>
-    <script src="script/HomeScript.js"></script>
+    <script src="script/common.js"></script>
     <script>
-        const modeToggle = document.getElementById('mode-toggle');
-        const body = document.body;
-        modeToggle.addEventListener('click', () => {
-            body.classList.toggle('white-mode');
+        document.addEventListener('DOMContentLoaded', function() {
+            const modeToggle = document.getElementById('mode-toggle');
+            if (modeToggle) {
+                modeToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('white-mode');
+                });
+            }
         });
-
-        const root = document.documentElement;
-        const marqueeElementsDisplayed = getComputedStyle(root).getPropertyValue("--marquee-elements-displayed");
-        const marqueeContent = document.querySelector("ul.marquee-content");
-
-        root.style.setProperty("--marquee-elements", marqueeContent.children.length);
-
-        for(let i=0; i<marqueeElementsDisplayed; i++) {
-            marqueeContent.appendChild(marqueeContent.children[i].cloneNode(true));
-        }
     </script>
 </body>
 </html>

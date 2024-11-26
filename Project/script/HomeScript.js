@@ -1,5 +1,4 @@
-
- var books = [
+var books = [
    
     {
         id:"Book1",

@@ -11,9 +11,15 @@ $conexion = new Conexion();
 $conn = $conexion->getcon();
 
 // Obtener información de la suscripción actual
-$stmt = $conn->prepare("SELECT s.*, p.FechaPago FROM Suscripciones s 
-                        LEFT JOIN Pagos p ON s.IDSuscripcion = p.IDSuscripcion 
-                        WHERE s.IDUsuario = ? ORDER BY s.FechaInicio DESC LIMIT 1");
+$stmt = $conn->prepare("
+    SELECT s.*, p.FechaPago 
+    FROM Suscripciones s 
+    LEFT JOIN Pagos p ON s.IDSuscripcion = p.IDSuscripcion 
+    WHERE s.IDUsuario = ? 
+    AND s.EstadoSuscripcion = 'Activa' 
+    ORDER BY s.FechaInicio DESC 
+    LIMIT 1
+");
 $stmt->execute([$_SESSION['usuario_id']]);
 $suscripcion = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -23,6 +29,11 @@ if ($suscripcion) {
     $fechaFin = new DateTime($suscripcion['FechaFin']);
     $hoy = new DateTime();
     $diasRestantes = $fechaFin->diff($hoy)->days;
+    
+    // Si la fecha fin es anterior a hoy, mostrar 0 días
+    if ($hoy > $fechaFin) {
+        $diasRestantes = 0;
+    }
 }
 
 // Definir los precios de los planes
@@ -193,6 +204,25 @@ function tieneSubscripcionActiva($userId) {
 
     <main class="gestion-suscripcion">
         <h1>Gestionar Suscripción</h1>
+        
+        <?php if(isset($_SESSION['mensaje_exito'])): ?>
+            <div class="alert alert-success">
+                <?php 
+                    echo $_SESSION['mensaje_exito'];
+                    unset($_SESSION['mensaje_exito']);
+                ?>
+            </div>
+        <?php endif; ?>
+        
+        <?php if(isset($_SESSION['error'])): ?>
+            <div class="alert alert-danger">
+                <?php 
+                    echo $_SESSION['error'];
+                    unset($_SESSION['error']);
+                ?>
+            </div>
+        <?php endif; ?>
+        
         <?php if ($suscripcion): ?>
             <div class="suscripcion-actual">
                 <h2>Tu Suscripción Actual</h2>
@@ -201,6 +231,11 @@ function tieneSubscripcionActiva($userId) {
                     <p><strong>Fecha de inicio:</strong> <?php echo htmlspecialchars(date('d/m/Y', strtotime($suscripcion['FechaInicio']))); ?></p>
                     <p><strong>Fecha de fin:</strong> <?php echo htmlspecialchars(date('d/m/Y', strtotime($suscripcion['FechaFin']))); ?></p>
                     <p><strong>Días restantes:</strong> <?php echo $diasRestantes; ?></p>
+                </div>
+                
+                <div class="cancelar-suscripcion">
+                    <button type="button" class="btn-cancelar" onclick="confirmarCancelacion()">Cancelar Suscripción</button>
+                    <p class="cancelar-info">Al cancelar, mantendrás el acceso hasta el final del período actual.</p>
                 </div>
             </div>
 
@@ -221,11 +256,11 @@ function tieneSubscripcionActiva($userId) {
                     </div>
                 </div>
                 <form action="proceso_cambio_plan.php" method="post">
-                    <select name="nuevo_plan">
+                    <select name="nuevo_plan" required>
                         <option value="">Selecciona un nuevo plan</option>
-                        <option value="basica" <?php echo $suscripcion['TipoSuscripcion'] == 'Básica' ? 'disabled' : ''; ?>>Plan Básico - $<?php echo $precios['basica']; ?>/mes</option>
-                        <option value="normal" <?php echo $suscripcion['TipoSuscripcion'] == 'Normal' ? 'disabled' : ''; ?>>Plan Normal - $<?php echo $precios['normal']; ?>/mes</option>
-                        <option value="premium" <?php echo $suscripcion['TipoSuscripcion'] == 'Premium' ? 'disabled' : ''; ?>>Plan Premium - $<?php echo $precios['premium']; ?>/mes</option>
+                        <option value="basica" <?php echo strtolower($suscripcion['TipoSuscripcion']) == 'básica' ? 'disabled' : ''; ?>>Plan Básico - $<?php echo $precios['basica']; ?>/mes</option>
+                        <option value="normal" <?php echo strtolower($suscripcion['TipoSuscripcion']) == 'normal' ? 'disabled' : ''; ?>>Plan Normal - $<?php echo $precios['normal']; ?>/mes</option>
+                        <option value="premium" <?php echo strtolower($suscripcion['TipoSuscripcion']) == 'premium' ? 'disabled' : ''; ?>>Plan Premium - $<?php echo $precios['premium']; ?>/mes</option>
                     </select>
                     <button type="submit" class="btn-cambiar-plan">Cambiar mi Plan</button>
                 </form>
@@ -259,6 +294,40 @@ function tieneSubscripcionActiva($userId) {
         modeToggle.addEventListener('click', () => {
             body.classList.toggle('white-mode');
         });
+    </script>
+    <div id="modalCancelar" class="modal">
+        <div class="modal-content">
+            <h3>¿Estás seguro de que deseas cancelar tu suscripción?</h3>
+            <p>Si cancelas tu suscripción:</p>
+            <ul>
+                <li>Mantendrás el acceso hasta <?php echo htmlspecialchars(date('d/m/Y', strtotime($suscripcion['FechaFin']))); ?></li>
+                <li>No se te cobrará el siguiente período</li>
+                <li>Perderás acceso a contenido premium después de la fecha de finalización</li>
+            </ul>
+            <div class="modal-buttons">
+                <form action="cancelar_suscripcion.php" method="POST">
+                    <button type="submit" class="btn-confirmar-cancelar">Sí, cancelar suscripción</button>
+                </form>
+                <button type="button" class="btn-cancelar-modal" onclick="cerrarModal()">No, mantener suscripción</button>
+            </div>
+        </div>
+    </div>
+    <script>
+    function confirmarCancelacion() {
+        document.getElementById('modalCancelar').style.display = 'block';
+    }
+
+    function cerrarModal() {
+        document.getElementById('modalCancelar').style.display = 'none';
+    }
+
+    // Cerrar modal si se hace clic fuera de él
+    window.onclick = function(event) {
+        var modal = document.getElementById('modalCancelar');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
     </script>
 </body>
 </html>
