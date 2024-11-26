@@ -80,6 +80,29 @@ if ($fechaNacimientoDate->format('Y') >= $fechaActual->format('Y')) {
     exit();
 }
 
+// Verifica que el usuario tenga al menos 18 años
+$edadMinima = 18;
+$fechaMinimaNacimiento = (new DateTime())->modify("-$edadMinima years");
+if ($fechaNacimientoDate > $fechaMinimaNacimiento) {
+    echo "<body>";
+    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+    echo "<script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Debes tener al menos $edadMinima años para registrarte!',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Aceptar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location = '../../intranet.php';
+            }
+        });
+        </script>
+        </body>";
+    exit();
+}
+
 // Verifica que las contraseñas coincidan
 if ($contrasena !== $contrasena2) {
     echo "<body>";
