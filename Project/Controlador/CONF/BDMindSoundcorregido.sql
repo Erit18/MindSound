@@ -68,6 +68,13 @@ CREATE TABLE Suscripciones (
     FOREIGN KEY (IDUsuario) REFERENCES Usuarios(IDUsuario)
 );
 
+
+-- Tabla MetodosPago
+CREATE TABLE MetodosPago (
+    IDMetodoPago INT PRIMARY KEY AUTO_INCREMENT,
+    NombreMetodo VARCHAR(50) NOT NULL UNIQUE
+);
+
 -- Tabla Pagos
 CREATE TABLE Pagos (
     IDPago INT PRIMARY KEY AUTO_INCREMENT,
@@ -80,12 +87,6 @@ CREATE TABLE Pagos (
     FOREIGN KEY (IDUsuario) REFERENCES Usuarios(IDUsuario),
     FOREIGN KEY (IDSuscripcion) REFERENCES Suscripciones(IDSuscripcion),
     FOREIGN KEY (IDMetodoPago) REFERENCES MetodosPago(IDMetodoPago)
-);
-
--- Tabla MetodosPago
-CREATE TABLE MetodosPago (
-    IDMetodoPago INT PRIMARY KEY AUTO_INCREMENT,
-    NombreMetodo VARCHAR(50) NOT NULL UNIQUE
 );
 
 -- Tabla ProgresoLibros
