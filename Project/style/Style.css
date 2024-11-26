@@ -1335,13 +1335,22 @@ margin-bottom: 20px;
     margin-top: 20px;
 }
 
-.btn-confirmar-cancelar {
+.btn-confirmar-cambiar {
     background-color: #730F16;
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.btn-confirmar-cancelar {
+  background-color: #730F16;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .btn-cancelar-modal {

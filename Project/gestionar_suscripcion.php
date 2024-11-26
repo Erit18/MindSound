@@ -255,14 +255,14 @@ function tieneSubscripcionActiva($userId) {
                         <p>$<?php echo $precios['premium']; ?>/mes</p>
                     </div>
                 </div>
-                <form action="proceso_cambio_plan.php" method="post">
-                    <select name="nuevo_plan" required>
+                <form id="formCambioPlan" action="proceso_cambio_plan.php" method="post">
+                    <select name="nuevo_plan" id="nuevo_plan" required>
                         <option value="">Selecciona un nuevo plan</option>
                         <option value="basica" <?php echo strtolower($suscripcion['TipoSuscripcion']) == 'básica' ? 'disabled' : ''; ?>>Plan Básico - $<?php echo $precios['basica']; ?>/mes</option>
                         <option value="normal" <?php echo strtolower($suscripcion['TipoSuscripcion']) == 'normal' ? 'disabled' : ''; ?>>Plan Normal - $<?php echo $precios['normal']; ?>/mes</option>
                         <option value="premium" <?php echo strtolower($suscripcion['TipoSuscripcion']) == 'premium' ? 'disabled' : ''; ?>>Plan Premium - $<?php echo $precios['premium']; ?>/mes</option>
                     </select>
-                    <button type="submit" class="btn-cambiar-plan">Cambiar mi Plan</button>
+                    <button type="button" class="btn-cambiar-plan" onclick="confirmarCambioPlan()">Cambiar mi Plan</button>
                 </form>
             </div>
         <?php else: ?>
@@ -328,6 +328,48 @@ function tieneSubscripcionActiva($userId) {
             modal.style.display = 'none';
         }
     }
+    </script>
+    <!-- Modal de confirmación -->
+    <div id="modalConfirmarCambio" class="modal">
+        <div class="modal-content">
+            <h3>Confirmar Cambio de Plan</h3>
+            <p>Estás a punto de cambiar tu plan a <span id="planSeleccionado"></span>.</p>
+            <p>¿Estás seguro de que deseas continuar?</p>
+            <div class="modal-buttons">
+                <button id="btnConfirmar" class="btn-confirmar-cambiar">Sí, cambiar plan</button>
+                <button type="button" class="btn-cancelar-modal" onclick="cerrarModal()">No, mantener suscripción</button>
+            </div>
+        </div>
+    </div>
+    <script>
+    function confirmarCambioPlan() {
+        const nuevoPlan = document.getElementById('nuevo_plan').value;
+        const planSeleccionado = document.getElementById('planSeleccionado');
+        
+        if (nuevoPlan) {
+            planSeleccionado.textContent = nuevoPlan.charAt(0).toUpperCase() + nuevoPlan.slice(1);
+            document.getElementById('modalConfirmarCambio').style.display = 'block';
+        } else {
+            alert('Por favor, selecciona un plan.');
+        }
+    }
+
+    function cerrarModal() {
+        document.getElementById('modalConfirmarCambio').style.display = 'none';
+    }
+
+    // Cerrar modal si se hace clic fuera de él
+    window.onclick = function(event) {
+        var modal = document.getElementById('modalConfirmarCambio');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    // Confirmar el cambio de plan
+    document.getElementById('btnConfirmar').onclick = function() {
+        document.getElementById('formCambioPlan').submit();
+    };
     </script>
 </body>
 </html>
