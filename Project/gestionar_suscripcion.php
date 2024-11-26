@@ -255,14 +255,14 @@ function tieneSubscripcionActiva($userId) {
                         <p>$<?php echo $precios['premium']; ?>/mes</p>
                     </div>
                 </div>
-                <form id="formCambioPlan" action="proceso_cambio_plan.php" method="post">
-                    <select name="nuevo_plan" id="nuevo_plan" required>
+                <form action="proceso_cambio_plan.php" method="post">
+                    <select name="nuevo_plan" required>
                         <option value="">Selecciona un nuevo plan</option>
                         <option value="basica" <?php echo strtolower($suscripcion['TipoSuscripcion']) == 'básica' ? 'disabled' : ''; ?>>Plan Básico - $<?php echo $precios['basica']; ?>/mes</option>
                         <option value="normal" <?php echo strtolower($suscripcion['TipoSuscripcion']) == 'normal' ? 'disabled' : ''; ?>>Plan Normal - $<?php echo $precios['normal']; ?>/mes</option>
                         <option value="premium" <?php echo strtolower($suscripcion['TipoSuscripcion']) == 'premium' ? 'disabled' : ''; ?>>Plan Premium - $<?php echo $precios['premium']; ?>/mes</option>
                     </select>
-                    <button type="button" class="btn-cambiar-plan" onclick="confirmarCambioPlan()">Cambiar mi Plan</button>
+                    <button type="submit" class="btn-cambiar-plan">Cambiar mi Plan</button>
                 </form>
             </div>
         <?php else: ?>
@@ -363,6 +363,11 @@ function tieneSubscripcionActiva($userId) {
         var modal = document.getElementById('modalConfirmarCambio');
         if (event.target == modal) {
             modal.style.display = 'none';
+        }
+
+        var modalCancelar = document.getElementById('modalCancelar');
+        if (event.target == modalCancelar) {
+            modalCancelar.style.display = 'none';
         }
     }
 
