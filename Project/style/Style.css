@@ -1362,3 +1362,103 @@ margin-bottom: 20px;
     opacity: 1;
     transform: translateY(0);
 }
+
+.generos-container {
+    margin-top: 1rem;
+}
+
+.generos-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.genero-tag {
+    background-color: #730F16;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    display: inline-block;
+}
+
+.genero-tag:hover {
+    background-color: #8B1319;
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+/* Estilos para la información del libro */
+.book-info {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.info-item {
+    margin: 10px 0;
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+.info-item i {
+    margin-right: 10px;
+    color: #d85d65;
+}
+
+.info-item span {
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+/* Estilos para la sección de géneros */
+.generos-section {
+    margin: 25px 0;
+}
+
+.generos-section h3 {
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.generos-section h3 i {
+    margin-right: 10px;
+    color: #d85d65;
+}
+
+.generos-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.genero-tag {
+    background: linear-gradient(135deg, #d85d65, #730F16);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    display: inline-block;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.genero-tag:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    background: linear-gradient(135deg, #e06a72, #8B1319);
+}
+
+/* Ajuste para la descripción */
+.disc {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 15px;
+    line-height: 1.6;
+    margin: 25px 0;
+}

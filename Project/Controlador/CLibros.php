@@ -283,21 +283,16 @@ class CLibros {
         return false;
     }
 
-    public function obtenerGenerosLibro() {
-        $idLibro = $_POST['idLibro'] ?? '';
-        
+    public function obtenerGenerosLibro($idLibro) {
         try {
-            $conexion = new Conexion();
-            $conn = $conexion->getcon();
-            
+            $conn = $this->conexion->getcon();
             $stmt = $conn->prepare("CALL SP_OBTENER_GENEROS_LIBRO(?)");
-            $stmt->bindParam(1, $idLibro, PDO::PARAM_INT);
+            $stmt->bindParam(1, $idLibro);
             $stmt->execute();
-            
-            $generos = $stmt->fetchAll(PDO::FETCH_COLUMN);
-            echo json_encode(['status' => 'success', 'generos' => $generos]);
-        } catch (PDOException $e) {
-            echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            error_log("Error al obtener géneros del libro: " . $e->getMessage());
+            return [];
         }
     }
 }

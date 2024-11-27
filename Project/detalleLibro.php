@@ -4,6 +4,7 @@ require_once 'Controlador/CLibros.php';
 $idLibro = $_GET['id'] ?? 0;
 $controladorLibros = new CLibros();
 $libro = $controladorLibros->obtenerLibroPorId($idLibro);
+$generos = $controladorLibros->obtenerGenerosLibro($idLibro);
 
 if (!$libro) {
     header("Location: BooksPage.php");
@@ -168,12 +169,38 @@ function tieneSubscripcionActiva($userId) {
 <div class="main_card">
     <div class="card_left">
         <h1><?php echo htmlspecialchars($libro['Titulo']); ?></h1>
-        <div class="card_cat">
-            <p>Autor: <?php echo htmlspecialchars($libro['Autor']); ?></p>
-            <p>Narrador: <?php echo htmlspecialchars($libro['Narrador']); ?></p>
-            <p>Duración: <?php echo $libro['Duracion']; ?></p>
+        
+        <!-- Información básica en una sección -->
+        <div class="book-info">
+            <div class="info-item">
+                <i class="fas fa-user"></i>
+                <span>Autor:</span> <?php echo htmlspecialchars($libro['Autor']); ?>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-microphone"></i>
+                <span>Narrador:</span> <?php echo htmlspecialchars($libro['Narrador']); ?>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-clock"></i>
+                <span>Duración:</span> <?php echo $libro['Duracion']; ?>
+            </div>
         </div>
+
+        <!-- Sección de géneros -->
+        <div class="generos-section">
+            <h3><i class="fas fa-tags"></i> Géneros</h3>
+            <div class="generos-tags">
+                <?php foreach ($generos as $genero): ?>
+                    <span class="genero-tag">
+                        <?php echo htmlspecialchars($genero['NombreGenero']); ?>
+                    </span>
+                <?php endforeach; ?>
+            </div>
+        </div>
+
         <p class="disc"><?php echo nl2br(htmlspecialchars($libro['Descripcion'])); ?></p>
+        
+        <!-- Botones de acción -->
         <div class="action-buttons">
             <a href="audio.php?id=<?php echo $libro['IDLibro']; ?>" class="action-button">
                 <i class="fas fa-play"></i> Reproducir
