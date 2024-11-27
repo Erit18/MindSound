@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="style/Style.css">
   <link rel="stylesheet" href="style/BooksPage.css">
   <script src="https://kit.fontawesome.com/9a05771681.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <title>Me gusta</title>
 </head>
   

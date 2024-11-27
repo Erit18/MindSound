@@ -132,10 +132,75 @@ function createBookCard(book) {
                 <button class="card__button">
                     <a href="detalleLibro.php?id=${book.IDLibro}">LEER MÁS</a>
                 </button>
-                <i class="fas fa-thumbs-up heart liked" data-book-id="${book.IDLibro}"></i>
+                <button class="like-button" data-book-id="${book.IDLibro}">
+                    <i class="fas fa-heart liked"></i>
+                </button>
             </div>
         </div>
     `;
+
+    // Agregar el evento de like específicamente para este botón
+    const likeButton = card.querySelector('.like-button');
+    likeButton.addEventListener('click', async function(e) {
+        e.preventDefault();
+        const icon = this.querySelector('i');
+        const bookId = this.getAttribute('data-book-id');
+        
+        try {
+            const response = await fetch('Controlador/manejarLike.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    bookId: bookId,
+                    action: 'unlike'
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    // Eliminar la tarjeta con una animación
+                    card.style.transition = 'all 0.3s ease';
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.8)';
+                    
+                    setTimeout(() => {
+                        card.remove();
+                        // Si no hay más libros, mostrar un mensaje
+                        if (document.querySelectorAll('.card').length === 0) {
+                            const container = document.getElementById('container');
+                            container.innerHTML = '<p style="color: white; text-align: center; width: 100%;">No tienes libros guardados</p>';
+                        }
+                    }, 300);
+
+                    // Mostrar notificación
+                    Swal.fire({
+                        title: 'Eliminado',
+                        text: 'Libro eliminado de tus favoritos',
+                        icon: 'info',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        position: 'top-end',
+                        toast: true,
+                        background: '#730F16',
+                        color: '#fff',
+                        iconColor: '#fff'
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Ocurrió un error al eliminar el libro',
+                icon: 'error',
+                confirmButtonColor: '#730F16'
+            });
+        }
+    });
+
     return card;
 }
 
