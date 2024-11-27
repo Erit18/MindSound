@@ -151,7 +151,7 @@ if (isset($_GET['success']) && $_GET['success'] == 'true' && isset($_SESSION['me
       <div class="profile"><a href="category/biography.php">
         <img src="img/category/01.png" alt=""><span class="name">BIOGRAFÍA</span></a>
       </div>
-      <div class="profile"><a href="category/historical.html">
+      <div class="profile"><a href="category/historical.php">
         <img src="img/category/02.png" alt=""><span class="name">HISTÓRICO </span></a>
       </div>
       <div class="profile"><a href="category/horror.html">

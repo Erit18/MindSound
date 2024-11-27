@@ -68,12 +68,7 @@ $libros = $controladorLibros->obtenerLibrosPorGenero('Biográfico');
                             <a href="../detalleLibro.php?id=<?php echo $libro['IDLibro']; ?>">LEER MÁS</a>
                         </button>
                         <button class="like-button" data-book-id="<?php echo $libro['IDLibro']; ?>">
-                            <i class="fas fa-heart <?php 
-                                if (isset($_SESSION['usuario'])) {
-                                    $esFavorito = $controladorLibros->esLibroFavorito($_SESSION['usuario']['IDUsuario'], $libro['IDLibro']);
-                                    echo $esFavorito ? 'liked' : '';
-                                }
-                            ?>"></i>
+                            <i class="fas fa-heart <?php echo $esFavorito ? 'liked' : ''; ?>"></i>
                         </button>
                     </div>
                 </div>
@@ -119,6 +114,53 @@ $libros = $controladorLibros->obtenerLibrosPorGenero('Biográfico');
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../script/like.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const isLoggedIn = document.body.getAttribute('data-user-logged-in') === 'true';
+    const userId = document.body.getAttribute('data-user-id');
+
+    const likeButtons = document.querySelectorAll('.like-button');
+    
+    likeButtons.forEach(button => {
+        button.addEventListener('click', async function(e) {
+            e.preventDefault();
+            if (!isLoggedIn) {
+                // Mostrar alerta de inicio de sesión
+                return;
+            }
+
+            const bookId = this.getAttribute('data-book-id');
+            const icon = this.querySelector('i');
+            const isLiked = icon.classList.contains('liked');
+
+            try {
+                const response = await fetch('../Controlador/manejarLike.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: userId,
+                        bookId: bookId,
+                        action: isLiked ? 'unlike' : 'like'
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        icon.classList.toggle('liked');
+                        icon.style.color = icon.classList.contains('liked') ? '#fff' : '#730F16';
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+});
+</script>
 
 </body>
 </html>
