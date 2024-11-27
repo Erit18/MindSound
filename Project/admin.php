@@ -4,6 +4,8 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'Administrad
     header("Location: intranet.php");
     exit();
 }
+
+$baseUrl = '/mindsound/Project';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,6 +21,7 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'Administrad
     <link rel="stylesheet" href="Vista/plugin/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="Vista/plugin/dist/css/adminlte.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -370,14 +373,22 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'Administrad
     <script src="Vista/plugin/dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="Vista/plugin/dist/js/demo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        var baseUrl = '<?php echo $baseUrl; ?>';
+
         function getClick(link) {
+            console.log("Cargando:", link);
             $.ajax({
                 url: "Vista/" + link,
                 type: 'get',
                 success: function(response) {
                     $("#TbBody").html(response);
+                    // Reinicializar los componentes después de cargar el contenido
+                    if (link === 'VLibros.php') {
+                        initializeLibrosComponents();
+                    }
                 },
                 error: function(xhr, status, error) {
                     console.error("Error al cargar la página:", error);
@@ -386,6 +397,222 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'Administrad
                         title: 'Error',
                         text: 'No se pudo cargar la página. Por favor, intente de nuevo más tarde.',
                     });
+                }
+            });
+        }
+
+        function initializeLibrosComponents() {
+            console.log("Inicializando componentes de Libros");
+            
+            // Inicializar Select2
+            $('.select2').select2({
+                placeholder: "Selecciona los géneros",
+                allowClear: true,
+                width: '100%'
+            });
+
+            // Evento para mostrar el formulario de nuevo libro
+            $(document).on('click', "#btnMostrarFormulario", function() {
+                console.log("Botón Agregar Nuevo Libro clickeado");
+                $("#idLibro").val('');
+                $("#formLibro")[0].reset();
+                $('.select2').val(null).trigger('change');
+                $("#modalLibroLabel").text("Agregar Nuevo Libro");
+                $("#modalLibro").modal('show');
+            });
+
+            // Evento para editar libro
+            $(document).on('click', ".btnEditar", function() {
+                console.log("Botón Editar clickeado");
+                const libroId = $(this).data('id');
+                $("#idLibro").val(libroId);
+                $("#titulo").val($(this).data('titulo'));
+                $("#autor").val($(this).data('autor'));
+                $("#narrador").val($(this).data('narrador'));
+                $("#duracion").val($(this).data('duracion'));
+                $("#fechaPublicacion").val($(this).data('fechapublicacion'));
+                $("#descripcion").val($(this).data('descripcion'));
+                $("#precio").val($(this).data('precio'));
+                $("#esGratuito").prop('checked', $(this).data('esgratuito') == 1);
+                $("#modalLibroLabel").text("Editar Libro");
+                
+                // Obtener los géneros del libro
+                $.ajax({
+                    url: baseUrl + '/Controlador/CLibros.php',
+                    type: 'POST',
+                    data: {
+                        accion: 'obtenerGeneros',
+                        idLibro: libroId
+                    },
+                    success: function(response) {
+                        console.log("Respuesta de géneros:", response);
+                        try {
+                            response = typeof response === 'string' ? JSON.parse(response) : response;
+                            if (response.status === 'success') {
+                                $('#generos').val(response.generos).trigger('change');
+                            }
+                        } catch (e) {
+                            console.error("Error al procesar géneros:", e);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error al obtener géneros:", error);
+                    }
+                });
+
+                // Guardar las rutas actuales en campos ocultos
+                $("#formLibro").append('<input type="hidden" name="rutaAudio_actual" value="' + $(this).data('rutaaudio') + '">');
+                $("#formLibro").append('<input type="hidden" name="rutaPortada_actual" value="' + $(this).data('rutaportada') + '">');
+
+                $("#modalLibro").modal('show');
+            });
+
+            // Evento para guardar libro
+            $(document).on('click', "#btnGuardarLibro", function() {
+                console.log("Botón Guardar clickeado");
+                var formData = new FormData($("#formLibro")[0]);
+                const idLibro = $("#idLibro").val();
+                formData.append('accion', idLibro ? 'actualizar' : 'agregar');
+
+                $.ajax({
+                    url: baseUrl + '/Controlador/CLibros.php',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        console.log("Respuesta del servidor:", response);
+                        $("#modalLibro").modal('hide');
+                        try {
+                            response = typeof response === 'string' ? JSON.parse(response) : response;
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Éxito',
+                                    text: idLibro ? "Libro actualizado con éxito" : "Libro agregado con éxito",
+                                    timer: 1500
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.message
+                                });
+                            }
+                        } catch (e) {
+                            console.error("Error al procesar respuesta:", e);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error al procesar la respuesta del servidor'
+                            });
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error("Error AJAX:", textStatus, errorThrown);
+                        $("#modalLibro").modal('hide');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error en la solicitud. Por favor, revisa la consola para más detalles.'
+                        });
+                    }
+                });
+            });
+
+            // Variable para almacenar el ID del libro a eliminar
+            let libroIdAEliminar;
+            let libroTituloAEliminar;
+
+            // Evento para eliminar libro
+            $(document).on('click', ".btnEliminar", function() {
+                console.log("Botón Eliminar clickeado");
+                libroIdAEliminar = $(this).data('id');
+                libroTituloAEliminar = $(this).data('titulo');
+                
+                // Usar SweetAlert2 para la confirmación
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: `¿Deseas eliminar el libro "${libroTituloAEliminar}"?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Realizar la eliminación
+                        $.ajax({
+                            url: baseUrl + '/Controlador/CLibros.php',
+                            type: 'POST',
+                            data: {
+                                accion: 'eliminar',
+                                idLibro: libroIdAEliminar
+                            },
+                            success: function(response) {
+                                console.log("Respuesta del servidor:", response);
+                                try {
+                                    response = typeof response === 'string' ? JSON.parse(response) : response;
+                                    if (response.status === 'success') {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Éxito',
+                                            text: 'Libro eliminado correctamente',
+                                            timer: 1500
+                                        }).then(() => {
+                                            location.reload();
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: response.message || 'Error al eliminar el libro'
+                                        });
+                                    }
+                                } catch (e) {
+                                    console.error("Error al procesar respuesta:", e);
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: 'Error al procesar la respuesta del servidor'
+                                    });
+                                }
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.error("Error AJAX:", textStatus, errorThrown);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Error en la solicitud. Por favor, revisa la consola para más detalles.'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Manejo del archivo de audio
+            $(document).on('change', '#rutaAudio', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const audio = new Audio();
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        audio.src = e.target.result;
+                        audio.addEventListener('loadedmetadata', function() {
+                            const duracionEnSegundos = Math.round(audio.duration);
+                            const minutos = Math.floor(duracionEnSegundos / 60);
+                            const segundos = duracionEnSegundos % 60;
+                            const duracionFormateada = `${minutos}:${segundos.toString().padStart(2, '0')}`;
+                            $('#duracion').val(duracionFormateada);
+                        });
+                    };
+                    
+                    reader.readAsDataURL(file);
                 }
             });
         }

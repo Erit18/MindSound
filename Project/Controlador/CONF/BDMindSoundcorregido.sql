@@ -220,27 +220,46 @@ END //
 
 -- Agregar un nuevo libro
 CREATE PROCEDURE SP_AGREGAR_LIBRO(
-    IN p_Titulo VARCHAR(100),
-    IN p_Autor VARCHAR(100),
-    IN p_Narrador VARCHAR(100),
-    IN p_Duracion TIME,
-    IN p_FechaPublicacion DATE,
-    IN p_Descripcion TEXT,
-    IN p_RutaAudio VARCHAR(255),
-    IN p_RutaPortada VARCHAR(255),
-    IN p_Precio DECIMAL(10, 2),
-    IN p_EsGratuito BOOLEAN
+    IN p_titulo VARCHAR(100),
+    IN p_autor VARCHAR(100),
+    IN p_narrador VARCHAR(100),
+    IN p_duracion VARCHAR(20),
+    IN p_fechaPublicacion DATE,
+    IN p_descripcion TEXT,
+    IN p_rutaAudio VARCHAR(255),
+    IN p_rutaPortada VARCHAR(255),
+    IN p_precio DECIMAL(10,2),
+    IN p_esGratuito TINYINT,
+    OUT p_idLibro INT
 )
 BEGIN
-    -- Validar duración
-    IF p_Duracion < '00:00:00' THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La duración no puede ser negativa';
-    END IF;
+    INSERT INTO Libros(
+        Titulo, 
+        Autor, 
+        Narrador, 
+        Duracion, 
+        FechaPublicacion, 
+        Descripcion, 
+        RutaAudio, 
+        RutaPortada, 
+        Precio, 
+        EsGratuito
+    ) VALUES (
+        p_titulo,
+        p_autor,
+        p_narrador,
+        p_duracion,
+        p_fechaPublicacion,
+        p_descripcion,
+        p_rutaAudio,
+        p_rutaPortada,
+        p_precio,
+        p_esGratuito
+    );
     
-    INSERT INTO Libros (Titulo, Autor, Narrador, Duracion, FechaPublicacion, Descripcion, RutaAudio, RutaPortada, Precio, EsGratuito)
-    VALUES (p_Titulo, p_Autor, p_Narrador, p_Duracion, p_FechaPublicacion, p_Descripcion, p_RutaAudio, p_RutaPortada, p_Precio, p_EsGratuito);
-END //
+    SET p_idLibro = LAST_INSERT_ID();
+    SELECT p_idLibro as IDLibro;
+END//
 
 -- Actualizar un libro existente
 CREATE PROCEDURE SP_ACTUALIZAR_LIBRO(
@@ -257,15 +276,15 @@ CREATE PROCEDURE SP_ACTUALIZAR_LIBRO(
     IN p_EsGratuito BOOLEAN
 )
 BEGIN
-    UPDATE Libros
+    UPDATE Libros 
     SET Titulo = p_Titulo,
         Autor = p_Autor,
         Narrador = p_Narrador,
         Duracion = p_Duracion,
         FechaPublicacion = p_FechaPublicacion,
         Descripcion = p_Descripcion,
-        RutaAudio = p_RutaAudio,
-        RutaPortada = p_RutaPortada,
+        RutaAudio = CASE WHEN p_RutaAudio = '' THEN RutaAudio ELSE p_RutaAudio END,
+        RutaPortada = CASE WHEN p_RutaPortada = '' THEN RutaPortada ELSE p_RutaPortada END,
         Precio = p_Precio,
         EsGratuito = p_EsGratuito
     WHERE IDLibro = p_IDLibro;
@@ -532,4 +551,14 @@ INSERT INTO `libros` VALUES
 'audio/albalearning-LaPrimeraAventura_adame.mp3',
 'img/Books/libro-adame[1].jpg',
 0.00, 1);
+
+-- Insertar los géneros básicos
+INSERT INTO Generos (NombreGenero, Descripcion) VALUES 
+('Biográfico', 'Libros basados en la vida real de personas'),
+('Histórico', 'Libros basados en eventos históricos'),
+('Horror', 'Libros del género de terror y horror'),
+('Misterio', 'Libros de suspenso y misterio'),
+('Novela', 'Libros de ficción narrativa'),
+('Ciencia', 'Libros sobre temas científicos'),
+('Deportes', 'Libros relacionados con deportes y actividad física');
 

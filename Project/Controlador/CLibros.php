@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', 0);
+ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 function captureErrors($errno, $errstr, $errfile, $errline) {
@@ -14,7 +14,7 @@ $errors = [];
 require_once __DIR__ . '/BD/Conexion.php';
 
 class CLibros {
-    private $conexion;
+    public $conexion;
 
     public function __construct() {
         $this->conexion = new Conexion();
@@ -46,93 +46,200 @@ class CLibros {
     }
 
     public function agregarLibro() {
-        // Obtener datos del POST
-        $titulo = $_POST['titulo'] ?? '';
-        $autor = $_POST['autor'] ?? '';
-        $narrador = $_POST['narrador'] ?? '';
-        $duracion = $_POST['duracion'] ?? '';
-        $fechaPublicacion = $_POST['fechaPublicacion'] ?? '';
-        $descripcion = $_POST['descripcion'] ?? '';
-        $precio = $_POST['precio'] ?? '';
-        $esGratuito = isset($_POST['esGratuito']) ? 1 : 0;
-
-        // Manejar la carga de archivos
-        $rutaAudio = $this->subirArchivo('rutaAudio', 'audio/');
-        $rutaPortada = $this->subirArchivo('rutaPortada', 'img/Books/');
-
-        error_log("Ruta de audio guardada: " . $rutaAudio);
-        error_log("Ruta de portada guardada: " . $rutaPortada);
-
-        // Validar datos
-        if (!$titulo || !$autor || !$fechaPublicacion) {
-            return json_encode(['status' => 'error', 'message' => 'Título, autor y fecha de publicación son requeridos']);
-        }
-
-        // Formatear la fecha
-        $fechaFormateada = date('Y-m-d', strtotime($fechaPublicacion));
-
         try {
             $conn = $this->conexion->getcon();
+            $conn->beginTransaction();
 
-            $stmt = $conn->prepare("CALL SP_AGREGAR_LIBRO(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bindParam(1, $titulo, PDO::PARAM_STR);
-            $stmt->bindParam(2, $autor, PDO::PARAM_STR);
-            $stmt->bindParam(3, $narrador, PDO::PARAM_STR);
-            $stmt->bindParam(4, $duracion, PDO::PARAM_STR);
-            $stmt->bindParam(5, $fechaFormateada, PDO::PARAM_STR);
-            $stmt->bindParam(6, $descripcion, PDO::PARAM_STR);
-            $stmt->bindParam(7, $rutaAudio, PDO::PARAM_STR);
-            $stmt->bindParam(8, $rutaPortada, PDO::PARAM_STR);
-            $stmt->bindParam(9, $precio, PDO::PARAM_STR);
-            $stmt->bindParam(10, $esGratuito, PDO::PARAM_BOOL);
+            // Validar campos básicos requeridos
+            $campos_requeridos = ['titulo', 'autor', 'narrador', 'fechaPublicacion', 
+                                'descripcion', 'precio'];
+            
+            foreach ($campos_requeridos as $campo) {
+                if (!isset($_POST[$campo]) || empty($_POST[$campo])) {
+                    throw new Exception("Campo requerido faltante: $campo");
+                }
+            }
 
+            // Establecer duración predeterminada si no se proporciona
+            $duracion = !empty($_POST['duracion']) ? $_POST['duracion'] : '0:00';
+
+            // Manejar la subida de archivos
+            $rutaAudio = '';
+            $rutaPortada = '';
+
+            // Procesar archivo de audio
+            if (isset($_FILES['rutaAudio']) && $_FILES['rutaAudio']['error'] === UPLOAD_ERR_OK) {
+                $audioFileName = basename($_FILES['rutaAudio']['name']);
+                $rutaAudio = 'audio/' . $audioFileName;
+                $targetPath = $_SERVER['DOCUMENT_ROOT'] . '/mindsound/Project/' . $rutaAudio;
+                
+                $audioDir = dirname($targetPath);
+                if (!file_exists($audioDir)) {
+                    mkdir($audioDir, 0777, true);
+                }
+                
+                if (!move_uploaded_file($_FILES['rutaAudio']['tmp_name'], $targetPath)) {
+                    throw new Exception("Error al subir el archivo de audio");
+                }
+            }
+
+            // Procesar imagen de portada
+            if (isset($_FILES['rutaPortada']) && $_FILES['rutaPortada']['error'] === UPLOAD_ERR_OK) {
+                $portadaFileName = basename($_FILES['rutaPortada']['name']);
+                $rutaPortada = 'img/Books/' . $portadaFileName;
+                $targetPath = $_SERVER['DOCUMENT_ROOT'] . '/mindsound/Project/' . $rutaPortada;
+                
+                $portadaDir = dirname($targetPath);
+                if (!file_exists($portadaDir)) {
+                    mkdir($portadaDir, 0777, true);
+                }
+                
+                if (!move_uploaded_file($_FILES['rutaPortada']['tmp_name'], $targetPath)) {
+                    throw new Exception("Error al subir la imagen de portada");
+                }
+            }
+
+            // Inicializar la variable @id_libro
+            $conn->query("SET @id_libro = 0");
+
+            // Preparar y ejecutar el procedimiento almacenado
+            $stmt = $conn->prepare("CALL SP_AGREGAR_LIBRO(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, @id_libro)");
+            
+            $esGratuito = isset($_POST['esGratuito']) ? 1 : 0;
+            
+            $stmt->bindParam(1, $_POST['titulo']);
+            $stmt->bindParam(2, $_POST['autor']);
+            $stmt->bindParam(3, $_POST['narrador']);
+            $stmt->bindParam(4, $duracion);
+            $stmt->bindParam(5, $_POST['fechaPublicacion']);
+            $stmt->bindParam(6, $_POST['descripcion']);
+            $stmt->bindParam(7, $rutaAudio);
+            $stmt->bindParam(8, $rutaPortada);
+            $stmt->bindParam(9, $_POST['precio']);
+            $stmt->bindParam(10, $esGratuito);
+            
             $stmt->execute();
+            $stmt->closeCursor(); // Cerrar el cursor después de la ejecución
 
+            // Obtener el ID del libro recién insertado
+            $result = $conn->query("SELECT @id_libro as IDLibro");
+            $row = $result->fetch(PDO::FETCH_ASSOC);
+            $idLibro = $row['IDLibro'];
+            $result->closeCursor(); // Cerrar el cursor del resultado
+
+            // Insertar los géneros seleccionados
+            if (isset($_POST['generos']) && is_array($_POST['generos'])) {
+                $stmtGenero = $conn->prepare("INSERT INTO LibroGenero (IDLibro, IDGenero) VALUES (?, ?)");
+                foreach ($_POST['generos'] as $idGenero) {
+                    $stmtGenero->bindParam(1, $idLibro);
+                    $stmtGenero->bindParam(2, $idGenero);
+                    $stmtGenero->execute();
+                    $stmtGenero->closeCursor(); // Cerrar el cursor después de cada inserción
+                }
+            }
+
+            $conn->commit();
             return json_encode(['status' => 'success', 'message' => 'Libro agregado con éxito']);
-        } catch (PDOException $e) {
-            return json_encode(['status' => 'error', 'message' => 'Error al agregar libro: ' . $e->getMessage()]);
+            
+        } catch (Exception $e) {
+            if (isset($conn)) {
+                $conn->rollBack();
+            }
+            error_log("Error al agregar libro: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            return json_encode(['status' => 'error', 'message' => 'Error en el servidor: ' . $e->getMessage()]);
         }
     }
 
     public function actualizarLibro() {
-        $idLibro = $_POST['idLibro'] ?? '';
-        $titulo = $_POST['titulo'] ?? '';
-        $autor = $_POST['autor'] ?? '';
-        $narrador = $_POST['narrador'] ?? '';
-        $duracion = $_POST['duracion'] ?? '';
-        $fechaPublicacion = $_POST['fechaPublicacion'] ?? '';
-        $descripcion = $_POST['descripcion'] ?? '';
-        $precio = $_POST['precio'] ?? '';
-        $esGratuito = isset($_POST['esGratuito']) ? 1 : 0;
-
-        // Manejar la carga de archivos
-        $rutaAudio = $this->subirArchivo('rutaAudio', 'imagenes') ?: $_POST['rutaAudioActual'] ?? '';
-        $rutaPortada = $this->subirArchivo('rutaPortada', 'imagenes') ?: $_POST['rutaPortadaActual'] ?? '';
-
-        if (!$idLibro || !$titulo || !$autor || !$fechaPublicacion) {
-            return json_encode(['status' => 'error', 'message' => 'Datos incompletos']);
-        }
-
         try {
             $conn = $this->conexion->getcon();
+            $conn->beginTransaction();
+
+            // Manejar la subida de archivos
+            $rutaAudio = $_POST['rutaAudio_actual'] ?? ''; // Mantener la ruta actual si no hay nuevo archivo
+            $rutaPortada = $_POST['rutaPortada_actual'] ?? ''; // Mantener la ruta actual si no hay nuevo archivo
+
+            // Procesar archivo de audio si se subió uno nuevo
+            if (isset($_FILES['rutaAudio']) && $_FILES['rutaAudio']['error'] === UPLOAD_ERR_OK) {
+                $audioFileName = basename($_FILES['rutaAudio']['name']);
+                $rutaAudio = 'audio/' . $audioFileName;
+                $targetPath = $_SERVER['DOCUMENT_ROOT'] . '/mindsound/Project/' . $rutaAudio;
+                
+                // Asegurarse de que el directorio existe
+                $audioDir = dirname($targetPath);
+                if (!file_exists($audioDir)) {
+                    mkdir($audioDir, 0777, true);
+                }
+                
+                if (!move_uploaded_file($_FILES['rutaAudio']['tmp_name'], $targetPath)) {
+                    throw new Exception("Error al subir el archivo de audio");
+                }
+            }
+
+            // Procesar imagen de portada si se subió una nueva
+            if (isset($_FILES['rutaPortada']) && $_FILES['rutaPortada']['error'] === UPLOAD_ERR_OK) {
+                $portadaFileName = basename($_FILES['rutaPortada']['name']);
+                $rutaPortada = 'img/Books/' . $portadaFileName;
+                $targetPath = $_SERVER['DOCUMENT_ROOT'] . '/mindsound/Project/' . $rutaPortada;
+                
+                // Asegurarse de que el directorio existe
+                $portadaDir = dirname($targetPath);
+                if (!file_exists($portadaDir)) {
+                    mkdir($portadaDir, 0777, true);
+                }
+                
+                if (!move_uploaded_file($_FILES['rutaPortada']['tmp_name'], $targetPath)) {
+                    throw new Exception("Error al subir la imagen de portada");
+                }
+            }
+
+            // Actualizar el libro
             $stmt = $conn->prepare("CALL SP_ACTUALIZAR_LIBRO(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bindParam(1, $idLibro, PDO::PARAM_INT);
-            $stmt->bindParam(2, $titulo, PDO::PARAM_STR);
-            $stmt->bindParam(3, $autor, PDO::PARAM_STR);
-            $stmt->bindParam(4, $narrador, PDO::PARAM_STR);
-            $stmt->bindParam(5, $duracion, PDO::PARAM_STR);
-            $stmt->bindParam(6, $fechaPublicacion, PDO::PARAM_STR);
-            $stmt->bindParam(7, $descripcion, PDO::PARAM_STR);
-            $stmt->bindParam(8, $rutaAudio, PDO::PARAM_STR);
-            $stmt->bindParam(9, $rutaPortada, PDO::PARAM_STR);
-            $stmt->bindParam(10, $precio, PDO::PARAM_STR);
-            $stmt->bindParam(11, $esGratuito, PDO::PARAM_BOOL);
-
+            
+            $esGratuito = isset($_POST['esGratuito']) ? 1 : 0;
+            
+            $stmt->bindParam(1, $_POST['idLibro']);
+            $stmt->bindParam(2, $_POST['titulo']);
+            $stmt->bindParam(3, $_POST['autor']);
+            $stmt->bindParam(4, $_POST['narrador']);
+            $stmt->bindParam(5, $_POST['duracion']);
+            $stmt->bindParam(6, $_POST['fechaPublicacion']);
+            $stmt->bindParam(7, $_POST['descripcion']);
+            $stmt->bindParam(8, $rutaAudio);
+            $stmt->bindParam(9, $rutaPortada);
+            $stmt->bindParam(10, $_POST['precio']);
+            $stmt->bindParam(11, $esGratuito);
+            
             $stmt->execute();
+            $stmt->closeCursor();
 
+            // Eliminar géneros anteriores
+            $stmtDelete = $conn->prepare("DELETE FROM LibroGenero WHERE IDLibro = ?");
+            $stmtDelete->bindParam(1, $_POST['idLibro']);
+            $stmtDelete->execute();
+            $stmtDelete->closeCursor();
+
+            // Insertar nuevos géneros
+            if (isset($_POST['generos']) && is_array($_POST['generos'])) {
+                $stmtGenero = $conn->prepare("INSERT INTO LibroGenero (IDLibro, IDGenero) VALUES (?, ?)");
+                foreach ($_POST['generos'] as $idGenero) {
+                    $stmtGenero->bindParam(1, $_POST['idLibro']);
+                    $stmtGenero->bindParam(2, $idGenero);
+                    $stmtGenero->execute();
+                }
+                $stmtGenero->closeCursor();
+            }
+
+            $conn->commit();
             return json_encode(['status' => 'success', 'message' => 'Libro actualizado con éxito']);
-        } catch (PDOException $e) {
-            return json_encode(['status' => 'error', 'message' => 'Error al actualizar libro: ' . $e->getMessage()]);
+        } catch (Exception $e) {
+            if (isset($conn)) {
+                $conn->rollBack();
+            }
+            error_log("Error al actualizar libro: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            return json_encode(['status' => 'error', 'message' => 'Error al actualizar el libro: ' . $e->getMessage()]);
         }
     }
 
@@ -175,33 +282,60 @@ class CLibros {
         }
         return false;
     }
+
+    public function obtenerGenerosLibro() {
+        $idLibro = $_POST['idLibro'] ?? '';
+        
+        try {
+            $conexion = new Conexion();
+            $conn = $conexion->getcon();
+            
+            $stmt = $conn->prepare("CALL SP_OBTENER_GENEROS_LIBRO(?)");
+            $stmt->bindParam(1, $idLibro, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            $generos = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            echo json_encode(['status' => 'success', 'generos' => $generos]);
+        } catch (PDOException $e) {
+            echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
 }
 
 // Manejo de solicitudes AJAX
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $controlador = new CLibros();
-    $accion = $_POST['accion'] ?? '';
+    try {
+        $controlador = new CLibros();
+        $accion = $_POST['accion'] ?? '';
 
-    switch ($accion) {
-        case 'obtener':
-            if (isset($_POST['idLibro'])) {
-                $libro = $controlador->obtenerLibroPorId($_POST['idLibro']);
-                echo json_encode(['status' => 'success', 'data' => $libro]);
-            } else {
-                echo json_encode(['status' => 'success', 'data' => $controlador->obtenerLibros()]);
-            }
-            break;
-        case 'agregar':
-            echo $controlador->agregarLibro();
-            break;
-        case 'actualizar':
-            echo $controlador->actualizarLibro();
-            break;
-        case 'eliminar':
-            echo $controlador->eliminarLibro();
-            break;
-        default:
-            echo json_encode(['status' => 'error', 'message' => 'Acción no reconocida']);
-            break;
+        switch ($accion) {
+            case 'obtener':
+                if (isset($_POST['idLibro'])) {
+                    $libro = $controlador->obtenerLibroPorId($_POST['idLibro']);
+                    echo json_encode(['status' => 'success', 'data' => $libro]);
+                } else {
+                    echo json_encode(['status' => 'success', 'data' => $controlador->obtenerLibros()]);
+                }
+                break;
+            case 'agregar':
+                echo $controlador->agregarLibro();
+                break;
+            case 'actualizar':
+                echo $controlador->actualizarLibro();
+                break;
+            case 'eliminar':
+                echo $controlador->eliminarLibro();
+                break;
+            case 'obtenerGeneros':
+                $controlador->obtenerGenerosLibro();
+                break;
+            default:
+                echo json_encode(['status' => 'error', 'message' => 'Acción no reconocida']);
+                break;
+        }
+    } catch (Exception $e) {
+        error_log("Error en el controlador: " . $e->getMessage());
+        error_log("Stack trace: " . $e->getTraceAsString());
+        echo json_encode(['status' => 'error', 'message' => 'Error en el servidor: ' . $e->getMessage()]);
     }
 }

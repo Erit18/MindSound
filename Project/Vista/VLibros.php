@@ -7,12 +7,9 @@ $libros = $controladorLibros->obtenerLibros();
 
 // Ajusta esto según la estructura de tu proyecto
 $baseUrl = '/mindsound/Project';
-
-// Si estás usando un servidor virtual, podrías necesitar esto en su lugar:
-// $baseUrl = ''
 ?>
 
-
+<!-- Mantén todo el HTML igual, pero elimina los scripts del final -->
 <h2>Gestión de Libros</h2>
 
 <div class="card-body">
@@ -64,17 +61,23 @@ $baseUrl = '/mindsound/Project';
                         <td>
                             <button class="btn btn-sm btn-primary btnEditar" 
                                 data-id="<?php echo $libro['IDLibro']; ?>"
-                                data-titulo="<?php echo $libro['Titulo']; ?>"
-                                data-autor="<?php echo $libro['Autor']; ?>"
-                                data-narrador="<?php echo $libro['Narrador']; ?>"
+                                data-titulo="<?php echo htmlspecialchars($libro['Titulo']); ?>"
+                                data-autor="<?php echo htmlspecialchars($libro['Autor']); ?>"
+                                data-narrador="<?php echo htmlspecialchars($libro['Narrador']); ?>"
                                 data-duracion="<?php echo $libro['Duracion']; ?>"
                                 data-fechapublicacion="<?php echo $libro['FechaPublicacion']; ?>"
-                                data-descripcion="<?php echo $libro['Descripcion']; ?>"
+                                data-descripcion="<?php echo htmlspecialchars($libro['Descripcion']); ?>"
                                 data-precio="<?php echo $libro['Precio']; ?>"
-                                data-esgratuito="<?php echo $libro['EsGratuito']; ?>">
+                                data-esgratuito="<?php echo $libro['EsGratuito']; ?>"
+                                data-rutaaudio="<?php echo htmlspecialchars($libro['RutaAudio']); ?>"
+                                data-rutaportada="<?php echo htmlspecialchars($libro['RutaPortada']); ?>">
                                 Editar
                             </button>
-                            <button class="btn btn-sm btn-danger btnEliminar" data-id="<?php echo $libro['IDLibro']; ?>">Eliminar</button>
+                            <button class="btn btn-sm btn-danger btnEliminar" 
+                                data-id="<?php echo $libro['IDLibro']; ?>" 
+                                data-titulo="<?php echo htmlspecialchars($libro['Titulo']); ?>">
+                                Eliminar
+                            </button>
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -111,11 +114,13 @@ $baseUrl = '/mindsound/Project';
                     </div>
                     <div class="form-group">
                         <label for="rutaAudio">Audio del libro (MP3)</label>
-                        <input type="file" class="form-control-file" id="rutaAudio" name="rutaAudio" accept=".mp3" required>
+                        <input type="file" class="form-control-file" id="rutaAudio" name="rutaAudio" accept=".mp3">
+                        <small class="form-text text-muted">Seleccione un archivo de audio en formato MP3</small>
                     </div>
                     <div class="form-group">
                         <label for="duracion">Duración</label>
                         <input type="text" class="form-control" id="duracion" name="duracion" readonly>
+                        <small class="form-text text-muted">La duración se calculará automáticamente al seleccionar el archivo de audio</small>
                     </div>
                     <div class="form-group">
                         <label for="fechaPublicacion">Fecha de Publicación:</label>
@@ -126,8 +131,9 @@ $baseUrl = '/mindsound/Project';
                         <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="rutaPortada">Imagen de Portada:</label>
+                        <label for="rutaPortada">Imagen de Portada</label>
                         <input type="file" class="form-control-file" id="rutaPortada" name="rutaPortada" accept="image/*">
+                        <small class="form-text text-muted">Seleccione una imagen para la portada</small>
                     </div>
                     <div class="form-group">
                         <label for="precio">Precio:</label>
@@ -136,6 +142,40 @@ $baseUrl = '/mindsound/Project';
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" id="esGratuito" name="esGratuito">
                         <label class="form-check-label" for="esGratuito">Es gratuito</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="generos">Géneros:</label>
+                        <select class="form-control select2" id="generos" name="generos[]" multiple="multiple" required>
+                            <?php
+                            try {
+                                // Usar el controlador existente
+                                $controladorLibros = new CLibros();
+                                $conn = $controladorLibros->conexion->getcon();
+                                
+                                // Debug: Imprimir la conexión
+                                var_dump($conn);
+                                
+                                // Obtener todos los géneros
+                                $stmt = $conn->prepare("SELECT IDGenero, NombreGenero FROM Generos ORDER BY NombreGenero");
+                                $stmt->execute();
+                                $generos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                
+                                // Debug: Imprimir los géneros
+                                var_dump($generos);
+                                
+                                if (empty($generos)) {
+                                    echo "<option value=''>No se encontraron géneros</option>";
+                                } else {
+                                    foreach ($generos as $genero) {
+                                        echo "<option value='" . $genero['IDGenero'] . "'>" . htmlspecialchars($genero['NombreGenero']) . "</option>";
+                                    }
+                                }
+                            } catch (PDOException $e) {
+                                error_log("Error al cargar géneros: " . $e->getMessage());
+                                echo "<option value=''>Error al cargar géneros: " . $e->getMessage() . "</option>";
+                            }
+                            ?>
+                        </select>
                     </div>
                 </form>
             </div>
@@ -187,158 +227,5 @@ $baseUrl = '/mindsound/Project';
     </div>
 </div>
 
-<script>
-var baseUrl = '<?php echo $baseUrl; ?>';
-
-$(document).ready(function() {
-    let libroIdAEliminar;
-
-    function mostrarMensaje(mensaje) {
-        $("#modalMensajeContenido").text(mensaje);
-        $("#modalMensaje").modal('show');
-    }
-
-    $("#btnMostrarFormulario").click(function() {
-        $("#idLibro").val('');
-        $("#formLibro")[0].reset();
-        $("#modalLibroLabel").text("Agregar Nuevo Libro");
-        $("#modalLibro").modal('show');
-    });
-
-    $(".btnEditar").click(function() {
-        const libroId = $(this).data('id');
-        $("#idLibro").val(libroId);
-        $("#titulo").val($(this).data('titulo'));
-        $("#autor").val($(this).data('autor'));
-        $("#narrador").val($(this).data('narrador'));
-        $("#duracion").val($(this).data('duracion'));
-        $("#fechaPublicacion").val($(this).data('fechapublicacion'));
-        $("#descripcion").val($(this).data('descripcion'));
-        $("#precio").val($(this).data('precio'));
-        $("#esGratuito").prop('checked', $(this).data('esgratuito') == 1);
-        $("#modalLibroLabel").text("Editar Libro");
-        $("#modalLibro").modal('show');
-    });
-
-    $(".btnEliminar").click(function() {
-        libroIdAEliminar = $(this).data('id');
-        $("#modalConfirmarEliminar").modal('show');
-    });
-
-    $("#btnGuardarLibro").click(function() {
-        var formData = new FormData($("#formLibro")[0]);
-        const idLibro = $("#idLibro").val();
-        formData.append('accion', idLibro ? 'actualizar' : 'agregar');
-
-        $.ajax({
-            url: baseUrl + '/Controlador/CLibros.php',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            dataType: 'json',
-            success: function(response) {
-                $("#modalLibro").modal('hide');
-                if (response.status === 'success') {
-                    mostrarMensaje(idLibro ? "Libro actualizado con éxito" : "Libro agregado con éxito");
-                    setTimeout(function() {
-                        location.reload();
-                    }, 1500);
-                } else {
-                    mostrarMensaje("Error al " + (idLibro ? "actualizar" : "agregar") + " el libro: " + response.message);
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                $("#modalLibro").modal('hide');
-                console.log("Error en la solicitud AJAX:", textStatus, errorThrown);
-                console.log("Respuesta del servidor:", jqXHR.responseText);
-                mostrarMensaje("Error en la solicitud. Por favor, revisa la consola para más detalles.");
-            }
-        });
-    });
-
-    $("#btnConfirmarEliminar").click(function() {
-        $.ajax({
-            url: baseUrl + '/Controlador/CLibros.php',
-            type: 'POST',
-            data: {
-                accion: 'eliminar',
-                idLibro: libroIdAEliminar
-            },
-            dataType: 'json',
-            success: function(response) {
-                $("#modalConfirmarEliminar").modal('hide');
-                if (response.status === 'success') {
-                    mostrarMensaje("Libro eliminado con éxito");
-                    setTimeout(function() {
-                        location.reload();
-                    }, 1500);
-                } else {
-                    mostrarMensaje("Error al eliminar el libro: " + response.message);
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                $("#modalConfirmarEliminar").modal('hide');
-                console.log("Error en la solicitud AJAX:", textStatus, errorThrown);
-                console.log("Respuesta del servidor:", jqXHR.responseText);
-                mostrarMensaje("Error en la solicitud. Por favor, revisa la consola para más detalles.");
-            }
-        });
-    });
-});
-
-document.getElementById('rutaAudio').addEventListener('change', function(e) {
-    var file = e.target.files[0];
-    if (file && file.type === "audio/mpeg") {
-        var audio = new Audio();
-        audio.onloadedmetadata = function() {
-            var duration = audio.duration;
-            var minutes = Math.floor(duration / 60);
-            var seconds = Math.floor(duration % 60);
-            document.getElementById('duracion').value = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-        };
-        audio.src = URL.createObjectURL(file);
-    } else {
-        alert('Por favor, seleccione un archivo MP3 válido.');
-        this.value = ''; // Limpiar el input
-        document.getElementById('duracion').value = '';
-    }
-});
-
-// Modificar el evento de envío del formulario
-document.getElementById('formLibro').addEventListener('submit', function(e) {
-    e.preventDefault();
-    var formData = new FormData(this);
-    
-    $.ajax({
-        url: 'Controlador/CLibros.php?action=agregar',
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-            // Manejar la respuesta
-            console.log(response);
-            Swal.fire({
-                icon: 'success',
-                title: 'Éxito',
-                text: 'Libro agregado correctamente',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    location.reload();
-                }
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error(error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'No se pudo agregar el libro. Por favor, intente de nuevo.',
-            });
-        }
-    });
-});
-</script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+<!-- Solo mantén las dependencias necesarias -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
