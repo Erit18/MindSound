@@ -1462,3 +1462,40 @@ margin-bottom: 20px;
     line-height: 1.6;
     margin: 25px 0;
 }
+
+.like-button {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.like-button i {
+    transition: all 0.3s ease;
+}
+
+.like-button i.liked {
+    color: #fff;
+}
+
+.action-button {
+    background: linear-gradient(135deg, #d85d65, #730F16);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    margin: 5px;
+}
+
+.action-button:hover {
+    background: linear-gradient(135deg, #e06a72, #8B1319);
+    transform: translateY(-2px);
+}
+
+.action-button i {
+    font-size: 1.1em;
+}

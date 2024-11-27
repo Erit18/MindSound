@@ -8,7 +8,6 @@ $correo = $_POST['correo'];
 $contrasena = $_POST['password'];
 
 if (empty($correo) || empty($contrasena)) {
-    // Mostrar error: "Por favor, ingrese tanto el correo como la contraseña"
     exit();
 }
 
@@ -21,13 +20,20 @@ $stmt->execute();
 
 if($usuario = $stmt->fetch(PDO::FETCH_ASSOC)) {
     if(password_verify($contrasena, $usuario['Contraseña'])) {
+        $_SESSION['usuario'] = [
+            'IDUsuario' => $usuario['IDUsuario'],
+            'Nombre' => $usuario['Nombre'],
+            'Apellido' => $usuario['Apellido'],
+            'CorreoElectronico' => $usuario['CorreoElectronico'],
+            'Rol' => $usuario['Rol']
+        ];
+        
         $_SESSION['usuario_id'] = $usuario['IDUsuario'];
         $_SESSION['usuario_nombre'] = $usuario['Nombre'];
         $_SESSION['usuario_apellido'] = $usuario['Apellido'];
         $_SESSION['usuario_correo'] = $usuario['CorreoElectronico'];
         $_SESSION['usuario_rol'] = $usuario['Rol'];
         
-        // Redirigir según el rol del usuario
         if ($usuario['Rol'] == 'Administrador') {
             header("Location: ../../admin.php");
         } else {

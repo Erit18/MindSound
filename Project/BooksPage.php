@@ -25,7 +25,8 @@ $baseUrl = '/mindsound/Project';
 </head>
   
   
-<body>
+<body data-user-logged-in="<?php echo isset($_SESSION['usuario']) ? 'true' : 'false'; ?>" 
+      data-user-id="<?php echo isset($_SESSION['usuario']) ? $_SESSION['usuario']['IDUsuario'] : ''; ?>">
    
 <!-- ____________________________________________ ENCABEZADO _______________________________________________________ -->
 

@@ -105,6 +105,16 @@ CREATE TABLE ProgresoLibros (
     FOREIGN KEY (IDLibro) REFERENCES Libros(IDLibro)
 );
 
+-- Tabla para los likes de usuarios
+CREATE TABLE LibrosGuardados (
+    IDUsuario INT,
+    IDLibro INT,
+    FechaGuardado DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (IDUsuario, IDLibro),
+    FOREIGN KEY (IDUsuario) REFERENCES Usuarios(IDUsuario),
+    FOREIGN KEY (IDLibro) REFERENCES Libros(IDLibro)
+);
+
 -- Procedimientos almacenados
 
 DELIMITER //
@@ -490,6 +500,37 @@ BEGIN
     FROM Generos g
     JOIN LibroGenero lg ON g.IDGenero = lg.IDGenero
     WHERE lg.IDLibro = p_IDLibro;
+END //
+
+-- Procedimientos almacenados para los likes
+DELIMITER //
+
+CREATE PROCEDURE SP_GUARDAR_LIBRO(
+    IN p_IDUsuario INT,
+    IN p_IDLibro INT
+)
+BEGIN
+    INSERT INTO LibrosGuardados (IDUsuario, IDLibro)
+    VALUES (p_IDUsuario, p_IDLibro);
+END //
+
+CREATE PROCEDURE SP_ELIMINAR_LIBRO_GUARDADO(
+    IN p_IDUsuario INT,
+    IN p_IDLibro INT
+)
+BEGIN
+    DELETE FROM LibrosGuardados 
+    WHERE IDUsuario = p_IDUsuario AND IDLibro = p_IDLibro;
+END //
+
+CREATE PROCEDURE SP_OBTENER_LIBROS_GUARDADOS(
+    IN p_IDUsuario INT
+)
+BEGIN
+    SELECT l.*, lg.FechaGuardado
+    FROM Libros l
+    INNER JOIN LibrosGuardados lg ON l.IDLibro = lg.IDLibro
+    WHERE lg.IDUsuario = p_IDUsuario;
 END //
 
 DELIMITER ;

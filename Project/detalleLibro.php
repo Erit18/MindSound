@@ -1,10 +1,26 @@
 <?php
+session_start();
+// Agrega esto temporalmente para debug
+echo "<!-- Debug: ";
+var_dump($_SESSION);
+echo " -->";
 require_once 'Controlador/CLibros.php';
+require_once 'Controlador/CLikes.php';
 
 $idLibro = $_GET['id'] ?? 0;
 $controladorLibros = new CLibros();
+$controladorLikes = new CLikes();
 $libro = $controladorLibros->obtenerLibroPorId($idLibro);
 $generos = $controladorLibros->obtenerGenerosLibro($idLibro);
+
+// Verificar si el libro está guardado para el usuario actual
+$esLibroGuardado = false;
+if (isset($_SESSION['usuario'])) {
+    $esLibroGuardado = $controladorLikes->verificarLibroGuardado(
+        $_SESSION['usuario']['IDUsuario'], 
+        $idLibro
+    );
+}
 
 if (!$libro) {
     header("Location: BooksPage.php");
@@ -17,6 +33,10 @@ $baseUrl = '/mindsound/Project';
 function tieneSubscripcionActiva($userId) {
     // Implementación de la función
 }
+
+// Verifica la sesión y asigna los valores correctamente
+$isLoggedIn = isset($_SESSION['usuario']) ? 'true' : 'false';
+$userId = isset($_SESSION['usuario']) ? $_SESSION['usuario']['IDUsuario'] : '';
 ?>
 
 <!DOCTYPE html>
@@ -126,7 +146,8 @@ function tieneSubscripcionActiva($userId) {
         }
     </style>
 </head>
-<body>
+<body data-user-logged-in="<?php echo $isLoggedIn; ?>" 
+      data-user-id="<?php echo $userId; ?>">
 
 <!-- Barra lateral -->
 <div id="nav">
@@ -209,7 +230,7 @@ function tieneSubscripcionActiva($userId) {
                 <i class="fas fa-download"></i> Descargar
             </a>
             <button class="action-button like-button" data-book-id="<?php echo $libro['IDLibro']; ?>">
-                <i class="fas fa-heart"></i> Me gusta
+                <i class="fas fa-heart <?php echo (isset($esLibroGuardado) && $esLibroGuardado) ? 'liked' : ''; ?>"></i> Me gusta
             </button>
         </div>
     </div>
@@ -219,18 +240,6 @@ function tieneSubscripcionActiva($userId) {
 </div>
 
 <script src="script/HomeScript.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const likeButton = document.querySelector('.like-button');
-    likeButton.addEventListener('click', function() {
-        const bookId = this.getAttribute('data-book-id');
-        // Aquí puedes agregar la lógica para manejar el "me gusta"
-        // Por ejemplo, enviar una solicitud AJAX al servidor
-        console.log('Me gusta clickeado para el libro ID:', bookId);
-        // Cambiar el estilo del botón para indicar que se ha dado "me gusta"
-        this.classList.toggle('liked');
-    });
-});
-</script>
+<script src="script/like.js"></script>
 </body>
 </html>
