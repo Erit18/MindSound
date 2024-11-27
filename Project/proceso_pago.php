@@ -69,7 +69,10 @@ $precio = $precios[$plan];
                                id="fecha_vencimiento" 
                                name="fecha_vencimiento" 
                                placeholder="MM/YY" 
-                               required>
+                               maxlength="5"
+                               required
+                               pattern="(0[1-9]|1[0-2])\/([0-9]{2})"
+                               title="Por favor ingrese una fecha válida en formato MM/YY">
                     </div>
                     <div class="form-group">
                         <label for="cvv">CVC</label>
@@ -77,7 +80,10 @@ $precio = $precios[$plan];
                                id="cvv" 
                                name="cvv" 
                                placeholder="123" 
-                               required>
+                               required
+                               maxlength="4"
+                               pattern="[0-9]{3,4}"
+                               title="Ingrese un CVC válido (3 o 4 dígitos)">
                     </div>
                 </div>
 
@@ -87,7 +93,9 @@ $precio = $precios[$plan];
                            id="nombre_tarjeta" 
                            name="nombre_tarjeta" 
                            placeholder="Como aparece en la tarjeta" 
-                           required>
+                           required
+                           pattern="[A-ZÁÉÍÓÚÑa-záéíóúñ\s'-]+"
+                           title="Ingrese el nombre como aparece en la tarjeta (solo letras y espacios)">
                 </div>
 
                 <button type="submit" class="btn-pagar">
@@ -253,27 +261,97 @@ $precio = $precios[$plan];
             }
         });
 
-        // Formatear fecha de vencimiento
+        // Validación de fecha de caducidad
         const expiryInput = document.getElementById('fecha_vencimiento');
+        expiryInput.setAttribute('maxlength', 5);
+
         expiryInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
+            
+            // Limitar a 4 dígitos (MMYY)
+            value = value.substring(0, 4);
+            
+            // Formatear como MM/YY
             if (value.length >= 2) {
+                const month = parseInt(value.substring(0, 2));
+                // Validar que el mes esté entre 01 y 12
+                if (month > 12) {
+                    value = '12' + value.substring(2);
+                } else if (month < 1) {
+                    value = '01' + value.substring(2);
+                }
                 value = value.substring(0, 2) + '/' + value.substring(2);
             }
+            
             e.target.value = value;
         });
 
-        // Formatear CVV
-        const cvvInput = document.getElementById('cvv');
-        cvvInput.addEventListener('input', function(e) {
-            e.target.value = e.target.value.replace(/\D/g, '').substring(0, 4);
+        // Validación al enviar el formulario
+        document.getElementById('payment-form').addEventListener('submit', function(e) {
+            const expiryValue = expiryInput.value;
+            const [month, year] = expiryValue.split('/');
+            
+            if (month && year) {
+                const currentDate = new Date();
+                const currentYear = currentDate.getFullYear() % 100; // Obtener últimos 2 dígitos del año
+                const currentMonth = currentDate.getMonth() + 1; // getMonth() devuelve 0-11
+                
+                const expYear = parseInt(year);
+                const expMonth = parseInt(month);
+                
+                // Validar que la fecha no esté expirada
+                if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
+                    e.preventDefault();
+                    alert('La tarjeta ha expirado. Por favor, use una tarjeta válida.');
+                    expiryInput.focus();
+                    return;
+                }
+                
+                // Validar que la fecha no esté muy lejos en el futuro (típicamente las tarjetas son válidas por 5 años)
+                if (expYear > currentYear + 5) {
+                    e.preventDefault();
+                    alert('Fecha de expiración inválida. Por favor, verifique la fecha.');
+                    expiryInput.focus();
+                    return;
+                }
+            }
         });
 
-        // Convertir nombre a mayúsculas
+        // Validación de CVC
+        const cvvInput = document.getElementById('cvv');
+        cvvInput.addEventListener('input', function(e) {
+            // Solo permitir números
+            let value = e.target.value.replace(/\D/g, '');
+            
+            // Obtener el tipo de tarjeta para determinar la longitud del CVC
+            const cardNumber = document.getElementById('numero_tarjeta').value;
+            const isAmex = cardNumber.startsWith('3');
+            const maxLength = isAmex ? 4 : 3;
+            
+            // Limitar la longitud según el tipo de tarjeta
+            value = value.substring(0, maxLength);
+            e.target.value = value;
+        });
+
+        // Validación del nombre del titular
         const nameInput = document.getElementById('nombre_tarjeta');
         nameInput.addEventListener('input', function(e) {
-            e.target.value = e.target.value.toUpperCase();
+            // Solo permitir letras, espacios y algunos caracteres especiales comunes en nombres
+            let value = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s'-]/g, '');
+            
+            // Convertir a mayúsculas
+            value = value.toUpperCase();
+            
+            // Evitar espacios dobles
+            value = value.replace(/\s+/g, ' ');
+            
+            e.target.value = value;
         });
+
+        // Actualizar el HTML para los inputs
+        document.getElementById('cvv').setAttribute('maxlength', '4');
+        document.getElementById('cvv').setAttribute('pattern', '[0-9]{3,4}');
+        document.getElementById('cvv').setAttribute('title', 'Ingrese un CVC válido (3 o 4 dígitos)');
     });
     </script>
 </body>
