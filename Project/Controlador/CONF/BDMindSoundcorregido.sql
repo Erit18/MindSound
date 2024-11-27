@@ -1,4 +1,3 @@
-/* wa */
 CREATE DATABASE bdmindsound;
 
 USE bdmindsound;
