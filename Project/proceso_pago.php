@@ -32,6 +32,8 @@ $precio = $precios[$plan];
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="img/logo/logo.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="proceso-pago-page">
     <div class="payment-container">
@@ -199,159 +201,168 @@ $precio = $precios[$plan];
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('payment-form');
         const cardInput = document.getElementById('numero_tarjeta');
         const cardType = document.querySelector('.card-type');
+        const cvvInput = document.getElementById('cvv');
+        const expiryInput = document.getElementById('fecha_vencimiento');
+        const nameInput = document.getElementById('nombre_tarjeta');
 
+        // Formateo y validación del número de tarjeta
         cardInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             
-            // Determinar tipo de tarjeta y longitud máxima
-            let maxLength = 16;
+            // Determinar tipo de tarjeta y mostrar ícono
             let icon = '';
-            
-            if (value.startsWith('4')) { // Visa
-                maxLength = 16;
+            if (value.startsWith('4')) {
                 icon = '<i class="fab fa-cc-visa" style="color: #1A1F71;"></i>';
-            } else if (value.startsWith('5')) { // Mastercard
-                maxLength = 16;
+            } else if (value.startsWith('5')) {
                 icon = '<i class="fab fa-cc-mastercard" style="color: #EB001B;"></i>';
-            } else if (value.startsWith('3')) { // American Express
-                maxLength = 15;
+            } else if (value.startsWith('3')) {
                 icon = '<i class="fab fa-cc-amex" style="color: #006FCF;"></i>';
             }
+            cardType.innerHTML = icon;
 
-            // Limitar la longitud según el tipo de tarjeta
-            value = value.substring(0, maxLength);
-            
-            // Formatear con espacios
+            // Formatear número con espacios cada 4 dígitos
             let formattedValue = '';
-            for(let i = 0; i < value.length; i++) {
-                if(i > 0 && i % 4 === 0) {
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
                     formattedValue += ' ';
                 }
                 formattedValue += value[i];
             }
             
             e.target.value = formattedValue;
-            cardType.innerHTML = icon;
-
-            // Actualizar el maxLength del input considerando los espacios
-            const spacesCount = Math.floor((maxLength - 1) / 4);
-            e.target.setAttribute('maxlength', maxLength + spacesCount);
         });
 
-        // Validación adicional en el formulario
-        document.getElementById('payment-form').addEventListener('submit', function(e) {
-            const cardNumber = cardInput.value.replace(/\D/g, '');
-            let isValid = false;
-
-            // Validar longitud según tipo de tarjeta
-            if (cardNumber.startsWith('4')) { // Visa
-                isValid = cardNumber.length === 16;
-            } else if (cardNumber.startsWith('5')) { // Mastercard
-                isValid = cardNumber.length === 16;
-            } else if (cardNumber.startsWith('3')) { // American Express
-                isValid = cardNumber.length === 15;
-            }
-
-            if (!isValid) {
-                e.preventDefault();
-                alert('Por favor, ingrese un número de tarjeta válido con la longitud correcta.');
-                cardInput.focus();
-            }
-        });
-
-        // Validación de fecha de caducidad
-        const expiryInput = document.getElementById('fecha_vencimiento');
-        expiryInput.setAttribute('maxlength', 5);
-
+        // Formateo y validación de fecha de vencimiento
         expiryInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             
-            // Limitar a 4 dígitos (MMYY)
-            value = value.substring(0, 4);
-            
             // Formatear como MM/YY
             if (value.length >= 2) {
-                const month = parseInt(value.substring(0, 2));
-                // Validar que el mes esté entre 01 y 12
-                if (month > 12) {
-                    value = '12' + value.substring(2);
-                } else if (month < 1) {
-                    value = '01' + value.substring(2);
+                const month = value.substring(0, 2);
+                const year = value.substring(2, 4);
+                
+                // Validar mes
+                if (parseInt(month) > 12) {
+                    value = '12' + year;
                 }
-                value = value.substring(0, 2) + '/' + value.substring(2);
+                
+                value = month + (value.length > 2 ? '/' + year : '');
             }
             
-            e.target.value = value;
-        });
-
-        // Validación al enviar el formulario
-        document.getElementById('payment-form').addEventListener('submit', function(e) {
-            const expiryValue = expiryInput.value;
-            const [month, year] = expiryValue.split('/');
-            
-            if (month && year) {
-                const currentDate = new Date();
-                const currentYear = currentDate.getFullYear() % 100; // Obtener últimos 2 dígitos del año
-                const currentMonth = currentDate.getMonth() + 1; // getMonth() devuelve 0-11
-                
-                const expYear = parseInt(year);
-                const expMonth = parseInt(month);
-                
-                // Validar que la fecha no esté expirada
-                if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
-                    e.preventDefault();
-                    alert('La tarjeta ha expirado. Por favor, use una tarjeta válida.');
-                    expiryInput.focus();
-                    return;
-                }
-                
-                // Validar que la fecha no esté muy lejos en el futuro (típicamente las tarjetas son válidas por 5 años)
-                if (expYear > currentYear + 5) {
-                    e.preventDefault();
-                    alert('Fecha de expiración inválida. Por favor, verifique la fecha.');
-                    expiryInput.focus();
-                    return;
-                }
-            }
-        });
-
-        // Validación de CVC
-        const cvvInput = document.getElementById('cvv');
-        cvvInput.addEventListener('input', function(e) {
-            // Solo permitir números
-            let value = e.target.value.replace(/\D/g, '');
-            
-            // Obtener el tipo de tarjeta para determinar la longitud del CVC
-            const cardNumber = document.getElementById('numero_tarjeta').value;
-            const isAmex = cardNumber.startsWith('3');
-            const maxLength = isAmex ? 4 : 3;
-            
-            // Limitar la longitud según el tipo de tarjeta
-            value = value.substring(0, maxLength);
             e.target.value = value;
         });
 
         // Validación del nombre del titular
-        const nameInput = document.getElementById('nombre_tarjeta');
         nameInput.addEventListener('input', function(e) {
-            // Solo permitir letras, espacios y algunos caracteres especiales comunes en nombres
-            let value = e.target.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s'-]/g, '');
+            let value = e.target.value;
+            let previousValue = value;
             
-            // Convertir a mayúsculas
-            value = value.toUpperCase();
+            // Reemplazar caracteres no permitidos
+            let newValue = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s'-]/g, '');
+            newValue = newValue.toUpperCase();
+            newValue = newValue.replace(/\s+/g, ' ');
             
-            // Evitar espacios dobles
-            value = value.replace(/\s+/g, ' ');
+            // Solo mostrar alerta si se intentó ingresar un carácter no permitido
+            if (previousValue !== newValue && /[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s'-]/.test(previousValue)) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Solo letras permitidas',
+                    text: 'El nombre del titular solo debe contener letras y espacios',
+                    background: '#37310D',
+                    color: '#ffffff',
+                    confirmButtonColor: '#730F16',
+                    toast: true,
+                    position: 'top-end',
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                });
+            }
             
+            e.target.value = newValue;
+        });
+
+        // Validación de CVC
+        cvvInput.addEventListener('input', function(e) {
+            const cardNumber = cardInput.value.replace(/\D/g, '');
+            const isAmex = cardNumber.startsWith('3');
+            const maxLength = isAmex ? 4 : 3;
+            
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > maxLength) {
+                value = value.slice(0, maxLength);
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Longitud máxima del CVC',
+                    text: `El CVC debe tener ${maxLength} dígitos para este tipo de tarjeta`,
+                    background: '#37310D',
+                    color: '#ffffff',
+                    confirmButtonColor: '#730F16',
+                    toast: true,
+                    position: 'top-end',
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                });
+            }
             e.target.value = value;
         });
 
-        // Actualizar el HTML para los inputs
-        document.getElementById('cvv').setAttribute('maxlength', '4');
-        document.getElementById('cvv').setAttribute('pattern', '[0-9]{3,4}');
-        document.getElementById('cvv').setAttribute('title', 'Ingrese un CVC válido (3 o 4 dígitos)');
+        // Validación al enviar el formulario
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let errores = [];
+
+            // Validar nombre
+            const nombre = nameInput.value.trim();
+            if (nombre.length < 5 || nombre.split(' ').length < 2) {
+                errores.push("Por favor, ingrese nombre y apellido completos");
+            }
+
+            // Validar CVC
+            const cardNumber = document.getElementById('numero_tarjeta').value;
+            const isAmex = cardNumber.startsWith('3');
+            const requiredCvvLength = isAmex ? 4 : 3;
+            const cvv = cvvInput.value;
+            
+            if (cvv.length !== requiredCvvLength) {
+                errores.push(`El CVC debe tener ${requiredCvvLength} dígitos`);
+            }
+
+            if (errores.length > 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de validación',
+                    html: errores.join('<br>'),
+                    background: '#37310D',
+                    color: '#ffffff',
+                    confirmButtonColor: '#730F16',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Entendido'
+                });
+                return;
+            }
+
+            // Si todo está correcto, mostrar mensaje de procesamiento
+            Swal.fire({
+                title: 'Procesando pago',
+                html: 'Por favor, espere un momento...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+                background: '#37310D',
+                color: '#ffffff'
+            });
+
+            // Simular procesamiento y enviar
+            setTimeout(() => {
+                form.submit();
+            }, 2000);
+        });
     });
     </script>
 </body>
