@@ -110,13 +110,13 @@ $precio = $precios[$plan];
     }
 
     .plan-selected {
-        color: #730F16;
+        color: #8F9569;
         font-size: 1.2em;
         margin-bottom: 5px;
     }
 
     .plan-price {
-        color: #730F16;
+        color: #8F9569;
         font-size: 1.1em;
     }
 
