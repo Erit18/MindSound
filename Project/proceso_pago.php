@@ -247,6 +247,8 @@ $precio = $precios[$plan];
                 // Validar mes
                 if (parseInt(month) > 12) {
                     value = '12' + year;
+                } else if (parseInt(month) < 1) {
+                    value = '01' + year;
                 }
                 
                 value = month + (value.length > 2 ? '/' + year : '');
@@ -315,6 +317,29 @@ $precio = $precios[$plan];
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             let errores = [];
+
+            // Validar fecha de caducidad
+            const expiryValue = expiryInput.value;
+            const [month, year] = expiryValue.split('/');
+            
+            if (month && year) {
+                const currentDate = new Date();
+                const currentYear = currentDate.getFullYear() % 100; // Obtener últimos 2 dígitos del año actual
+                const currentMonth = currentDate.getMonth() + 1; // getMonth() devuelve 0-11
+                
+                const expYear = parseInt(year);
+                const expMonth = parseInt(month);
+                
+                // Validar que la fecha no esté expirada
+                if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
+                    errores.push('La tarjeta ha expirado. Por favor, use una tarjeta válida.');
+                }
+                
+                // Validar que la fecha no esté muy lejos en el futuro (típicamente 5-10 años)
+                if (expYear > currentYear + 10) {
+                    errores.push('Fecha de expiración inválida. La fecha está muy lejos en el futuro.');
+                }
+            }
 
             // Validar nombre
             const nombre = nameInput.value.trim();
