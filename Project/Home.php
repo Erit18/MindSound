@@ -241,16 +241,15 @@ if (isset($_GET['success']) && $_GET['success'] == 'true' && isset($_SESSION['me
     <article class="card">
         <img class="card__background" 
              src="<?php echo file_exists($libro['RutaPortada']) ? $baseUrl . '/' . $libro['RutaPortada'] : $baseUrl . '/img/default-cover.jpg'; ?>" 
-             alt="<?php echo htmlspecialchars($libro['Titulo']); ?>" 
-             width="1920" height="2193">
-        <div class="card__content | flow">
-            <div class="card__content--container | flow">
-                <h3 class="card__title"><?php echo $libro['Titulo']; ?></h3>
+             alt="<?php echo htmlspecialchars($libro['Titulo']); ?>">
+        <div class="card__content">
+            <div class="card__content--container">
+                <h3 class="card__title"><?php echo htmlspecialchars($libro['Titulo']); ?></h3>
                 <p class="card__description">
-                    <?php echo substr($libro['Descripcion'], 0, 100) . '...'; ?>
+                    <?php echo htmlspecialchars(substr($libro['Descripcion'], 0, 100)) . '...'; ?>
                 </p>
             </div>
-            <a href="detalleLibro.php?id=<?php echo $libro['IDLibro']; ?>"><button class="card__button">Leer más</button></a>
+            <a href="detalleLibro.php?id=<?php echo $libro['IDLibro']; ?>" class="card__button">Leer más</a>
         </div>
     </article>
     <?php endforeach; ?>
