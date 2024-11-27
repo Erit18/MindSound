@@ -22,7 +22,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     confirmButtonText: 'Iniciar sesión'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = 'intranet.php';
+                        // Obtener la ruta base del proyecto
+                        const currentPath = window.location.pathname;
+                        const isInProjectRoot = currentPath.includes('/Project/') && !currentPath.includes('/category/');
+                        const redirectPath = isInProjectRoot ? 'intranet.php' : '../intranet.php';
+                        window.location.href = redirectPath;
                     }
                 });
                 return;

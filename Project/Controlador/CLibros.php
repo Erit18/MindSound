@@ -314,6 +314,19 @@ class CLibros {
             return [];
         }
     }
+
+    public function esLibroFavorito($idUsuario, $idLibro) {
+        try {
+            $conn = $this->conexion->getcon();
+            $stmt = $conn->prepare("SELECT COUNT(*) FROM LibrosGuardados WHERE IDUsuario = ? AND IDLibro = ?");
+            $stmt->bindParam(1, $idUsuario);
+            $stmt->bindParam(2, $idLibro);
+            $stmt->execute();
+            return $stmt->fetchColumn() > 0;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
 }
 
 // Manejo de solicitudes AJAX

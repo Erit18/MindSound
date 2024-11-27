@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once '../Controlador/CLibros.php';
 
 // Obtener libros del género "Biográfico"
@@ -21,7 +22,10 @@ $libros = $controladorLibros->obtenerLibrosPorGenero('Biográfico');
   <title>Biography</title>
 </head>
   
-  <body>
+  <body <?php 
+    echo 'data-user-logged-in="' . (isset($_SESSION['usuario']) ? 'true' : 'false') . '" ';
+    echo 'data-user-id="' . (isset($_SESSION['usuario']) ? $_SESSION['usuario']['IDUsuario'] : '') . '"';
+  ?>>
 
  <!-- ____________________________________________ HEADER _______________________________________________________ -->
   
@@ -64,7 +68,12 @@ $libros = $controladorLibros->obtenerLibrosPorGenero('Biográfico');
                             <a href="../detalleLibro.php?id=<?php echo $libro['IDLibro']; ?>">LEER MÁS</a>
                         </button>
                         <button class="like-button" data-book-id="<?php echo $libro['IDLibro']; ?>">
-                            <i class="fas fa-heart"></i>
+                            <i class="fas fa-heart <?php 
+                                if (isset($_SESSION['usuario'])) {
+                                    $esFavorito = $controladorLibros->esLibroFavorito($_SESSION['usuario']['IDUsuario'], $libro['IDLibro']);
+                                    echo $esFavorito ? 'liked' : '';
+                                }
+                            ?>"></i>
                         </button>
                     </div>
                 </div>
@@ -108,7 +117,8 @@ $libros = $controladorLibros->obtenerLibrosPorGenero('Biográfico');
   });
 </script>
 
-    
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../script/like.js"></script>
 
 </body>
 </html>

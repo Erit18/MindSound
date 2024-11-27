@@ -1531,3 +1531,49 @@ margin-bottom: 20px;
 .action-button i {
     font-size: 1.1em;
 }
+
+/* Estilo para el contenedor de botones */
+.liked_books {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 15px;
+}
+
+/* Estilo para el botón de corazón */
+.like-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+}
+
+.like-button i {
+    color: #730F16;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.like-button:hover i {
+    transform: scale(1.2);
+}
+
+.like-button i.liked {
+    color: #fff;
+}
+
+/* Ajuste para el botón "LEER MÁS" */
+.card__button {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.card__button a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    width: 100%;
+}
