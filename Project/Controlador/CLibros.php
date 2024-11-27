@@ -295,6 +295,25 @@ class CLibros {
             return [];
         }
     }
+
+    public function obtenerLibrosPorGenero($nombreGenero) {
+        try {
+            $conn = $this->conexion->getcon();
+            $stmt = $conn->prepare("
+                SELECT l.*
+                FROM Libros l
+                JOIN LibroGenero lg ON l.IDLibro = lg.IDLibro
+                JOIN Generos g ON lg.IDGenero = g.IDGenero
+                WHERE g.NombreGenero = ?
+            ");
+            $stmt->bindParam(1, $nombreGenero, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error al obtener libros por género: " . $e->getMessage());
+            return [];
+        }
+    }
 }
 
 // Manejo de solicitudes AJAX

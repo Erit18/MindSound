@@ -148,7 +148,7 @@ if (isset($_GET['success']) && $_GET['success'] == 'true' && isset($_SESSION['me
   <section class="category">
     <h2 class="section-heading">Categoría</h2>
     <div class="container2">
-      <div class="profile"><a href="category/biography.html">
+      <div class="profile"><a href="category/biography.php">
         <img src="img/category/01.png" alt=""><span class="name">BIOGRAFÍA</span></a>
       </div>
       <div class="profile"><a href="category/historical.html">

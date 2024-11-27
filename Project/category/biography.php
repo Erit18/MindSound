@@ -1,3 +1,11 @@
+<?php
+require_once '../Controlador/CLibros.php';
+
+// Obtener libros del género "Biográfico"
+$controladorLibros = new CLibros();
+$libros = $controladorLibros->obtenerLibrosPorGenero('Biográfico');
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -43,7 +51,26 @@
 
     <h1>Biography</h1>
     <div id="container">
-  </div>
+        <?php foreach ($libros as $libro): ?>
+            <div class="card">
+                <img class="card__background" src="<?php echo '../' . $libro['RutaPortada']; ?>" alt="<?php echo htmlspecialchars($libro['Titulo']); ?>">
+                <div class="card__content">
+                    <div class="card__content--container">
+                        <h3 class="card__title"><?php echo htmlspecialchars($libro['Titulo']); ?></h3>
+                        <p class="card__description"><?php echo htmlspecialchars($libro['Descripcion']); ?></p>
+                    </div>
+                    <div class="liked_books">
+                        <button class="card__button">
+                            <a href="../detalleLibro.php?id=<?php echo $libro['IDLibro']; ?>">LEER MÁS</a>
+                        </button>
+                        <button class="like-button" data-book-id="<?php echo $libro['IDLibro']; ?>">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
   </div>
 
 
@@ -72,7 +99,7 @@
 
 
 <script src="https://hammerjs.github.io/dist/hammer.js"></script>
-<script src="biography.js"></script>
+<script src="../script/like.js"></script>
 <script>
   const modeToggle = document.getElementById('mode-toggle');
   const body = document.body;
