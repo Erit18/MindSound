@@ -123,8 +123,8 @@ function createBookCard(book) {
     card.classList.add('card');
     card.innerHTML = `
         <img class="card__background" src="${book.RutaPortada}" alt="${book.Titulo}">
-        <div class="card__content | flow">
-            <div class="card__content--container | flow">
+        <div class="card__content">
+            <div class="card__content--container">
                 <h3 class="card__title">${book.Titulo}</h3>
                 <p class="card__description">${book.Descripcion}</p>
             </div>
