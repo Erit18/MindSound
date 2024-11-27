@@ -152,22 +152,22 @@ if (isset($_GET['success']) && $_GET['success'] == 'true' && isset($_SESSION['me
         <img src="img/category/01.png" alt=""><span class="name">BIOGRAFÍA</span></a>
       </div>
       <div class="profile"><a href="category/historical.php">
-        <img src="img/category/02.png" alt=""><span class="name">HISTÓRICO </span></a>
+        <img src="img/category/02.png" alt=""><span class="name">HISTÓRICO</span></a>
       </div>
-      <div class="profile"><a href="category/horror.html">
-        <img src="img/category/03.png" alt=""><span class="name">TERROR </span></a>
+      <div class="profile"><a href="category/horror.php">
+        <img src="img/category/03.png" alt=""><span class="name">TERROR</span></a>
       </div>
-      <div class="profile"><a href="category/mystery.html">
+      <div class="profile"><a href="category/mystery.php">
         <img src="img/category/04.png" alt=""><span class="name">MISTERIO</span></a>
       </div>
-      <div class="profile"><a href="category/novel.html">
+      <div class="profile"><a href="category/novel.php">
         <img src="img/category/06.png" alt=""><span class="name">NOVELA</span></a>
       </div>
-      <div class="profile"><a href="category/science.html">
-        <img src="img/category/05.png" alt=""><span class="name"> CIENCIA</span></a>
+      <div class="profile"><a href="category/science.php">
+        <img src="img/category/05.png" alt=""><span class="name">CIENCIA</span></a>
       </div>
-      <div class="profile"><a href="category/sports.html">
-        <img src="img/category/07.png" alt=""><span class="name">DEPORTES </span></a>
+      <div class="profile"><a href="category/sports.php">
+        <img src="img/category/07.png" alt=""><span class="name">DEPORTES</span></a>
       </div>
     </div>
   </section>

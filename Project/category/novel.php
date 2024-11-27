@@ -4,7 +4,7 @@ require_once '../Controlador/CLibros.php';
 
 // Obtener libros del género "Biográfico"
 $controladorLibros = new CLibros();
-$libros = $controladorLibros->obtenerLibrosPorGenero('Histórico');
+$libros = $controladorLibros->obtenerLibrosPorGenero('Novela');
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +19,7 @@ $libros = $controladorLibros->obtenerLibrosPorGenero('Histórico');
   <link rel="icon" type="image/x-icon" href="..//img/logo/logo.ico">
  <link rel="stylesheet" href="../style/Style.css">
  <script src="https://kit.fontawesome.com/9a05771681.js" crossorigin="anonymous"></script>
-  <title>Histórico</title>
+  <title>Novela</title>
 </head>
   
   <body <?php 

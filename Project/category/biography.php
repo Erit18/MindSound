@@ -19,7 +19,7 @@ $libros = $controladorLibros->obtenerLibrosPorGenero('Biográfico');
   <link rel="icon" type="image/x-icon" href="..//img/logo/logo.ico">
  <link rel="stylesheet" href="../style/Style.css">
  <script src="https://kit.fontawesome.com/9a05771681.js" crossorigin="anonymous"></script>
-  <title>Biography</title>
+  <title>Biográfico</title>
 </head>
   
   <body <?php 
