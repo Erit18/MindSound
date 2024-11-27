@@ -14,8 +14,17 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Like button clicked');
             
             if (!isLoggedIn) {
-                alert('Debes iniciar sesión para guardar libros');
-                window.location.href = 'login.php';
+                Swal.fire({
+                    title: 'Inicia sesión',
+                    text: 'Debes iniciar sesión para guardar libros',
+                    icon: 'warning',
+                    confirmButtonColor: '#730F16',
+                    confirmButtonText: 'Iniciar sesión'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = 'intranet.php';
+                    }
+                });
                 return;
             }
 
@@ -23,9 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const icon = this.querySelector('i') || this;
             const isLiked = icon.classList.contains('liked');
             
-            console.log('Book ID:', bookId);
-            console.log('Is liked:', isLiked);
-
             try {
                 const response = await fetch('Controlador/manejarLike.php', {
                     method: 'POST',
@@ -39,23 +45,52 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                 });
 
-                console.log('Response status:', response.status);
-                
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('Response data:', data);
-                    
                     if (data.success) {
                         icon.classList.toggle('liked');
                         if (icon.classList.contains('liked')) {
                             icon.style.color = '#fff';
+                            // Mostrar notificación de éxito al agregar
+                            Swal.fire({
+                                title: '¡Guardado!',
+                                text: 'Libro agregado a tus favoritos',
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 1500,
+                                position: 'top-end',
+                                toast: true,
+                                background: '#4CAF50',
+                                color: '#fff',
+                                iconColor: '#fff'
+                            });
                         } else {
                             icon.style.color = '#730F16';
+                            // Mostrar notificación al quitar de favoritos
+                            Swal.fire({
+                                title: 'Eliminado',
+                                text: 'Libro eliminado de tus favoritos',
+                                icon: 'info',
+                                showConfirmButton: false,
+                                timer: 1500,
+                                position: 'top-end',
+                                toast: true,
+                                background: '#730F16',
+                                color: '#fff',
+                                iconColor: '#fff'
+                            });
                         }
                     }
                 }
             } catch (error) {
                 console.error('Error:', error);
+                // Mostrar notificación de error
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Ocurrió un error al procesar tu solicitud',
+                    icon: 'error',
+                    confirmButtonColor: '#730F16'
+                });
             }
         });
     });

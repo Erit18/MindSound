@@ -145,6 +145,7 @@ $userId = isset($_SESSION['usuario']) ? $_SESSION['usuario']['IDUsuario'] : '';
             }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body data-user-logged-in="<?php echo $isLoggedIn; ?>" 
       data-user-id="<?php echo $userId; ?>">
