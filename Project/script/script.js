@@ -6,90 +6,75 @@ document.addEventListener('DOMContentLoaded', function() {
     const progressBar = document.querySelector('.bar');
     const timeNow = document.querySelector('.timeNow');
     const audioDuration = document.querySelector('.audioDuration');
+    const disk = document.querySelector('.disk');
 
-    let audioContext, source, analyser;
     let isPlaying = false;
-    let startedAt = 0;
-    let pausedAt = 0;
-    let duration = 0;
 
-    function initAudio() {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        source = audioContext.createMediaElementSource(audioElement);
-        analyser = audioContext.createAnalyser();
-        source.connect(analyser);
-        analyser.connect(audioContext.destination);
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = Math.floor(seconds % 60);
+        return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
     }
 
-    function togglePlay() {
-        if (!audioContext) initAudio();
+    function updateProgress() {
+        const currentTime = audioElement.currentTime;
+        const duration = audioElement.duration;
+        progressBar.value = (currentTime / duration) * 100;
+        timeNow.textContent = formatTime(currentTime);
+        
         if (isPlaying) {
-            audioContext.suspend();
-            pausedAt = audioContext.currentTime - startedAt;
-            isPlaying = false;
-            playBtn.classList.add('pause');
-        } else {
-            if (audioContext.state === 'suspended') {
-                audioContext.resume();
-            }
-            startedAt = audioContext.currentTime - pausedAt;
-            audioElement.play();
-            isPlaying = true;
-            playBtn.classList.remove('pause');
-            requestAnimationFrame(updateAudioTime);
+            requestAnimationFrame(updateProgress);
         }
     }
 
-    function formatTime(time) {
-        const minutes = Math.floor(time / 60);
-        const seconds = Math.floor(time % 60);
-        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    }
-
-    function updateAudioTime() {
-        if (isPlaying) {
-            const currentTime = audioContext.currentTime - startedAt;
-            progressBar.value = (currentTime / duration) * 100;
-            timeNow.textContent = formatTime(currentTime);
-            requestAnimationFrame(updateAudioTime);
+    function togglePlay() {
+        if (audioElement.paused) {
+            audioElement.play();
+            isPlaying = true;
+            disk.classList.add('play');
+            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            requestAnimationFrame(updateProgress);
+        } else {
+            audioElement.pause();
+            isPlaying = false;
+            disk.classList.remove('play');
+            playBtn.innerHTML = '<i class="fas fa-play"></i>';
         }
     }
 
     function seek(e) {
-        const seekTime = (e.target.value / 100) * duration;
-        pausedAt = seekTime;
-        if (isPlaying) {
-            audioElement.currentTime = seekTime;
-            startedAt = audioContext.currentTime - seekTime;
+        const percent = e.target.value;
+        const time = (percent * audioElement.duration) / 100;
+        audioElement.currentTime = time;
+        if (!isPlaying) {
+            updateProgress();
         }
-        timeNow.textContent = formatTime(seekTime);
     }
 
     function skip(direction) {
-        const currentTime = isPlaying ? audioContext.currentTime - startedAt : pausedAt;
-        const newTime = Math.max(0, Math.min(duration, currentTime + direction * 10));
-        if (isPlaying) {
-            audioElement.currentTime = newTime;
-            startedAt = audioContext.currentTime - newTime;
-        } else {
-            pausedAt = newTime;
+        audioElement.currentTime += direction * 10;
+        if (!isPlaying) {
+            updateProgress();
         }
-        progressBar.value = (newTime / duration) * 100;
-        timeNow.textContent = formatTime(newTime);
     }
 
+    // Event Listeners
     playBtn.addEventListener('click', togglePlay);
     backwardBtn.addEventListener('click', () => skip(-1));
     forwardBtn.addEventListener('click', () => skip(1));
     progressBar.addEventListener('input', seek);
 
     audioElement.addEventListener('loadedmetadata', function() {
-        duration = audioElement.duration;
-        audioDuration.textContent = formatTime(duration);
-        progressBar.max = 100;
+        audioDuration.textContent = formatTime(audioElement.duration);
+        timeNow.textContent = formatTime(0);
+        progressBar.value = 0;
     });
 
-    audioElement.addEventListener('error', function(e) {
-        console.error('Error loading audio:', e);
+    audioElement.addEventListener('ended', function() {
+        isPlaying = false;
+        disk.classList.remove('play');
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        progressBar.value = 0;
+        timeNow.textContent = formatTime(0);
     });
 });
