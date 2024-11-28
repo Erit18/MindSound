@@ -97,7 +97,6 @@ function tieneSubscripcionActiva($userId) {
 
     <script src="https://hammerjs.github.io/dist/hammer.js"></script>
     <script src="script/script.js"></script>
-    <script src="script/audioPlayer.js"></script>
     <script>
       const modeToggle = document.getElementById('mode-toggle');
       const body = document.body;
