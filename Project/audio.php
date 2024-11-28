@@ -2,6 +2,16 @@
 session_start();
 require_once 'Controlador/CLibros.php';
 
+// Función para verificar el estado de suscripción
+function tieneSubscripcionActiva($userId) {
+    $conexion = new Conexion();
+    $conn = $conexion->getcon();
+    $stmt = $conn->prepare("SELECT EstadoSuscripcion FROM Usuarios WHERE IDUsuario = ?");
+    $stmt->execute([$userId]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['EstadoSuscripcion'] === 'Activa';
+}
+
 // Obtener el ID del libro de la URL
 $idLibro = $_GET['id'] ?? 0;
 
@@ -30,8 +40,43 @@ $baseUrl = '/mindsound/Project';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-    <!-- Barra de navegación -->
-    <?php include 'nav.php'; ?>
+    <header id="header">
+        <div id="nav">
+            <div class="topnav" id="myTopnav">
+                <a href="Home.php">Inicio</a>
+                <a href="BooksPage.php">Libros</a>
+                <a href="likes.php">Me gusta</a>
+                <a href="aboutus.php">Sobre Nosotros</a>
+                <a href="contact.php">Contacto</a>
+                <?php if(isset($_SESSION['usuario_id'])): ?>
+                    <?php if($_SESSION['usuario_rol'] !== 'Administrador'): ?>
+                        <?php if(tieneSubscripcionActiva($_SESSION['usuario_id'])): ?>
+                            <a href="gestionar_suscripcion.php">Gestionar Suscripción</a>
+                        <?php else: ?>
+                            <a href="suscripciones.php">Suscribirse</a>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <a href="intranet.php?redirect=suscripciones.php">Suscribirse</a>
+                <?php endif; ?>
+                <a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a>
+            </div>
+
+            <div class="search-container">
+                <input type="text" name="search" id="searchInput" placeholder="Buscar..." class="search-input">
+                <a href="#" class="search-btn">
+                    <i class="fas fa-search" aria-hidden="true"></i>      
+                </a>
+            </div>
+            <div class="Container" id="containere">
+                <?php if(isset($_SESSION['usuario_id'])): ?>
+                    <a href="Modelo/PHP/cerrarsesion.php" class="login-btn">Cerrar sesión</a>
+                <?php else: ?>
+                    <a href="intranet.php" class="login-btn">Iniciar sesión</a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </header>
 
     <div class="audioPlayer">
         <h2 class="audioName"><?php echo htmlspecialchars($libro['Titulo']); ?></h2>
