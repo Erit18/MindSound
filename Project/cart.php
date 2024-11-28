@@ -15,114 +15,49 @@
 </head>
 
 <body>
-
-<!-- ____________________________________________ HEADER _______________________________________________________ -->
-  
-<header id="header">
-    <div id="nav">
-      <div id="logo">
-        <a href="Home.php"><img src="img/logo/logo.png" alt="test image" class="responsive"></a>
-      </div>
-      <div class="topnav" id="myTopnav">
-        <a href="Home.php">Inicio</a>
-        <a href="BooksPage.php">Libros</a>
-        <a href="likes.php">Me gusta</a>
-        <a href="aboutus.php">Sobre nosotros</a>
-        <a href="contact.php">Contacto</a>
-        <a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a>
-      </div>
-      <div id="whitemode"> 
-        <h6>Modo Claro</h6>
-        <label class="switch">
-        <input type="checkbox" id="mode-toggle" Modo Claro> <span class="slider round"></span></label>
-      </div>
-      <div class="search-container">
-        <input type="text" name="search" id="searchInput" placeholder="Buscar..." class="search-input">
-        <a href="#" class="search-btn">
-        <i class="fas fa-search" aria-hidden="true"></i>      
-        </a>
-      </div>
+  <div id="nav">
+    <div class="topnav">
+      <a href="Home.php">Inicio</a>
+      <a href="BooksPage.php">Libros</a>
+      <a href="likes.php">Me gusta</a>
+      <a href="aboutus.php">Sobre nosotros</a>
+      <a href="contact.php">Contacto</a>
+      <a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a>
+    </div>
   </div>
-  </header>
-  
-  <!-- ____________________________________________ HEADER _______________________________________________________ -->
 
-
-        <div id="main">
-
-        <div class="cont">
-            <div class="cart">
-                <div class="top">
-                    <h2>Carrito de Compras</h2>      
-                </div>
-
-
-
-
-                <div id="cartcontainer">
-
-
-                  <table cellspacing="0" class="table-head">
-                    <tr>
-                        <th width="150" class="head-img">Imagen</th>
-                        <th width="360">Nombre</th>
-                        <th width="150">Precio</th>
-                        <th width="70">Eliminar</th>
-                    </tr>
-                </table>
-
-
-
-                    <table  cellspacing="0" id="cart-items">
-                      
-                    </table>
-
-                    <hr>
-
-                    
-                    
-                    
-                </div>
+  <div class="main-content">
+    <div class="cart-container">
+      <div class="cart-section">
+        <h2>Carrito de Compras</h2>
+        <div class="cart-table">
+          <div class="table-header">
+            <div class="header-row">
+              <span>Imagen</span>
+              <span>Nombre</span>
+              <span>Precio</span>
+              <span>Eliminar</span>
             </div>
-            <div class="summary">
-                <div class="top">
-                    <h2>Resumen del Pedido</h2>
-                </div>
-                <div class="detail">
-                    <h2 id="itemB">0 Libros</h2>
-                    <h2 id="total-price">0</h2>
-                </div>
-                <div style="margin-top: 30px; padding: 0 30px;">
-                <h2>Envío</h2>
-                <input type="text" placeholder="Entrega estándar">
-                <div class="paypal-button-container"></div>
-            </div>
-            <hr>
-
-
-
-            <div style="padding: 0 10px; margin-bottom: 20px;">
-                
-            </div>
-
-            
-            </div>
+          </div>
+          <div id="cart-items"></div>
         </div>
+      </div>
+
+      <div class="order-summary">
+        <h2>Resumen del Pedido</h2>
+        <div class="summary-box">
+          <div class="summary-total">
+            <span id="itemB">0 Libros</span>
+            <span id="total-price">0 $</span>
+          </div>
         </div>
-    
-
-        <script src="https://www.paypal.com/sdk/js?client-id=AU91bSoIYcUUNqZ5RxWGP6T4aaXZww5hTu6vb3QK9IujBKlLDhfroDSnsTVZU6hWQMWK6yXwqY-oQNsW"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="script/bookcartscript.js"></script>
-    <script src="script/scriptCart.js"></script>
-    <script>
-        const modeToggle = document.getElementById('mode-toggle');
-        const body = document.body;
-        modeToggle.addEventListener('click', () => {
-        body.classList.toggle('white-mode');
-        });
-      </script>
-    
-
+        <div class="shipping-section">
+          <h3>Envío</h3>
+          <input type="text" placeholder="Entrega estándar" class="shipping-input">
+        </div>
+        <div class="paypal-button-container"></div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
