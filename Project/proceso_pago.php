@@ -36,6 +36,38 @@ $precio = $precios[$plan];
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="proceso-pago-page">
+    <header id="header">
+        <div id="nav">
+            <div class="topnav" id="myTopnav">
+                <a href="Home.php">Inicio</a>
+                <a href="BooksPage.php">Libros</a>
+                <a href="likes.php">Me gusta</a>
+                <a href="aboutus.php">Sobre Nosotros</a>
+                <a href="contact.php">Contacto</a>
+                <?php if(isset($_SESSION['usuario_id'])): ?>
+                    <?php if($_SESSION['usuario_rol'] !== 'Administrador'): ?>
+                        <a href="suscripciones.php">Suscribirse</a>
+                    <?php endif; ?>
+                <?php endif; ?>
+                <a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a>
+            </div>
+
+            <div class="search-container">
+                <input type="text" name="search" id="searchInput" placeholder="Buscar..." class="search-input">
+                <a href="#" class="search-btn">
+                    <i class="fas fa-search" aria-hidden="true"></i>      
+                </a>
+            </div>
+            <div class="Container" id="containere">
+                <?php if(isset($_SESSION['usuario_id'])): ?>
+                    <a href="Modelo/PHP/cerrarsesion.php" class="login-btn">Cerrar sesión</a>
+                <?php else: ?>
+                    <a href="intranet.php" class="login-btn">Iniciar sesión</a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </header>
+
     <div class="payment-container">
         <h1>Completar Pago</h1>
         

@@ -62,9 +62,11 @@ $baseUrl = '/Project'; // Ajusta esto según la estructura de tu proyecto
                 <h2>Básica</h2>
                 <p class="price">$9.99/mes</p>
                 <ul>
-                    <li>Acceso a libros gratuitos</li>
-                    <li>1 libro premium al mes</li>
-                    <li>Soporte por correo</li>
+                    <li>Acceso a todo el catálogo en streaming</li>
+                    <li>Calidad de audio estándar</li>
+                    <li>Escucha en 1 dispositivo a la vez</li>
+                    <li>Función de marcadores básicos</li>
+                    <li>Solo reproducción online</li>
                 </ul>
                 <a href="proceso_pago.php?plan=basica" class="btn-subscribe">Suscribirse</a>
             </div>
@@ -72,9 +74,12 @@ $baseUrl = '/Project'; // Ajusta esto según la estructura de tu proyecto
                 <h2>Normal</h2>
                 <p class="price">$14.99/mes</p>
                 <ul>
-                    <li>Acceso a libros gratuitos</li>
-                    <li>3 libros premium al mes</li>
-                    <li>Soporte prioritario</li>
+                    <li>Acceso a todo el catálogo en streaming</li>
+                    <li>Calidad de audio HD</li>
+                    <li>Escucha en 2 dispositivos a la vez</li>
+                    <li>Marcadores avanzados y notas</li>
+                    <li>Descarga temporal para escucha offline</li>
+                    <li>Velocidad de reproducción ajustable</li>
                 </ul>
                 <a href="proceso_pago.php?plan=normal" class="btn-subscribe">Suscribirse</a>
             </div>
@@ -82,12 +87,24 @@ $baseUrl = '/Project'; // Ajusta esto según la estructura de tu proyecto
                 <h2>Premium</h2>
                 <p class="price">$19.99/mes</p>
                 <ul>
-                    <li>Acceso ilimitado a todos los libros</li>
-                    <li>Estrenos anticipados</li>
-                    <li>Soporte 24/7</li>
+                    <li>Acceso a todo el catálogo en streaming</li>
+                    <li>Calidad de audio Ultra HD</li>
+                    <li>Escucha en 5 dispositivos a la vez</li>
+                    <li>Todas las funciones de marcadores y notas</li>
+                    <li>Descarga temporal para escucha offline</li>
+                    <li>Velocidad de reproducción ajustable</li>
+                    <li>Acceso anticipado a nuevos lanzamientos</li>
+                    <li>Sin anuncios ni interrupciones</li>
                 </ul>
                 <a href="proceso_pago.php?plan=premium" class="btn-subscribe">Suscribirse</a>
             </div>
+        </div>
+
+        <!-- Agregar banner informativo -->
+        <div class="info-banner">
+            <h3>¿Prefieres no suscribirte?</h3>
+            <p>Compra audiolibros individuales y tenlos en tu biblioteca para siempre</p>
+            <p>Cancela cuando quieras</p>
         </div>
     </main>
 

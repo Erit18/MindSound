@@ -1024,620 +1024,224 @@ margin-bottom: 20px;
 }
 
 /* Estilos para la página de suscripciones */
+.suscripciones-page {
+    background-color: #22312A;
+    min-height: 100vh;
+    padding: 40px 20px;
+    max-width: calc(100% - 250px);
+    margin-left: auto;
+}
+
+.suscripciones-page h1 {
+    color: #C5B783;
+    text-align: center;
+    margin: 40px 0;
+    font-size: 3rem;
+    font-family: "Bebas Neue", cursive;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    transform: translateX(40px);
+}
+
 .subscription-plans {
     display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    margin: 2rem 0;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    transform: translateX(40px);
 }
 
 .plan {
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 0.25rem;
-    padding: 1.5rem;
-    margin: 1rem;
-    width: 300px;
+    flex: 0 1 320px;
+    min-width: 280px;
+    max-width: 320px;
+    background: linear-gradient(145deg, #37310D, #2a2508);
+    border: 2px solid #C5B783;
+    border-radius: 15px;
+    padding: 30px;
     text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.plan:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    border-color: #730F16;
 }
 
 .plan h2 {
-    color: #007bff;
+    color: #C5B783;
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    font-family: "Bebas Neue", cursive;
 }
 
 .plan .price {
-    font-size: 1.5rem;
+    color: #730F16;
+    font-size: 2.5rem;
     font-weight: bold;
-    margin: 1rem 0;
+    margin: 25px 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .plan ul {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
+    margin: 30px 0;
+    text-align: left;
 }
 
 .plan li {
-    margin: 0.5rem 0;
+    color: #ffffff;
+    margin: 15px 0;
+    padding-left: 30px;
+    position: relative;
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+
+.plan li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #C5B783;
+    font-weight: bold;
 }
 
 .btn-subscribe {
     display: inline-block;
-    background-color: #007bff;
+    background: linear-gradient(145deg, #730F16, #8B1319);
     color: white;
-    padding: 0.5rem 1rem;
+    padding: 15px 30px;
     text-decoration: none;
-    border-radius: 0.25rem;
-    margin-top: 1rem;
-}
-
-/* Estilos para el formulario de pago */
-#payment-form {
-    max-width: 500px;
-    margin: 0 auto;
-}
-
-.form-group {
-    margin-bottom: 1rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-}
-
-.btn-pagar {
-    display: block;
-    width: 100%;
-    background-color: #28a745;
-    color: white;
-    padding: 0.75rem;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
     border: none;
-    border-radius: 0.25rem;
-    font-size: 1rem;
-    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(115, 15, 22, 0.3);
 }
 
-.subscription-btn {
-    background-color: #28a745;
-    color: white;
-    padding: 0.5rem 1rem;
-    text-decoration: none;
-    border-radius: 0.25rem;
-    margin-left: 1rem;
+.btn-subscribe:hover {
+    background: linear-gradient(145deg, #8B1319, #730F16);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(115, 15, 22, 0.4);
 }
 
-/* Estilos específicos para la página de suscripciones */
-.suscripciones-page {
-    background-color: #22312A; /* Mantenemos el fondo oscuro */
-    color: #ffffff;
-}
-
-.suscripciones-page h1 {
-    color: #8F9569; /* Color similar al de tu barra de navegación */
+.info-banner {
     text-align: center;
-    margin-bottom: 2rem;
-    font-size: 2.5rem;
+    margin: 50px auto;
+    max-width: 800px;
+    padding: 30px;
+    background: rgba(55, 49, 13, 0.6);
+    border-radius: 15px;
+    border: 1px solid #C5B783;
+    transform: translateX(0px);
 }
 
-.suscripciones-page .subscription-plans {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 2rem;
-}
-
-.suscripciones-page .plan {
-    background-color: #37310D; /* Un tono oscuro que combina con tu paleta */
-    border: 1px solid #8F9569;
-    border-radius: 10px;
-    padding: 2rem;
-    width: 300px;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.suscripciones-page .plan:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(143, 149, 105, 0.2);
-}
-
-.suscripciones-page .plan h2 {
-    color: #8F9569; /* Color similar al de tu barra de navegación */
+.info-banner h3 {
+    color: #C5B783;
     font-size: 1.8rem;
-    margin-bottom: 1rem;
+    margin-bottom: 15px;
+    font-family: "Bebas Neue", cursive;
 }
 
-.suscripciones-page .plan .price {
-    color: #730F16; /* Color rojo de tu sitio */
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 1.5rem;
-}
-
-.suscripciones-page .plan ul {
-    list-style-type: none;
-    padding: 0;
-    margin-bottom: 1.5rem;
-}
-
-.suscripciones-page .plan li {
-    margin: 0.5rem 0;
+.info-banner p {
     color: #ffffff;
+    font-size: 1.1rem;
+    margin: 10px 0;
+    line-height: 1.6;
 }
 
-.suscripciones-page .btn-subscribe {
-    display: inline-block;
-    background-color: #730F16; /* Color rojo de tu sitio */
-    color: white;
-    padding: 0.75rem 1.5rem;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
+/* Responsive */
+@media (max-width: 1024px) {
+    .subscription-plans, 
+    .suscripciones-page h1,
+    .info-banner {
+        transform: translateX(0);
+    }
 }
 
-.suscripciones-page .btn-subscribe:hover {
-    background-color: #8B1319; /* Un tono más claro del rojo al pasar el mouse */
+@media (max-width: 768px) {
+    .plan {
+        flex: 1 1 100%;
+        max-width: 340px;
+    }
 }
 
 /* Estilos específicos para la página de proceso de pago */
 .proceso-pago-page {
     background-color: #22312A;
-    color: #ffffff;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 250px;
 }
 
-.proceso-pago-page h1 {
-    color: #8F9569;
+.payment-container {
+    max-width: 500px;
+    width: 100%;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.payment-container h1 {
+    color: #C5B783;
     text-align: center;
-    margin-bottom: 2rem;
     font-size: 2.5rem;
+    margin-bottom: 20px;
+    font-family: "Bebas Neue", cursive;
 }
 
-.proceso-pago-page #payment-form {
+.plan-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.plan-info p {
+    color: #8F9569;
+    font-size: 1.2rem;
+    margin: 5px 0;
+}
+
+.card-form {
+    background-color: #37310D;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #C5B783;
     width: 100%;
-    max-width: 500px;
+    max-width: 450px;
     margin: 0 auto;
-    background-color: #37310D;
-    padding: 2rem;
-    border-radius: 10px;
-    border: 1px solid #8F9569;
-    box-sizing: border-box;
 }
 
-.proceso-pago-page .form-group {
-    margin-bottom: 1.5rem;
-}
-
-.proceso-pago-page label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #8F9569;
-}
-
-.proceso-pago-page input[type="text"] {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #8F9569;
-    border-radius: 5px;
-    background-color: #22312A;
+.card-form h2 {
     color: #ffffff;
-    box-sizing: border-box;
-}
-
-.proceso-pago-page input[type="text"]::placeholder {
-    color: #8F9569;
-    opacity: 0.7;
-}
-
-.proceso-pago-page .btn-pagar {
-    display: block;
-    width: 100%;
-    background-color: #730F16;
-    color: white;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    box-sizing: border-box;
-}
-
-.proceso-pago-page .btn-pagar:hover {
-    background-color: #8B1319;
-}
-
-/* Estilo para mostrar el monto a pagar */
-.proceso-pago-page .monto-a-pagar {
     text-align: center;
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-    color: #730F16;
-    font-weight: bold;
-}
-
-.mensaje-exito {
-    background-color: #4CAF50;
-    color: white;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    text-align: center;
-    font-weight: bold;
-}
-
-.alert {
-    padding: 15px;
-    margin-bottom: 20px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-}
-
-.alert-success {
-    color: #155724;
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-}
-
-.alert-danger {
-    color: #721c24;
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-}
-
-.cancelar-suscripcion {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #8F9569;
-}
-
-.btn-cancelar {
-    background-color: #730F16;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.btn-cancelar:hover {
-    background-color: #8B1319;
-}
-
-.cancelar-info {
-    font-size: 0.9em;
-    color: #8F9569;
-    margin-top: 10px;
-}
-
-/* Estilos para el modal */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-}
-
-.modal-content {
-    background-color: #37310D;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #8F9569;
-    border-radius: 10px;
-    width: 80%;
-    max-width: 500px;
-    color: white;
-}
-
-.modal-content h3 {
-    color: #8F9569;
-    margin-bottom: 15px;
-}
-
-.modal-content ul {
-    margin: 15px 0;
-    padding-left: 20px;
-}
-
-.modal-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-.btn-confirmar-cambiar {
-    background-color: #730F16;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.btn-confirmar-cancelar {
-  background-color: #730F16;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.btn-cancelar-modal {
-    background-color: #8F9569;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.card:hover .card__content {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.generos-container {
-    margin-top: 1rem;
-}
-
-.generos-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-}
-
-.genero-tag {
-    background-color: #730F16;
-    color: white;
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
-    font-size: 0.9rem;
-    display: inline-block;
-}
-
-.genero-tag:hover {
-    background-color: #8B1319;
-    transform: translateY(-2px);
-    transition: all 0.3s ease;
-}
-
-/* Estilos para la información del libro */
-.book-info {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 15px;
-    padding: 20px;
     margin-bottom: 25px;
 }
 
-.info-item {
-    margin: 10px 0;
-    color: #fff;
-    font-size: 0.95rem;
-}
-
-.info-item i {
-    margin-right: 10px;
-    color: #d85d65;
-}
-
-.info-item span {
-    font-weight: 600;
-    margin-right: 5px;
-}
-
-/* Estilos para la sección de géneros */
-.generos-section {
-    margin: 25px 0;
-}
-
-.generos-section h3 {
-    font-size: 1.2rem;
-    color: #fff;
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-}
-
-.generos-section h3 i {
-    margin-right: 10px;
-    color: #d85d65;
-}
-
-.generos-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.genero-tag {
-    background: linear-gradient(135deg, #d85d65, #730F16);
-    color: white;
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    display: inline-block;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-}
-
-.genero-tag:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    background: linear-gradient(135deg, #e06a72, #8B1319);
-}
-
-/* Ajuste para la descripción */
-.disc {
-    background: rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    border-radius: 15px;
-    line-height: 1.6;
-    margin: 25px 0;
-}
-
-.like-button {
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.like-button i {
-    transition: all 0.3s ease;
-}
-
-.like-button i.liked {
-    color: #fff;
-}
-
-.action-button {
-    background: linear-gradient(135deg, #d85d65, #730F16);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    margin: 5px;
-}
-
-.action-button:hover {
-    background: linear-gradient(135deg, #e06a72, #8B1319);
-    transform: translateY(-2px);
-}
-
-.action-button i {
-    font-size: 1.1em;
-}
-
-/* Estilo para el contenedor de botones */
-.liked_books {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-top: 15px;
-}
-
-/* Estilo para el botón de corazón */
-.like-button {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
-    transition: all 0.3s ease;
-    margin-left: 10px;
-}
-
-.like-button i {
-    color: #730F16;
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
-}
-
-.like-button:hover i {
-    transform: scale(1.2);
-}
-
-.like-button i.liked {
-    color: #fff;
-}
-
-/* Ajuste para el botón "LEER MÁS" */
-.card__button {
-    flex: 1;
-    margin-right: 10px;
-}
-
-.card__button a {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    width: 100%;
-}
-
-/* Estilos para el formulario de tarjeta */
-.card-form {
-    background-color: #37310D;
-    border-radius: 10px;
-    padding: 20px;
-    max-width: 400px;
-    margin: 20px auto;
-    color: #ffffff;
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.form-group {
     margin-bottom: 20px;
-}
-
-.card-logos {
-    display: flex;
-    gap: 10px;
-}
-
-.card-logo {
-    width: 50px;
-    height: 30px;
-    opacity: 0.5;
-    transition: opacity 0.3s ease;
-}
-
-.card-logo.active {
-    opacity: 1;
+    width: 100%;
 }
 
 .form-row {
     display: flex;
-    justify-content: space-between;
     gap: 20px;
-    margin-bottom: 20px;
+    width: 100%;
 }
 
-.fecha-group {
+.form-row .form-group {
     flex: 1;
-    max-width: 150px;
 }
 
-.cvc-group {
-    flex: 1;
-    max-width: 100px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    color: #8F9569;
-    font-size: 14px;
-    line-height: 1.2;
-}
-
-/* Asegurar que los inputs tengan la misma altura y alineación */
-.form-group input {
+.card-form input {
     width: 100%;
     padding: 12px;
     background-color: #22312A;
@@ -1645,39 +1249,41 @@ margin-bottom: 20px;
     border-radius: 5px;
     color: #ffffff;
     font-size: 16px;
-    height: 45px;
     box-sizing: border-box;
 }
 
-.plan-info {
-    text-align: center;
-    margin-bottom: 30px;
-    background: rgba(34, 49, 42, 0.7);
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #C5B783;
-}
-
-.plan-selected, .plan-price {
-    color: #C5B783;
-    font-size: 1.2em;
-    margin-bottom: 5px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-/* Estilo para el botón de pago */
 .btn-pagar {
     width: 100%;
     padding: 15px;
-    background-color: #8F9569;
+    background-color: #730F16;
     color: white;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin-top: 20px;
 }
 
-.btn-pagar:hover {
-    background-color: #A1A77D;
+/* Responsive */
+@media (max-width: 1024px) {
+    .proceso-pago-page {
+        padding-left: 20px;
+    }
+    
+    .payment-container {
+        padding: 10px;
+        max-width: 450px;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .card-form {
+        padding: 20px;
+    }
 }
