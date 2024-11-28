@@ -234,7 +234,9 @@ function tieneSubscripcionActiva($userId) {
                 </div>
                 
                 <div class="cancelar-suscripcion">
-                    <button type="button" class="btn-cancelar" onclick="confirmarCancelacion()">Cancelar Suscripción</button>
+                    <button type="button" class="btn-cancelar" onclick="confirmarCancelacion()">
+                        Cancelar Suscripción
+                    </button>
                     <p class="cancelar-info">Al cancelar, mantendrás el acceso hasta el final del período actual.</p>
                 </div>
             </div>
@@ -314,17 +316,25 @@ function tieneSubscripcionActiva($userId) {
     </div>
     <script>
     function confirmarCancelacion() {
-        document.getElementById('modalCancelar').style.display = 'block';
+        const modal = document.getElementById('modalCancelar');
+        if (modal) {
+            modal.style.display = 'block';
+        } else {
+            console.error('Modal no encontrado');
+        }
     }
 
     function cerrarModal() {
-        document.getElementById('modalCancelar').style.display = 'none';
+        const modal = document.getElementById('modalCancelar');
+        if (modal) {
+            modal.style.display = 'none';
+        }
     }
 
     // Cerrar modal si se hace clic fuera de él
     window.onclick = function(event) {
-        var modal = document.getElementById('modalCancelar');
-        if (event.target == modal) {
+        const modal = document.getElementById('modalCancelar');
+        if (event.target === modal) {
             modal.style.display = 'none';
         }
     }
