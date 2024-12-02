@@ -241,23 +241,49 @@ main {
 }
 
 .contenedor form {
-    background-color: #CAB890; 
+    background-color: #CAB890;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: 0 80px; /* Aumentado de 60px */
+    padding: 0 50px; /* Reducido de 80px */
     height: 100%;
+}
+
+.contenedor h1 {
+    margin-bottom: 15px; /* Añadido para reducir espacio después del título */
+}
+
+.social-iconos {
+    margin: 10px 0; /* Reducido de 20px */
+}
+
+.contenedor span {
+    margin-bottom: 15px; /* Añadido para controlar espacio después del texto */
 }
 
 .contenedor input,
 .contenedor select {
-    background-color: #70683A; 
-    color: white;
-    border: none;
-    border-radius: 8px;
+    margin: 8px 0;
+    padding: 15px 20px;
+    font-size: 17px;
+}
+
+.form-group {
     width: 100%;
-    outline: none;
+    position: relative;
+    margin: 8px 0;
+}
+
+.contenedor button {
+    margin-top: 15px; /* Ajustado para el botón final */
+}
+
+/* Ajustar el espaciado de los iconos sociales */
+.social-iconos a {
+    margin: 0 2px; /* Reducido de 3px */
+    width: 45px; /* Reducido de 55px */
+    height: 45px; /* Reducido de 55px */
 }
 
 .contenedor input::placeholder,
@@ -295,19 +321,6 @@ main {
     opacity: 1;
     z-index: 5;
     animation: move 0.6s;
-}
-
-.social-iconos {
-    margin: 20px 0;
-}
-
-.social-iconos a {
-    border: 1px solid #333333; /* Gris oscuro */
-    border-radius: 20%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 3px;
 }
 
 .cambiar-contenedor {
@@ -374,7 +387,7 @@ main {
 .form-group {
     width: 100%;
     position: relative;
-    margin: 12px 0;
+    margin: 8px 0;
 }
 
 .fecha-label {
@@ -393,6 +406,7 @@ main {
     border: none;
     border-radius: 8px;
     font-size: 17px;
+    margin: 0;
 }
 
 /* Estilo para mostrar el placeholder */
@@ -427,6 +441,61 @@ main {
 }
 
 /* Mantener el icono del calendario visible */
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-25%);
+}
+
+/* Aseguramos que todos los inputs tengan el mismo espaciado */
+.contenedor input,
+.contenedor select {
+    margin: 8px 0;
+    padding: 15px 20px;
+    font-size: 17px;
+}
+
+/* Estilos base para todos los inputs y selects */
+.contenedor input,
+.contenedor select {
+    width: 100%;
+    margin: 8px 0;
+    padding: 15px 20px;
+    font-size: 17px;
+    background-color: #70683A;
+    color: white;
+    border: none;
+    border-radius: 8px;
+}
+
+/* Estilos específicos para el input de fecha */
+.form-group {
+    width: 100%;
+    position: relative;
+    margin: 8px 0;
+}
+
+.form-group input[type="date"] {
+    width: 100%;
+    padding: 15px 20px;
+    background-color: #70683A;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 17px;
+    margin: 0;
+}
+
+/* Estilos para el placeholder */
+.contenedor input::placeholder,
+.contenedor select::placeholder {
+    color: #cccccc;
+}
+
+/* Mantener los estilos del calendario */
 .form-group input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
     cursor: pointer;
