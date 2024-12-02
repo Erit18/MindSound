@@ -74,21 +74,7 @@
             <div class="form-contenedor crear-cuenta">
                 <form action="Modelo/PHP/registrar.php" method="POST">
                     <h1 class="titulo" id="titulo">Registrate</h1>
-                    <div class="social-iconos">
-                        <a href="#" class="iconos">
-                            <i class="fa-brands fa-google-plus-g"></i>
-                        </a>
-                        <a href="#" class="iconos">
-                            <i class="fa-brands fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="iconos">
-                            <i class="fa-brands fa-x-twitter"></i>
-                        </a>
-                        <a href="#" class="iconos">
-                            <i class="fa-brands fa-instagram"></i>
-                        </a>
-                    </div>
-                    <span>O usa tu correo y contraseña</span>
+                    <span>Ingresa tus datos para registrarte</span>
                     <input type="text" name="nombre" id="nombre" placeholder="Nombre" required>
                     <input type="text" name="apellido" id="apellido" placeholder="Apellido" required>
                     <input type="email" name="correo" id="correo" placeholder="Correo electrónico" required>
@@ -113,21 +99,7 @@
             <div class="form-contenedor iniciar-sesion">
                 <form action="Modelo/PHP/iniciosesion.php" method="POST">
                     <h1 class="titulo" id="titulo">Inicia Sesión</h1>
-                    <div class="social-iconos">
-                        <a href="#" class="iconos">
-                            <i class="fa-brands fa-google-plus-g"></i>
-                        </a>
-                        <a href="#" class="iconos">
-                            <i class="fa-brands fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="iconos">
-                            <i class="fa-brands fa-x-twitter"></i>
-                        </a>
-                        <a href="#" class="iconos">
-                            <i class="fa-brands fa-instagram"></i>
-                        </a>
-                    </div>
-                    <span>Usa tu correo y contraseña</span>
+                    <span>Ingresa tus credenciales</span>
                     <input type="email" name="correo" placeholder="Correo electrónico" required>
                     <input type="password" name="password" placeholder="Contraseña" required>
                     <a href="#">¿Olvidaste tu contraseña?</a>
