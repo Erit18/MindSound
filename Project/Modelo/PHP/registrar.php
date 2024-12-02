@@ -60,6 +60,30 @@ if (!filter_var($correo, FILTER_VALIDATE_EMAIL) || preg_match('/@.*\./', $correo
 // Verifica que la fecha de nacimiento no sea del año actual o futuro
 $fechaActual = new DateTime();
 $fechaNacimientoDate = new DateTime($fechaNacimiento);
+
+// Nueva validación para edad máxima (120 años)
+$edadMaxima = 100;
+$fechaMaximaNacimiento = (new DateTime())->modify("-$edadMaxima years");
+if ($fechaNacimientoDate < $fechaMaximaNacimiento) {
+    echo "<body>";
+    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+    echo "<script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'La fecha de nacimiento no es válida. La edad máxima permitida es de $edadMaxima años.',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Aceptar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location = '../../intranet.php';
+            }
+        });
+        </script>
+        </body>";
+    exit();
+}
+
 if ($fechaNacimientoDate->format('Y') >= $fechaActual->format('Y')) {
     echo "<body>";
     echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
