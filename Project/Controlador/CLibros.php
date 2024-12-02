@@ -327,6 +327,26 @@ class CLibros {
             return false;
         }
     }
+
+    public function buscarLibros($termino) {
+        try {
+            $conn = $this->conexion->getcon();
+            $stmt = $conn->prepare("
+                SELECT IDLibro, Titulo, Autor, RutaPortada 
+                FROM Libros 
+                WHERE Titulo LIKE ? OR Autor LIKE ?
+                LIMIT 5
+            ");
+            $searchTerm = "%{$termino}%";
+            $stmt->bindParam(1, $searchTerm);
+            $stmt->bindParam(2, $searchTerm);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error en búsqueda: " . $e->getMessage());
+            return [];
+        }
+    }
 }
 
 // Manejo de solicitudes AJAX
@@ -355,6 +375,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 break;
             case 'obtenerGeneros':
                 $controlador->obtenerGenerosLibro();
+                break;
+            case 'buscar':
+                if (isset($_POST['termino'])) {
+                    $resultados = $controlador->buscarLibros($_POST['termino']);
+                    echo json_encode(['status' => 'success', 'data' => $resultados]);
+                }
                 break;
             default:
                 echo json_encode(['status' => 'error', 'message' => 'Acción no reconocida']);

@@ -90,10 +90,11 @@ if (isset($_GET['success']) && $_GET['success'] == 'true' && isset($_SESSION['me
     </div>
 
     <div class="search-container">
-      <input type="text" name="search" id="searchInput" placeholder="Buscar..." class="search-input">
+      <input type="text" name="search" id="searchInput" placeholder="Buscar por título o autor..." class="search-input">
       <a href="#" class="search-btn">
       <i class="fas fa-search" aria-hidden="true"></i>      
       </a>
+      <div class="search-results" id="searchResults"></div>
     </div>
     <div class="Container" id="containere">
       <?php if(isset($_SESSION['usuario_id'])): ?>
