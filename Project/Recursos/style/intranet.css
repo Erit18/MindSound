@@ -370,3 +370,68 @@ main {
 .contenedor.active .cambiar-derecha {
     transform: translateX(200%);
 }
+
+.form-group {
+    width: 100%;
+    position: relative;
+    margin: 12px 0;
+}
+
+.fecha-label {
+    display: block;
+    color: #333333;
+    margin-bottom: 5px;
+    font-size: 16px;
+    text-align: left;
+}
+
+.form-group input[type="date"] {
+    width: 100%;
+    padding: 15px 20px;
+    background-color: #70683A;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 17px;
+}
+
+/* Estilo para mostrar el placeholder */
+.form-group input[type="date"]::-webkit-datetime-edit-text,
+.form-group input[type="date"]::-webkit-datetime-edit-month-field,
+.form-group input[type="date"]::-webkit-datetime-edit-day-field,
+.form-group input[type="date"]::-webkit-datetime-edit-year-field {
+    color: transparent;
+}
+
+.form-group input[type="date"]::-webkit-datetime-edit {
+    color: transparent;
+}
+
+.form-group input[type="date"]::before {
+    content: "Fecha de nacimiento";
+    color: #cccccc;
+    position: absolute;
+    left: 20px;
+}
+
+/* Cuando se selecciona una fecha, ocultar el placeholder */
+.form-group input[type="date"]:valid::before {
+    display: none;
+}
+
+.form-group input[type="date"]:valid::-webkit-datetime-edit-text,
+.form-group input[type="date"]:valid::-webkit-datetime-edit-month-field,
+.form-group input[type="date"]:valid::-webkit-datetime-edit-day-field,
+.form-group input[type="date"]:valid::-webkit-datetime-edit-year-field {
+    color: white;
+}
+
+/* Mantener el icono del calendario visible */
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-25%);
+}

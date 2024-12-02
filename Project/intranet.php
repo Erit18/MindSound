@@ -94,7 +94,13 @@
                     <input type="email" name="correo" id="correo" placeholder="Correo electrónico" required>
                     <input type="password" name="password" id="password" placeholder="Contraseña" required>
                     <input type="password" name="password2" id="password2" placeholder="Repetir Contraseña" required>
-                    <input type="date" name="fechaNacimiento" id="fechaNacimiento" required>
+                    <div class="form-group">
+                        <input type="date" 
+                               name="fechaNacimiento" 
+                               id="fechaNacimiento" 
+                               placeholder="Fecha de nacimiento"
+                               required>
+                    </div>
                     <select name="genero" id="genero" required>
                         <option value="">Selecciona tu género</option>
                         <option value="Masculino">Masculino</option>
