@@ -177,57 +177,33 @@ if (isset($_GET['success']) && $_GET['success'] == 'true' && isset($_SESSION['me
 
 <!-- ____________________________________________ TOP RATED _______________________________________________________ -->
 
-<h1>Mejor valorados</h1>
+<h1>Libros Recomendados</h1>
 
 <div class="toprated">
-  <article class="card">
-    <img class="card__background" src="img/Books/The Poor Traveler.jpg" alt="Photo of Cartagena's cathedral at the background and some colonial style houses" width="1920" height="2193">
-    <div class="card__content | flow">
-      <div class="card__content--container | flow">
-        <h3 class="card__title">El Pobre Viajero</h3>
-        <p class="card__description">
-          Reimpresión del original, publicado por primera vez en 1858. La editorial Anatiposi publica libros históricos como reimpresiones.
-        </p>
-      </div>
-      <a href="html Books/The Poor Traveler.html"><button class="card__button" >Leer más</button></a>
-    </div>
-  </article>
-  <article class="card">
-    <img class="card__background" src="img/Books/The Three Questions.jpg" alt="Photo of Cartagena's cathedral at the background and some colonial style houses" width="1920" height="2193">
-    <div class="card__content | flow">
-      <div class="card__content--container | flow">
-        <h3 class="card__title">Las Tres Preguntas</h3>
-        <p class="card__description">
-          es un cuento corto de 1903 del autor ruso León Tolstói como parte de la colección ...
-        </p>
-      </div>
-      <a href="html Books/The Three Questions.html"><button class="card__button" >Leer más</button></a>
-    </div>
-  </article>
-  <article class="card">
-    <img class="card__background" src="img/Books/nazret elfosdk.jpg" alt="Photo of Cartagena's cathedral at the background and some colonial style houses" width="1920" height="2193">
-    <div class="card__content | flow">
-      <div class="card__content--container | flow">
-        <h3 class="card__title">Teoría del Pistacho</h3>
-        <p class="card__description">
-          El libro "Teoría del Pistacho" es una de las creaciones del escritor saudí "Fahd Amer Al-Ahmadi".
-        </p>
-      </div>
-      <a href="html Books/nazret elfosdk.html"><button class="card__button" >Leer más</button></a>
-    </div>
-  </article>
-  <article class="card">
-    <img class="card__background" src="img/Books/gadid nafsk.jpg" alt="Photo of Cartagena's cathedral at the background and some colonial style houses" width="1920" height="2193">
-    <div class="card__content | flow">
-      <div class="card__content--container | flow">
-        <h3 class="card__title">Renuévate</h3>
-        <p class="card__description">
-          Renuévate: Cómo convertirte en la persona que siempre has querido ser por Steve Chandler
-        </p>
-      </div>
-      <a href="html Books/gadid nafsk.html"><button class="card__button" >Leer más</button></a>
-    </div>
-  </article> 
+    <?php 
+    // Obtener todos los libros
+    $librosRecomendados = $libros;
+    // Mezclar aleatoriamente el array
+    shuffle($librosRecomendados);
+    // Tomar solo los primeros 4 libros
+    $librosRecomendados = array_slice($librosRecomendados, 0, 4);
+    
+    foreach ($librosRecomendados as $libro): ?>
+        <article class="card">
+            <img class="card__background" 
+                 src="<?php echo file_exists($libro['RutaPortada']) ? $baseUrl . '/' . $libro['RutaPortada'] : $baseUrl . '/img/default-cover.jpg'; ?>" 
+                 alt="<?php echo htmlspecialchars($libro['Titulo']); ?>">
+            <div class="card__content | flow">
+                <div class="card__content--container | flow">
+                    <h3 class="card__title"><?php echo htmlspecialchars($libro['Titulo']); ?></h3>
+                    <p class="card__description">
+                        <?php echo htmlspecialchars(substr($libro['Descripcion'], 0, 100)) . '...'; ?>
+                    </p>
+                </div>
+                <a href="detalleLibro.php?id=<?php echo $libro['IDLibro']; ?>"><button class="card__button">Leer más</button></a>
+            </div>
+        </article>
+    <?php endforeach; ?>
 </div>
 
 <!-- ____________________________________________ TOP RATED _______________________________________________________ -->
