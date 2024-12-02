@@ -245,20 +245,13 @@ if (isset($_GET['success']) && $_GET['success'] == 'true' && isset($_SESSION['me
     
 <footer>
   <div class="footer-content">
-    <h3>Compañía</h3>
+    <h3>SoundMind</h3>
     <p>SoundMind es tu destino premium para audiolibros. Ofrecemos una amplia selección de títulos gratuitos, 
     así como una colección exclusiva de audiolibros premium para nuestros suscriptores. Nuestra misión es hacer 
     que la literatura sea accesible para todos, en cualquier momento y lugar. Con SoundMind, puedes sumergirte 
     en historias fascinantes, aprender nuevos conceptos y disfrutar de la narración profesional, todo desde la 
     comodidad de tu dispositivo. Únete a nuestra comunidad de amantes de la lectura auditiva y descubre un 
     nuevo mundo de posibilidades literarias.</p>
-    <ul class="socials">
-      <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class="fa fa-youtube" aria-hidden="true"></i></a></li>
-      <li><a href="#"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a></li>
-    </ul>
   </div>
 </footer>
 
