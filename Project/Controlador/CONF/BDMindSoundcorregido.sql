@@ -416,10 +416,16 @@ DELIMITER //
 
 CREATE PROCEDURE SP_OBTENER_PAGOS()
 BEGIN
-    SELECT p.*, u.Nombre, u.Apellido, s.TipoSuscripcion
+    SELECT 
+        p.*,
+        u.Nombre,
+        u.Apellido,
+        s.TipoSuscripcion,
+        mp.NombreMetodo as MetodoPago
     FROM Pagos p
     JOIN Usuarios u ON p.IDUsuario = u.IDUsuario
-    JOIN Suscripciones s ON p.IDSuscripcion = s.IDSuscripcion;
+    JOIN Suscripciones s ON p.IDSuscripcion = s.IDSuscripcion
+    LEFT JOIN MetodosPago mp ON p.IDMetodoPago = mp.IDMetodoPago;
 END //
 
 CREATE PROCEDURE SP_OBTENER_PAGO_POR_ID(IN p_IDPago INT)
@@ -603,3 +609,9 @@ INSERT INTO Generos (NombreGenero, Descripcion) VALUES
 ('Ciencia', 'Libros sobre temas científicos'),
 ('Deportes', 'Libros relacionados con deportes y actividad física');
 
+-- Insertar algunos métodos de pago básicos
+INSERT INTO MetodosPago (NombreMetodo) VALUES 
+('PayPal'),
+('Tarjeta de Crédito'),
+('Transferencia Bancaria'),
+('Efectivo');
