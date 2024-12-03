@@ -123,10 +123,112 @@
 
 })();
 
-// Búsqueda en tiempo real
+// Mover la función realizarBusqueda fuera del evento DOMContentLoaded
+async function realizarBusqueda(termino) {
+    try {
+        const formData = new FormData();
+        formData.append('accion', 'buscar');
+        formData.append('termino', termino);
+
+        const response = await fetch('Controlador/CLibros.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
+            mostrarResultados(data.data);
+        }
+    } catch (error) {
+        console.error('Error en la búsqueda:', error);
+    }
+}
+
+class VoiceAssistant {
+    constructor() {
+        this.synthesis = window.speechSynthesis;
+        this.recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        this.recognition.lang = 'es-ES';
+        this.recognition.continuous = false;
+        this.recognition.interimResults = false;
+        this.isListening = false;
+        this.setupVoiceAssistant();
+    }
+
+    speak(text) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'es-ES';
+        utterance.rate = 1;
+        this.synthesis.speak(utterance);
+    }
+
+    cleanText(text) {
+        return text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").trim();
+    }
+
+    setupVoiceAssistant() {
+        const searchInput = document.getElementById('searchInput');
+        const voiceButton = document.createElement('button');
+        voiceButton.className = 'voice-search-btn';
+        voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
+        voiceButton.setAttribute('aria-label', 'Búsqueda por voz');
+        
+        searchInput.parentElement.appendChild(voiceButton);
+
+        voiceButton.addEventListener('click', () => this.toggleListening());
+
+        this.recognition.onstart = () => {
+            this.isListening = true;
+            voiceButton.classList.add('listening');
+            this.speak('Te escucho');
+        };
+
+        this.recognition.onend = () => {
+            this.isListening = false;
+            voiceButton.classList.remove('listening');
+            if (!this.commandDetected) {
+                setTimeout(() => {
+                    this.speak('Puedes buscar un libro usando el botón de micrófono. Di "ayuda" para más información.');
+                }, 500);
+            }
+            this.commandDetected = false;
+        };
+
+        this.recognition.onresult = (event) => {
+            const command = this.cleanText(event.results[0][0].transcript.toLowerCase());
+            this.commandDetected = true;
+            
+            if (command.includes('ayuda')) {
+                this.speak('Puedes buscar un libro diciendo "buscar" seguido del título o autor. Por ejemplo: "buscar El principito".');
+            } else if (command.includes('buscar')) {
+                const searchTerm = this.cleanText(command.replace('buscar', ''));
+                searchInput.value = searchTerm;
+                this.speak(`Buscando ${searchTerm}`);
+                realizarBusqueda(searchTerm);
+            } else {
+                // Si no se reconoce el comando como búsqueda o ayuda, realizar búsqueda directa
+                searchInput.value = command;
+                this.speak(`Buscando ${command}`);
+                realizarBusqueda(command);
+            }
+        };
+    }
+
+    toggleListening() {
+        if (this.isListening) {
+            this.recognition.stop();
+        } else {
+            this.recognition.start();
+        }
+    }
+}
+
+// Inicializar el asistente de voz y configurar la búsqueda cuando se carga el documento
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
     const searchResults = document.getElementById('searchResults');
+    const voiceAssistant = new VoiceAssistant();
     let timeoutId;
 
     searchInput.addEventListener('input', function() {
@@ -143,30 +245,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 300);
     });
 
-    async function realizarBusqueda(termino) {
-        try {
-            const formData = new FormData();
-            formData.append('accion', 'buscar');
-            formData.append('termino', termino);
-
-            const response = await fetch('Controlador/CLibros.php', {
-                method: 'POST',
-                body: formData
-            });
-
-            const data = await response.json();
-
-            if (data.status === 'success') {
-                mostrarResultados(data.data);
-            }
-        } catch (error) {
-            console.error('Error en la búsqueda:', error);
-        }
-    }
-
-    function mostrarResultados(resultados) {
+    // Función global para mostrar resultados
+    window.mostrarResultados = function(resultados) {
         if (resultados.length === 0) {
             searchResults.innerHTML = '<div class="search-result-item"><div class="search-result-info"><div class="search-result-title">No se encontraron resultados</div></div></div>';
+            voiceAssistant.speak('No se encontraron resultados para tu búsqueda');
         } else {
             searchResults.innerHTML = resultados.map(libro => `
                 <a href="detalleLibro.php?id=${libro.IDLibro}" class="search-result-item">
@@ -177,9 +260,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </a>
             `).join('');
+            
+            voiceAssistant.speak(`Se encontraron ${resultados.length} resultados. ${
+                resultados.map((libro, index) => `Resultado ${index + 1}: ${libro.Titulo} por ${libro.Autor}`).join('. ')
+            }`);
         }
         searchResults.classList.add('active');
-    }
+    };
 
     // Cerrar resultados al hacer clic fuera
     document.addEventListener('click', function(e) {
