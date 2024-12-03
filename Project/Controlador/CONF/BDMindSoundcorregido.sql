@@ -594,7 +594,43 @@ Todo Reich necesita a sus príncipes cerca.',
 'Juan Uceda sonrió complacido del adulador comentario, y se lanzó a la complicada tarea de anudar el lazo de la corbata. Pablillo, el estudiante más desaplicado y simpático entre cuantos simpáticos y desaplicados llenan los claustros de la Universidad madrileña, acabó de sorber su caté, y acudió presuroso a enfundar en el frac el cuerpo de su amigo.',
 'audio/albalearning-LaPrimeraAventura_adame.mp3',
 'img/Books/libro-adame[1].jpg',
-0.00, 1);
+0.00, 1),
+
+(32, 'Cuando Mama Lastima', 'Rayo Guzman', 'Anónimo', '04:53:00', '2013-06-04',
+'Las teorías tibetanas dicen que los hijos eligen a los padres. Según esta visión de la vida, tres meses antes de iniciar la gestación cada alma hace la elección de acuerdo con las lecciones que debe aprender en esa vida. De los vínculos divinos en la Tierra, el más poderoso es el de la Madre y nos genera un aprendizaje profundo, tan doloroso que a veces lastima, tan amoroso que, en ocasiones, mutila y sobreprotege. Todo en nombre del amor. Cuando mamá lastima es un libro que encierra historias verdaderas convertidas en mentiras que se sienten de verdad, porque donde a uno le duele un párrafo es porque ha conectado con alguna herida interior. No pretende curar las heridas de la relación más importante de nuestra existencia como es la de la madre con un hijo, pero sí busca, sin juicios, sin prejuicios, sin rencores, la comprensión del porqué y del para qué. En síntesis, una recopilación de historias conmovedoras narradas desde ese niño herido que, a través del perdón, se deshace de su dolor crónico y camina hacia el sendero de la liberación emocional, de la reconciliación y la gratitud.',
+'audio/Cuando Mamá lastima (Audiolibro) Rayo Guzmán.mp3',
+'img/Books/mamalast.webp',
+12.00, 1),
+
+(33, 'Fuerza mental para deportistas adolescentes', 'Leo Black', 'Dian Velázquez', '04:57:00', '2024-08-23',
+'Ser mentalmente fuerte en el mundo actual es todo un logro. Como adolescente que se enfrenta a la presión escolar, la presión social, la presión familiar y, además, la presión deportiva, tienes que esforzarte por mantener una mente sana junto con un cuerpo sano. La ansiedad por el rendimiento es real, y también lo son las distracciones, así como el peso de las expectativas de los demás.',
+'audio/Fuerza mental para deportistas adolescentes (Audiolibro) Leo Black.mp3',
+'img/Books/deport.jpg',
+12.00, 1),
+
+(34, 'Horror al caer la noche', 'Edgar Allan Poe ,  Howard Phillips Lovecraft ,  Robert Louis Stevenson ,  William Hope Hodgson', 'Yair Martinez Quezada', '05:00:00', '2024-03-07',
+'Conversación con una momia, El corazón delator, El sistema del Dr Tarr y el profesor Fether (Poe). Del más allá, El modelo de Pickman (Lovecraft). El ladrón de cadáveres, Markheim (Stevenson) El caballo invisible, La habitación que silbaba, La puerta del monstruo (Hodgson)',
+'audio/Horror al caer la noche (Audiolibro) Edgar Allan Poe.mp3',
+'img/Books/horror.jpg',
+12.00, 1),
+
+(35, 'Las cadenas del rey', 'Karine Bernal Lobo', 'Isabella Hoyos Restrepo', '04:48:00', '2024-08-07',
+'Las cadenas del rey es la segunda parte de la Saga Rey, que llega después del arrasador éxito de El perfume del rey, que ha vendido más de 20.000 ejemplares en América Latina.En este libro seguimos la historia de Emily Malhore que terminó en punta en el volumen anterior. Si antes la protagonista era una chica ingenua que estaba descubriendo las guerras de poder entre los miembros de la monarquía, así como las injusticias del mundo y los límites a los que pueden llegar sus personas de confianza, ahora conoceremos a una Emily muy diferente.',
+'audio/Las cadenas del rey (Audiolibro) Karine Bernal Lobo.mp3',
+'img/Books/lascadenas.jpg',
+12.00, 1),
+
+(36, 'Ganar es una Ciencia y un Arte', 'Halbert Ward', 'Harmony Productions', '05:00:00', '2024-04-11',
+'¿Cansado de perder y buscando el éxito?\r\nAumenta tus probabilidades y conquista cualquier desafío...Escucha, todos tenemos este sueño de ganar en todo... siempre. Pero, ¿cómo puedes lograrlo cuando no tienes mucha experiencia en muchas cosas, el miedo siempre está en tu cabeza, y lo peor de todo, te enfrentas a alguien que está muy experimentado y resulta intimidante?',
+'audio/Ganar es una ciencia y un arte (Audiolibro) Halbert Ward.mp3',
+'img/Books/ganar.jpg',
+21.00, 1),
+
+(37, 'La Teoría de la Relatividad', 'Cristhian Daniel Gaona', 'Ale Markman', '02:16:00', '2024-11-22',
+'Para Albert Einstein el amor era la 5ta esencia de la vida, la energía universal más grande y la respuesta a todas las preguntas. El amor se asemeja a la gravedad.La gravedad es la fuerza que atrae un objeto hacía otro.',
+'audio/La Teoría de la Relatividad (Audiolibro) Cristhian Daniel Gaona.mp3',
+'img/Books/relati.jpg',
+41.00, 1);
 
 -- Insertar los géneros básicos
 INSERT INTO Generos (NombreGenero, Descripcion) VALUES 
@@ -626,4 +662,14 @@ INSERT INTO `librogenero` (`IDLibro`, `IDGenero`) VALUES
 (28, 1), -- La Supraconciencia existe: Biográfico
 (29, 2), -- Respira: Histórico
 (29, 4), -- Respira: Misterio
-(30, 4); -- Tu cerebro quiere arte: Misterio
+(30, 4), -- Tu cerebro quiere arte: Misterio
+(32, 1), -- Cuando Mama Lastima: Biográfico
+(32, 2), -- Cuando Mama Lastima: Histórico
+(33, 7), -- Fuerza mental para deportistas adolescentes: Deportes
+(34, 3), -- Horror al caer la noche: Horror
+(34, 4), -- Horror al caer la noche: Misterio
+(35, 4), -- Las cadenas del rey: Misterio
+(35, 5), -- Las cadenas del rey: Novela
+(36, 6), -- Ganar es una Ciencia y un Arte: Ciencia
+(37, 1), -- La Teoría de la Relatividad: Biográfico
+(37, 6); -- La Teoría de la Relatividad: Ciencia
