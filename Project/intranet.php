@@ -48,12 +48,6 @@
       <a href="cart.php"><i class="fa-solid fa-cart-shopping"></i></a>
     </div>
 
-    <div class="search-container">
-      <input type="text" name="search" id="searchInput" placeholder="Buscar..." class="search-input">
-      <a href="#" class="search-btn">
-      <i class="fas fa-search" aria-hidden="true"></i>      
-      </a>
-    </div>
     <div>
         <?php
         session_start();
