@@ -45,79 +45,65 @@
 <!-- ____________________________________________ SECCIÓN DE CONTACTO _______________________________________________________ -->
 
   <div class="container">
-    <span class="big-circle"></span>
-      
     <div class="form">
-      <div class="contact-info">
-        <h3 class="title">Pongámonos en contacto</h3>
-        <p class="text">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe
-          dolorum adipisci recusandae praesentium dicta!
-        </p>
-      <div class="info">
-      <div class="information">
-        <img src="img/location.png" class="icon" alt="" />
-          <p>dirección</p>
-      </div>
-      <div class="information">
-        <img src="img/email.png" class="icon" alt="" />
-          <p>empresa@gmail.com</p>
-      </div>
-      <div class="information">
-        <img src="img/phone.png" class="icon" alt="" />
-          <p>teléfono</p>
-      </div>
-  </div>
+        <div class="contact-info">
+            <h2>¿Necesitas ayuda?</h2>
+            <p>
+                Estamos aquí para ayudarte.
+                Contáctanos para cualquier consulta
+                sobre libros, pedidos o sugerencias. Te
+                responderemos lo antes posible.
+            </p>
+            
+            <div class="information">
+                <i class="fas fa-map-marker-alt"></i>
+                <p>Calle Librería 123, Madrid, España</p>
+            </div>
+            
+            <div class="information">
+                <i class="fas fa-envelope"></i>
+                <p>contacto@libreria.com</p>
+            </div>
+            
+            <div class="information">
+                <i class="fas fa-phone"></i>
+                <p>+34 912 345 678</p>
+            </div>
 
-  <div class="social-media">
-    <p>Conéctate con nosotros :</p>
-    <div class="social-icons">
-      <a href="#">
-        <i class="fab fa-facebook-f"></i>
-      </a>
-      <a href="#">
-        <i class="fab fa-twitter"></i>
-      </a>
-      <a href="#">
-        <i class="fab fa-instagram"></i>
-        </a>
-      <a href="#">
-        <i class="fab fa-linkedin-in"></i>
-      </a>
-    </div>
-  </div>
-  </div>
-
-  <div class="contact-form">
-    <span class="circle one"></span>
-    <span class="circle two"></span>
-    <form action="index.php" autocomplete="off">
-      <h3 class="title">Contáctanos</h3>
-      <div class="input-container">
-        <input type="text" name="name" class="input" />
-        <label for="">Nombre de usuario</label>
-          <span>Nombre de usuario</span>
-      </div>
-      <div class="input-container">
-        <input type="email" name="email" class="input" />
-        <label for="">Correo electrónico</label>
-          <span>Correo electrónico</span>
-      </div>
-      <div class="input-container">
-        <input type="tel" name="phone" class="input" />
-        <label for="">Teléfono</label>
-          <span>Teléfono</span>
-      </div>
-      <div class="input-container textarea">
-        <textarea name="message" class="input"></textarea>
-        <label for="">Mensaje</label>
-          <span>Mensaje</span>
-      </div>
-        <input type="submit" value="Enviar" class="btn" />
-      </form>
+            <div class="social-media">
+                <p>Síguenos en redes sociales:</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
         </div>
-      </div>
+
+        <div class="contact-form">
+            <h2>Envíanos un mensaje</h2>
+            <form action="process_contact.php" method="POST">
+                <div class="input-container">
+                    <input type="text" name="name" class="input" placeholder="Nombre" required>
+                </div>
+                
+                <div class="input-container">
+                    <input type="email" name="email" class="input" placeholder="Correo electrónico" required>
+                </div>
+                
+                <div class="input-container">
+                    <input type="tel" name="phone" class="input" placeholder="Teléfono" required>
+                </div>
+                
+                <div class="input-container">
+                    <textarea name="message" class="input" placeholder="Mensaje" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Enviar</button>
+            </form>
+        </div>
     </div>
+  </div>
 
 <!-- ____________________________________________ SECCIÓN DE CONTACTO _______________________________________________________ -->
 
