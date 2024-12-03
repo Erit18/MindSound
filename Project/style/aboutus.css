@@ -51,17 +51,20 @@ body {
 .aboutus-container {
     max-width: 1200px;
     margin: 40px auto;
-    padding: 20px;
-    background-color: #CAB890;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    border-radius: 8px;
+    padding: 30px;
+    background-color: #37310D;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    border-radius: 15px;
+    border: 2px solid #C5B783;
 }
 
 .aboutus-title {
     text-align: center;
-    color: #81241F;
-    font-size: 2.5em;
-    margin-bottom: 30px;
+    color: #C5B783;
+    font-size: 3em;
+    margin-bottom: 40px;
+    font-family: "Bebas Neue", cursive;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
 .aboutus-content {
@@ -69,81 +72,86 @@ body {
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    gap: 40px;
 }
 
 .aboutus-image {
     flex: 1;
-    max-width: 400px;
-    margin-right: 40px;
+    max-width: 450px;
 }
 
 .aboutus-image img {
     width: 100%;
     height: auto;
-    border-radius: 8px;
+    border-radius: 15px;
+    border: 3px solid #730F16;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease;
+}
+
+.aboutus-image img:hover {
+    transform: scale(1.02);
 }
 
 .aboutus-text {
-    flex: 2;
+    flex: 1;
+    min-width: 300px;
 }
 
 .aboutus-text h2 {
-    color: #81241F;
-    font-size: 2em;
-    margin-bottom: 20px;
+    color: #C5B783;
+    font-size: 2.5em;
+    margin-bottom: 25px;
+    font-family: "Dancing Script", cursive;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
 .aboutus-text h3 {
-    color: #81241F;
-    font-size: 1.5em;
-    margin-top: 20px;
-    margin-bottom: 10px;
+    color: #730F16;
+    font-size: 1.8em;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-family: "Bebas Neue", cursive;
 }
 
 .aboutus-text p {
-    color: #37310D;
-    margin-bottom: 15px;
+    color: #ffffff;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    line-height: 1.8;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
 }
 
 @media (max-width: 1000px) {
-    body {
-        padding-left: 0;
-    }
-
-    #nav {
-        width: 100%;
-        height: auto;
-        position: static;
-        padding: 10px 5px;
-    }
-
-    .topnav {
-        width: 100%;
-        margin: auto;
-        margin-bottom: 10px;
-        padding: 15px 10px;
-    }
-
-    .topnav a {
-        font-size: 15px;
-    }
-
-    .search-container {
-        display: none;
-    }
-
     .aboutus-container {
         width: 90%;
         margin: 20px auto;
+        padding: 20px;
     }
 
     .aboutus-content {
         flex-direction: column;
+        gap: 30px;
     }
 
     .aboutus-image {
         max-width: 100%;
-        margin-right: 0;
-        margin-bottom: 20px;
+    }
+
+    .aboutus-title {
+        font-size: 2.5em;
+    }
+
+    .aboutus-text h2 {
+        font-size: 2em;
+        text-align: center;
+    }
+
+    .aboutus-text h3 {
+        font-size: 1.5em;
+    }
+
+    .aboutus-text p {
+        font-size: 1em;
     }
 }
