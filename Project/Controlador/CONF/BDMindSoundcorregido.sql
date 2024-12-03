@@ -544,56 +544,53 @@ DELIMITER ;
 
 -- Luego, inserta los datos uno por uno
 INSERT INTO `libros` VALUES 
-(24, 'El hijo del Reich', 'Rafael Tarradas Bultó', 'Anónimo', '0:29', '2024-08-28', 
-'El niño al que todos buscan. Una madre dispuesta a defenderlo. Un secreto inconfesable. 180.000 lectores ya tienen a Rafael Tarradas Bultó en su lista de imprescindibles.\r\n\r\nTodo Reich necesita a sus príncipes cerca.',
-'audio/ringtones-super-mario-bros.mp3',
+(24, 'El hijo del Reich', 'Rafael Tarradas Bultó', 'Anónimo', '03:59:00', '2024-08-28', 
+'El niño al que todos buscan. Una madre dispuesta a defenderlo. Un secreto inconfesable. 180.000 lectores ya tienen a Rafael Tarradas Bultó en su lista de imprescindibles.
+
+Todo Reich necesita a sus príncipes cerca.',
+'audio/El hijo del Reich (Audiolibro) Rafael Tarradas Bultó.mp3',
 'img/Books/portada_el-hijo-del-reich_rafael-tarradas-bulto_202408021345[1].webp',
-0.00, 1);
+0.00, 1),
 
-INSERT INTO `libros` VALUES 
-(25, 'La sangre del padre', 'Alfonso Goizueta', 'Anónimo', '0:29', '2023-11-20',
+(25, 'La sangre del padre', 'Alfonso Goizueta', 'Anónimo', '04:55:00', '2023-11-20',
 'Conquistó el imperio más poderoso del mundo, pero la guerra más violenta la libró contra sí mismo.',
-'audio/ringtones-super-mario-bros.mp3',
+'audio/La Sangre del Padre Audiolibro, Alfonso Goizueta (Finalista Premio Planeta 2023).mp3',
 'img/Books/portada_la-sangre-del-padre_alfonso-goizueta_202310231206[1].webp',
-0.00, 1);
+0.00, 1),
 
-INSERT INTO `libros` VALUES 
-(26, 'Cuando la tormenta pase', 'Manel Loureiro', 'Anónimo', '0:29', '2024-07-31',
+(26, 'Cuando la tormenta pase', 'Manel Loureiro', 'Anónimo', '04:52:00', '2024-07-31',
 'Una remota isla. Una ofrenda sangrienta. Una tempestad que parece el preludio de una gran tragedia. Manel Loureiro da un giro definitivo al thriller con una novela impactante que no te puedes perder.',
-'audio/ringtones-super-mario-bros.mp3',
+'audio/Cuando la tormenta pase (Audiolibro) Manel Loureiro.mp3',
 'img/Books/portada_cuando-la-tormenta-pase_manel-loureiro_202406141234[1].webp',
-0.00, 1);
+0.00, 1),
 
-INSERT INTO `libros` VALUES 
-(27, 'El tiempo de las fieras', 'Víctor del Árbol', 'Anónimo', '0:29', '2024-08-24',
+(27, 'El tiempo de las fieras', 'Víctor del Árbol', 'Anónimo', '05:00:00', '2024-08-24',
 'El atropello de una joven será la punta de lanza de una trama colosal de crimen y poder en la que todas las piezas que la componen empezarán a tambalearse.',
-'audio/ringtones-super-mario-bros.mp3',
+'audio/El tiempo entre costuras (Audiolibro) María Dueñas.mp3',
 'img/Books/portada_el-tiempo-de-las-fieras_victor-del-arbol_202408021337[1].webp',
-0.00, 1);
+0.00, 1),
 
-INSERT INTO `libros` VALUES 
-(28, 'La Supraconciencia existe', 'Dr. Manuel Sans Segarra y Juan Carlos Cebrián', 'Anónimo', '0:29', '2024-09-18',
+(28, 'La Supraconciencia existe', 'Dr. Manuel Sans Segarra y Juan Carlos Cebrián', 'Anónimo', '03:00:00', '2024-09-18',
 'El libro definitivo sobre el fenómeno de las Experiencias Cercanas a la Muerte (ECM) y su poder para transformar nuestras vidas.',
-'audio/ringtones-super-mario-bros.mp3',
+'audio/La supraconciencia existe Audiolibro, Dr  Manuel Sans Segarra.mp3',
 'img/Books/402620_portada_la-supraconciencia-existe_dr-manuel-sans-segarra_202407191422[1].webp',
-0.00, 1);
+0.00, 1),
 
-INSERT INTO `libros` VALUES 
-(29, 'Respira', 'James Nestor', 'Anónimo', '0:29', '2021-01-21',
-'«Si respiras, necesitas leer este libro.» Wallace Nichols\r\n\r\n«Un libro transformador que va a cambiar completamente la manera en la que pensamos en nuestro cuerpo y nuestra mente.» Joshua Foer',
-'audio/ringtones-super-mario-bros.mp3',
+(29, 'Respira', 'James Nestor', 'Anónimo', '06:54:00', '2021-01-21',
+'«Si respiras, necesitas leer este libro.» Wallace Nichols
+
+«Un libro transformador que va a cambiar completamente la manera en la que pensamos en nuestro cuerpo y nuestra mente.» Joshua Foer',
+'audio/Respira (James Nestor) - Resumen Animado.mp3',
 'img/Books/portada_respira_james-nestor_202011161204[1].webp',
-0.00, 1);
+0.00, 1),
 
-INSERT INTO `libros` VALUES 
-(30, 'Tu cerebro quiere arte', 'Susan Magsamen e Ivy Ross', 'Anónimo', '0:29', '2024-11-20',
+(30, 'Tu cerebro quiere arte', 'Susan Magsamen e Ivy Ross', 'Anónimo', '03:00:00', '2024-11-20',
 'Un fascinante recorrido a travs de la nueva ciencia de la neuroestética, que demuestra cómo el contacto con el arte transforma nuestro cerebro, mejora nuestra salud mental y física y nos permite construir comunidades más fuertes y unidas.',
-'audio/ringtones-super-mario-bros.mp3',
+'audio/El arte de ser nosotros (Audiolibro) Inma Rubiales.mp3',
 'img/Books/portada_tu-cerebro-quiere-arte_susan-magsamen_202410141740[1].webp',
-0.00, 1);
+0.00, 1),
 
-INSERT INTO `libros` VALUES 
-(31, 'La primera aventura', 'Serafín Adame Martínez', 'Anónimo', '9:30', '1922-02-26',
+(31, 'La primera aventura', 'Serafín Adame Martínez', 'Anónimo', '09:30:00', '1922-02-26',
 'Juan Uceda sonrió complacido del adulador comentario, y se lanzó a la complicada tarea de anudar el lazo de la corbata. Pablillo, el estudiante más desaplicado y simpático entre cuantos simpáticos y desaplicados llenan los claustros de la Universidad madrileña, acabó de sorber su caté, y acudió presuroso a enfundar en el frac el cuerpo de su amigo.',
 'audio/albalearning-LaPrimeraAventura_adame.mp3',
 'img/Books/libro-adame[1].jpg',
@@ -615,3 +612,18 @@ INSERT INTO MetodosPago (NombreMetodo) VALUES
 ('Tarjeta de Crédito'),
 ('Transferencia Bancaria'),
 ('Efectivo');
+
+-- Insertar relaciones libro-género
+INSERT INTO `librogenero` (`IDLibro`, `IDGenero`) VALUES
+(24, 2), -- El hijo del Reich: Histórico
+(24, 4), -- El hijo del Reich: Misterio
+(25, 1), -- La sangre del padre: Biográfico
+(25, 5), -- La sangre del padre: Novela
+(26, 1), -- Cuando la tormenta pase: Biográfico
+(26, 3), -- Cuando la tormenta pase: Horror
+(26, 5), -- Cuando la tormenta pase: Novela
+(27, 4), -- El tiempo de las fieras: Misterio
+(28, 1), -- La Supraconciencia existe: Biográfico
+(29, 2), -- Respira: Histórico
+(29, 4), -- Respira: Misterio
+(30, 4); -- Tu cerebro quiere arte: Misterio
