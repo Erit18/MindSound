@@ -19,7 +19,7 @@ $baseUrl = '/mindsound/Project';
   <link href="https://fonts.googleapis.com/css2?family=Lato&amp;display=swap" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="img/logo/logo.ico">
   <link rel="stylesheet" href="style/Style.css">
-  <link rel="stylesheet" href="style/BooksPage.css">
+  <link rel="stylesheet" href="style/BookStyle.css">
   <script src="https://kit.fontawesome.com/9a05771681.js" crossorigin="anonymous"></script>
   <title>Libros</title>
 </head>
@@ -43,10 +43,11 @@ $baseUrl = '/mindsound/Project';
     </div>
 
     <div class="search-container">
-      <input type="text" name="search" id="searchInput" placeholder="Buscar..." class="search-input">
+      <input type="text" name="search" id="searchInput" placeholder="Buscar por título o autor..." class="search-input">
       <a href="#" class="search-btn">
-      <i class="fas fa-search" aria-hidden="true"></i>      
+        <i class="fas fa-search" aria-hidden="true"></i>      
       </a>
+      <div class="search-results" id="searchResults"></div>
     </div>
 </div>
 </header>
