@@ -200,7 +200,13 @@ class VoiceAssistant {
             this.commandDetected = true;
             
             if (command.includes('ayuda')) {
-                this.speak('Puedes buscar un libro diciendo "buscar" seguido del título o autor. Por ejemplo: "buscar El principito".');
+                this.speak('Puedes buscar un libro diciendo "buscar" seguido del título o autor, o reproducir directamente diciendo "reproducir" seguido del título.');
+            } else if (command.includes('reproducir')) {
+                const searchTerm = this.cleanText(command.replace('reproducir', ''));
+                searchInput.value = searchTerm;
+                this.speak(`Buscando ${searchTerm} para reproducir`);
+                // Realizamos una búsqueda especial que reproducirá automáticamente
+                this.buscarParaReproducir(searchTerm);
             } else if (command.includes('buscar')) {
                 const searchTerm = this.cleanText(command.replace('buscar', ''));
                 searchInput.value = searchTerm;
@@ -212,6 +218,34 @@ class VoiceAssistant {
                 realizarBusqueda(command);
             }
         };
+    }
+
+    async buscarParaReproducir(termino) {
+        try {
+            const formData = new FormData();
+            formData.append('accion', 'buscar');
+            formData.append('termino', termino);
+
+            const response = await fetch('Controlador/CLibros.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.status === 'success' && data.data.length > 0) {
+                // Ir directamente a reproducir el primer resultado
+                this.speak(`Reproduciendo ${data.data[0].Titulo}`);
+                setTimeout(() => {
+                    window.location.href = `audio.php?id=${data.data[0].IDLibro}&autoplay=true`;
+                }, 1500); // Pequeña pausa para que se escuche el mensaje
+            } else {
+                this.speak('No se encontró el libro especificado');
+            }
+        } catch (error) {
+            console.error('Error en la búsqueda:', error);
+            this.speak('Hubo un error al buscar el libro');
+        }
     }
 
     toggleListening() {
