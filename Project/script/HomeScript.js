@@ -154,6 +154,7 @@ class VoiceAssistant {
         this.recognition.interimResults = false;
         this.isListening = false;
         this.setupVoiceAssistant();
+        this.iniciarAsistenteAutomatico();
     }
 
     speak(text) {
@@ -161,6 +162,18 @@ class VoiceAssistant {
         utterance.lang = 'es-ES';
         utterance.rate = 1;
         this.synthesis.speak(utterance);
+    }
+
+    iniciarAsistenteAutomatico() {
+        setTimeout(() => {
+            const mensajeInicial = "Bienvenido a SoundMind. Puedes buscar un libro diciendo 'buscar' seguido del título, o reproducirlo directamente diciendo 'reproducir' seguido del título. Por ejemplo: 'buscar El principito' o 'reproducir El principito'. ¿Qué deseas hacer?";
+            
+            const utterance = new SpeechSynthesisUtterance(mensajeInicial);
+            utterance.onend = () => {
+                this.recognition.start();
+            };
+            this.synthesis.speak(utterance);
+        }, 1000); // Pequeño retraso para asegurar que la página esté cargada
     }
 
     cleanText(text) {
