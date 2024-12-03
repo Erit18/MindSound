@@ -324,7 +324,11 @@ document.addEventListener('DOMContentLoaded', function() {
     window.mostrarResultados = function(resultados) {
         if (resultados.length === 0) {
             searchResults.innerHTML = '<div class="search-result-item"><div class="search-result-info"><div class="search-result-title">No se encontraron resultados</div></div></div>';
-            voiceAssistant.speak('No se encontraron resultados para tu búsqueda');
+            const utterance = new SpeechSynthesisUtterance('No se encontraron resultados. ¿Qué otro libro deseas buscar?');
+            utterance.onend = () => {
+                voiceAssistant.recognition.start();
+            };
+            voiceAssistant.synthesis.speak(utterance);
         } else {
             searchResults.innerHTML = resultados.map(libro => `
                 <a href="detalleLibro.php?id=${libro.IDLibro}" class="search-result-item">
@@ -336,7 +340,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 </a>
             `).join('');
             
-            // Eliminamos la primera llamada a speak y solo usamos el utterance
             const utterance = new SpeechSynthesisUtterance(`Se encontró ${resultados[0].Titulo} por ${resultados[0].Autor}. ¿Deseas reproducirlo?`);
             utterance.onend = () => {
                 voiceAssistant.listenForReproduction(resultados[0].IDLibro);
