@@ -158,6 +158,7 @@ class VoiceAssistant {
     }
 
     speak(text) {
+        this.synthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'es-ES';
         utterance.rate = 1;
@@ -168,9 +169,12 @@ class VoiceAssistant {
         setTimeout(() => {
             const mensajeInicial = "Bienvenido a SoundMind. Puedes buscar un libro diciendo 'buscar' seguido del título, o reproducirlo directamente diciendo 'reproducir' seguido del título. Por ejemplo: 'buscar El principito' o 'reproducir El principito'. ¿Qué deseas hacer?";
             
+            this.recognition.start();
+            
             const utterance = new SpeechSynthesisUtterance(mensajeInicial);
-            utterance.onend = () => {
-                this.recognition.start();
+            utterance.onstart = () => {
+                document.querySelector('.voice-search-btn').classList.add('listening');
+                this.isListening = true;
             };
             this.synthesis.speak(utterance);
         }, 1000); // Pequeño retraso para asegurar que la página esté cargada
@@ -191,34 +195,18 @@ class VoiceAssistant {
 
         voiceButton.addEventListener('click', () => this.toggleListening());
 
-        this.recognition.onstart = () => {
-            this.isListening = true;
-            voiceButton.classList.add('listening');
-            this.speak('Te escucho');
-        };
-
-        this.recognition.onend = () => {
-            this.isListening = false;
-            voiceButton.classList.remove('listening');
-            if (!this.commandDetected) {
-                setTimeout(() => {
-                    this.speak('Puedes buscar un libro usando el botón de micrófono. Di "ayuda" para más información.');
-                }, 500);
-            }
-            this.commandDetected = false;
-        };
-
         this.recognition.onresult = (event) => {
+            this.synthesis.cancel();
+            
             const command = this.cleanText(event.results[0][0].transcript.toLowerCase());
             this.commandDetected = true;
             
             if (command.includes('ayuda')) {
-                this.speak('Puedes buscar un libro diciendo "buscar" seguido del título o autor, o reproducir directamente diciendo "reproducir" seguido del título.');
+                this.speak('Puedes buscar un libro diciendo "buscar" seguido del título, o reproducir directamente diciendo "reproducir" seguido del título.');
             } else if (command.includes('reproducir')) {
                 const searchTerm = this.cleanText(command.replace('reproducir', ''));
                 searchInput.value = searchTerm;
                 this.speak(`Buscando ${searchTerm} para reproducir`);
-                // Realizamos una búsqueda especial que reproducirá automáticamente
                 this.buscarParaReproducir(searchTerm);
             } else if (command.includes('buscar')) {
                 const searchTerm = this.cleanText(command.replace('buscar', ''));
@@ -230,6 +218,16 @@ class VoiceAssistant {
                 this.speak(`Buscando ${command}`);
                 realizarBusqueda(command);
             }
+        };
+
+        this.recognition.onend = () => {
+            if (!this.commandDetected) {
+                setTimeout(() => {
+                    this.recognition.start();
+                }, 100);
+            }
+            this.isListening = false;
+            document.querySelector('.voice-search-btn').classList.remove('listening');
         };
     }
 
@@ -247,7 +245,6 @@ class VoiceAssistant {
             const data = await response.json();
 
             if (data.status === 'success' && data.data.length > 0) {
-                // Ir directamente a reproducir el primer resultado
                 this.speak(`Reproduciendo ${data.data[0].Titulo}`);
                 setTimeout(() => {
                     window.location.href = `audio.php?id=${data.data[0].IDLibro}&autoplay=true`;
@@ -276,13 +273,11 @@ class VoiceAssistant {
             
             if (response.includes('si') || response.includes('sí')) {
                 this.speak('De acuerdo, iniciando reproducción');
-                // Redirigir a audio.php con autoplay
                 window.location.href = `audio.php?id=${libroId}&autoplay=true`;
             } else if (response.includes('no')) {
                 this.speak('De acuerdo, puedes seguir buscando otros libros');
             } else {
                 this.speak('No he entendido tu respuesta. Por favor, di sí o no');
-                // Volver a escuchar
                 setTimeout(() => this.listenForReproduction(libroId), 2000);
             }
         };
@@ -292,7 +287,6 @@ class VoiceAssistant {
             document.querySelector('.voice-search-btn').classList.remove('listening');
         };
 
-        // Iniciar reconocimiento
         this.isListening = true;
         document.querySelector('.voice-search-btn').classList.add('listening');
         this.recognition.start();
