@@ -115,6 +115,11 @@ CREATE TABLE LibrosGuardados (
     FOREIGN KEY (IDLibro) REFERENCES Libros(IDLibro)
 );
 
+
+
+
+
+
 -- Procedimientos almacenados
 
 DELIMITER //
@@ -542,6 +547,13 @@ END //
 DELIMITER ;
 
 
+
+
+
+
+
+
+
 -- Luego, inserta los datos uno por uno
 INSERT INTO `libros` VALUES 
 (24, 'El hijo del Reich', 'Rafael Tarradas Bultó', 'Anónimo', '03:59:00', '2024-08-28', 
@@ -632,6 +644,10 @@ Todo Reich necesita a sus príncipes cerca.',
 'img/Books/relati.jpg',
 41.00, 1);
 
+
+
+
+
 -- Insertar los géneros básicos
 INSERT INTO Generos (NombreGenero, Descripcion) VALUES 
 ('Biográfico', 'Libros basados en la vida real de personas'),
@@ -642,12 +658,24 @@ INSERT INTO Generos (NombreGenero, Descripcion) VALUES
 ('Ciencia', 'Libros sobre temas científicos'),
 ('Deportes', 'Libros relacionados con deportes y actividad física');
 
+
+
+
+
+
+
 -- Insertar algunos métodos de pago básicos
 INSERT INTO MetodosPago (NombreMetodo) VALUES 
 ('PayPal'),
 ('Tarjeta de Crédito'),
 ('Transferencia Bancaria'),
 ('Efectivo');
+
+
+
+
+
+
 
 -- Insertar relaciones libro-género
 INSERT INTO `librogenero` (`IDLibro`, `IDGenero`) VALUES
