@@ -207,7 +207,6 @@ class VoiceAssistant {
                 this.speak(`Buscando ${searchTerm}`);
                 realizarBusqueda(searchTerm);
             } else {
-                // Si no se reconoce el comando como búsqueda o ayuda, realizar búsqueda directa
                 searchInput.value = command;
                 this.speak(`Buscando ${command}`);
                 realizarBusqueda(command);
@@ -221,6 +220,35 @@ class VoiceAssistant {
         } else {
             this.recognition.start();
         }
+    }
+
+    listenForReproduction(libroId) {
+        this.recognition.onresult = (event) => {
+            const response = this.cleanText(event.results[0][0].transcript.toLowerCase());
+            this.commandDetected = true;
+            
+            if (response.includes('si') || response.includes('sí')) {
+                this.speak('De acuerdo, iniciando reproducción');
+                // Redirigir a audio.php con autoplay
+                window.location.href = `audio.php?id=${libroId}&autoplay=true`;
+            } else if (response.includes('no')) {
+                this.speak('De acuerdo, puedes seguir buscando otros libros');
+            } else {
+                this.speak('No he entendido tu respuesta. Por favor, di sí o no');
+                // Volver a escuchar
+                setTimeout(() => this.listenForReproduction(libroId), 2000);
+            }
+        };
+
+        this.recognition.onend = () => {
+            this.isListening = false;
+            document.querySelector('.voice-search-btn').classList.remove('listening');
+        };
+
+        // Iniciar reconocimiento
+        this.isListening = true;
+        document.querySelector('.voice-search-btn').classList.add('listening');
+        this.recognition.start();
     }
 }
 
@@ -261,9 +289,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 </a>
             `).join('');
             
-            voiceAssistant.speak(`Se encontraron ${resultados.length} resultados. ${
-                resultados.map((libro, index) => `Resultado ${index + 1}: ${libro.Titulo} por ${libro.Autor}`).join('. ')
-            }`);
+            // Eliminamos la primera llamada a speak y solo usamos el utterance
+            const utterance = new SpeechSynthesisUtterance(`Se encontró ${resultados[0].Titulo} por ${resultados[0].Autor}. ¿Deseas reproducirlo?`);
+            utterance.onend = () => {
+                voiceAssistant.listenForReproduction(resultados[0].IDLibro);
+            };
+            voiceAssistant.synthesis.speak(utterance);
         }
         searchResults.classList.add('active');
     };

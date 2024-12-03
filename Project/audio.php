@@ -109,5 +109,18 @@ $baseUrl = '/mindsound/Project';
     </div>
 
     <script src="script/script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Verificar si se debe reproducir automáticamente
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('autoplay') === 'true') {
+            // Simular clic en el botón de reproducir
+            const playButton = document.querySelector('.playBtn');
+            if (playButton) {
+                playButton.click();
+            }
+        }
+    });
+    </script>
 </body>
 </html>
